@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Payment Page</title>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="description" content="Travelix Project" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" type="text/css" href="styles/bootstrap4/bootstrap.min.css" />
+    <link href="plugins/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="styles/telefrik_styles.css" />
+    <link rel="stylesheet" type="text/css" href="styles/telefrik_responsive.css" />
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css" />
+    <link rel="stylesheet" href="/path/to/cdn/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" />
+    <script src="/path/to/cdn/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="styles/bookong_style.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css">
+
+    <style>
+        :root {
+            --primary-color: #34495e;
+            --secondary-color: green;
+            --accent-color: #e74c3c;
+            --background-color: #ecf0f1;
+            --card-color: #fff;
+            --text-color: #333;
+            --border-radius: 8px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.2;
+        }
+
+        .paymentContainer {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background-color: var(--card-color);
+            border-radius: var(--border-radius);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            
+        }
+
+        .payment-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .payment-header h1 {
+            color: var(--primary-color);
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .payment-header p {
+            color: var(--text-color);
+            font-size: 1.1rem;
+        }
+
+        .payment-content {
+            display: flex;
+            justify-content: space-between;
+            gap: 2rem;
+        }
+
+        .payment-form {
+            flex: 1;
+        }
+
+        .order-summary {
+            flex: 0 0 300px;
+            background-color: var(--primary-color);
+            color: var(--card-color);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            align-self: flex-start;
+            position: sticky;
+            top: 2rem;
+        }
+
+        h2 {
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        input, select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #ddd;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+
+        .input-icon {
+            position: absolute;
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+            color: var(--primary-color);
+        }
+
+        .card-details {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .card-details > div {
+            flex: 1;
+        }
+
+        .btn {
+            background-color: var(--secondary-color);
+            color: #fff;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s, transform 0.1s;
+            width: 100%;
+            font-weight: bold;
+        }
+
+        .btn:hover {
+            background-color: darkgreen;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .secure-badge {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--secondary-color);
+            font-weight: bold;
+            margin-top: 1rem;
+            padding: 0.5rem;
+            background-color: rgba(52, 152, 219, 0.1);
+            border-radius: var(--border-radius);
+        }
+
+        .secure-badge i {
+            margin-right: 0.5rem;
+        }
+
+        .order-summary h2 {
+            color: var(--card-color);
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+            padding-bottom: 1rem;
+        }
+
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .total {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .payment-methods {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+        }
+
+        .payment-method {
+            flex: 1;
+            text-align: center;
+            padding: 1rem;
+            border: 2px solid #ddd;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: border-color 0.3s, background-color 0.3s;
+        }
+
+        .payment-method:hover, .payment-method.active {
+            border-color: var(--secondary-color);
+            background-color: rgba(52, 152, 219, 0.1);
+        }
+
+        .payment-method img {
+            max-width: 80px;
+            height: auto;
+        }
+
+        @media (max-width: 768px) {
+            .payment-content {
+                flex-direction: column;
+            }
+
+            .order-summary {
+                width: 100%;
+                position: static;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="super_container">
+        <!-- Header -->
+
+        <header class="header">
+            <!-- Top Bar -->
+
+            <div class="top_bar">
+                <div class="container">
+                    <div class="row">
+                        <div class="col d-flex flex-row">
+                            <div class="phone"><sup>Ajloun Tour
+                                <sup>360</sup>
+                            </sup></div>
+                            <div class="social">
+                                <ul class="social_list">
+                                    <li class="social_list_item">
+                                        <a href="#"><i class="fa fa-pinterest" aria-hidden="true"></i></a>
+                                    </li>
+                                    <li class="social_list_item">
+                                        <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+                                    </li>
+                                    <li class="social_list_item">
+                                        <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+                                    </li>
+                                    <li class="social_list_item">
+                                        <a href="#"><i class="fa fa-dribbble" aria-hidden="true"></i></a>
+                                    </li>
+                                    <li class="social_list_item">
+                                        <a href="#"><i class="fa fa-behance" aria-hidden="true"></i></a>
+                                    </li>
+                                    <li class="social_list_item">
+                                        <a href="#"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="user_box ml-auto">
+                                <div class="user_box_login user_box_link">
+                                    <a href="login.html">login</a>
+                                </div>
+                                <div class="user_box_register user_box_link">
+                                    <a href="login.html">register</a>
+                                </div>
+                            </div>
+                            <div>
+                                <a href="edit_profile.html" class="profileimga">
+                                    <img src="image/2.png" alt="" class="profileimg">
+                                </a>
+                            </div>
+                        </div>
+                       
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Navigation -->
+
+            <nav class="main_nav">
+                <div class="container">
+                    <div class="row">
+                        <div class="col main_nav_col d-flex flex-row align-items-center justify-content-start">
+                            <div class="logo_container">
+                                <div class="logo">
+                                    <a href="#"><img src="image/alogo.png" alt="" /></a>
+                                </div>
+                            </div>
+                            <div class="main_nav_container ml-auto">
+                                <ul class="main_nav_list">
+                                    <li class="main_nav_item"><a href="index.html">home</a></li>
+                                    <li class="main_nav_item">
+                                        <a href="services.html">services</a>
+                                    </li>
+                                    <li class="main_nav_item">
+                                        <a href="contact.html">contact us</a>
+                                    </li>
+                                    <li class="main_nav_item">
+                                        <a href="about.html">about us</a>
+                                    </li>
+                                    <li class="main_nav_item">
+                                        <a href="offers.html">offers</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="content_search ml-lg-0 ml-auto">
+                                <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
+                                    xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="17px"
+                                    height="17px" viewBox="0 0 512 512" enable-background="new 0 0 512 512"
+                                    xml:space="preserve">
+                                    <g>
+                                        <g>
+                                            <g>
+                                                <path class="mag_glass" fill="#FFFFFF" d="M78.438,216.78c0,57.906,22.55,112.343,63.493,153.287c40.945,40.944,95.383,63.494,153.287,63.494
+											s112.344-22.55,153.287-63.494C489.451,329.123,512,274.686,512,216.78c0-57.904-22.549-112.342-63.494-153.286
+											C407.563,22.549,353.124,0,295.219,0c-57.904,0-112.342,22.549-153.287,63.494C100.988,104.438,78.439,158.876,78.438,216.78z
+											M119.804,216.78c0-96.725,78.69-175.416,175.415-175.416s175.418,78.691,175.418,175.416
+											c0,96.725-78.691,175.416-175.416,175.416C198.495,392.195,119.804,313.505,119.804,216.78z" />
+                                            </g>
+                                        </g>
+                                        <g>
+                                            <g>
+                                                <path class="mag_glass" fill="#FFFFFF" d="M6.057,505.942c4.038,4.039,9.332,6.058,14.625,6.058s10.587-2.019,14.625-6.058L171.268,369.98
+											c8.076-8.076,8.076-21.172,0-29.248c-8.076-8.078-21.172-8.078-29.249,0L6.057,476.693
+											C-2.019,484.77-2.019,497.865,6.057,505.942z" />
+                                            </g>
+                                        </g>
+                                    </g>
+                                </svg>
+                            </div>
+
+                            <form id="search_form" class="search_form bez_1">
+                                <input type="search" class="search_content_input bez_1" />
+                            </form>
+
+                            <div class="hamburger">
+                                <i class="fa fa-bars trans_200"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </header>
+
+        <div class="menu trans_500">
+            <div class="menu_content d-flex flex-column align-items-center justify-content-center text-center">
+                <div class="menu_close_container">
+                    <div class="menu_close"></div>
+                </div>
+                <div class="logo menu_logo">
+                    <a href="index.html"><img src="image/alogo.png" alt="" /></a>
+                </div>
+                <ul>
+                    <li class="menu_item"><a href="index.html">home</a></li>
+                    <li class="menu_item"><a href="services.html">services</a></li>
+                    <li class="menu_item"><a href="contact.html">contact us</a></li>
+                    <li class="menu_item"><a href="about.html">about us</a></li>
+                    <li class="menu_item"><a href="offers.html">offers</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Home -->
+
+        <div class="home">
+            <div class="home_background parallax-window" data-parallax="scroll" data-image-src="image2/back5.jpg">
+            </div>
+            <div class="home_content">
+                <div class="home_title">booking</div>
+            </div>
+        </div>
+
+
+        <div class="titlepages">
+            <strong>booking</strong>
+            <div id="container-stars">
+                <div id="stars"></div>
+            </div>
+            <div id="glow">
+                <div class="circle"></div>
+                <div class="circle"></div>
+            </div>
+        </div>
+
+        <div class="paymentContainer">
+            <div class="payment-header">
+                <h1>Secure Checkout</h1>
+                <p>Complete your booking with our safe and secure payment system</p>
+            </div>
+            <div class="payment-content">
+                <div class="payment-form">
+                    <h2>Payment Details</h2>
+                    <form id="payment-form">
+                        <div class="payment-methods">
+                            <div class="payment-method active" data-method="card">
+                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQfKI3h7qkMUuliQA1ui6n_eDkwCTbNS3WvLA&s" alt="Credit Card" />
+                                <p>Credit Card</p>
+                            </div>
+                            <div class="payment-method" data-method="paypal">
+                                <img src="data:image/png;base64,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" alt="PayPal" />
+                                <p>PayPal</p>
+                            </div>
+                            <div class="payment-method" data-method="orange-money">
+                                <img src="data:image/png;base64,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" alt="Orange Money" />
+                                <p>Orange Money</p>
+                            </div>
+                        </div>
+                        <div id="card-payment-fields">
+                            <div class="form-group">
+                                <label for="name">Full Name</label>
+                                <input type="text" id="name" name="name" required>
+                                <i class="input-icon fas fa-user"></i>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email Address</label>
+                                <input type="email" id="email" name="email" required>
+                                <i class="input-icon fas fa-envelope"></i>
+                            </div>
+                            <div class="form-group">
+                                <label for="card-number">Card Number</label>
+                                <input type="text" id="card-number" name="card-number" placeholder="1234 5678 9012 3456"
+                                    required>
+                                <i class="input-icon fas fa-credit-card"></i>
+                            </div>
+                            <div class="form-group card-details">
+                                <div>
+                                    <label for="expiry">Expiry Date</label>
+                                    <input type="text" id="expiry" name="expiry" placeholder="MM/YY" required>
+                                </div>
+                                <div>
+                                    <label for="cvv">CVV</label>
+                                    <input type="number" id="cvv" name="cvv" placeholder="123" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="paypal-fields" style="display: none;">
+                            <div class="form-group">
+                                <label for="paypal-email">PayPal Email</label>
+                                <input type="email" id="paypal-email" name="paypal-email">
+                                <i class="input-icon fab fa-paypal"></i>
+                            </div>
+                        </div>
+                        <div id="orange-money-fields" style="display: none;">
+                            <div class="form-group">
+                                <label for="phone-number">Phone Number</label>
+                                <input type="tel" id="phone-number" name="phone-number">
+                                <i class="input-icon fas fa-phone"></i>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn">Pay Now</button>
+                    </form>
+                    <div class="secure-badge">
+                        <i class="fas fa-lock"></i> Your payment is secure and encrypted
+                    </div>
+                </div>
+                <div class="order-summary">
+                    <h2>Order Summary</h2>
+                    <div class="order-item">
+                        <span>Deluxe Tour Package</span>
+                        <span>$1500</span>
+                    </div>
+                    <div class="order-item">
+                        <span>Travel Insurance</span>
+                        <span>$100</span>
+                    </div>
+                    <div class="order-item">
+                        <span>Taxes & Fees</span>
+                        <span>$160</span>
+                    </div>
+                    <div class="total">
+                        <span>Total</span>
+                        <span>$1760</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+        
+
+
+
+
+
+
+        <!-- Footer -->
+        <footer class="footer">
+
+            <div class="container">
+                <div class="row">
+                    <!-- Footer Column -->
+                    <div class="col-lg-3 footer_column">
+                        <div class="footer_col">
+                            <div class="footer_content footer_about">
+                                <div class="logo_container footer_logo">
+                                    <div class="logo">
+                                        <a href="#"><img src="image/alogo.png" alt="" /></a>
+                                    </div>
+                                </div>
+                                <p class="footer_about_text">
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                                    Vivamus quis vu lputate eros, iaculis consequat nisl. Nunc
+                                    et suscipit urna. Integer eleme ntum orci eu vehicula
+                                    pretium.
+                                </p>
+                                <ul class="footer_social_list">
+                                    <li class="footer_social_item">
+                                        <a href="#"><i class="fa fa-pinterest"></i></a>
+                                    </li>
+                                    <li class="footer_social_item">
+                                        <a href="#"><i class="fa fa-facebook-f"></i></a>
+                                    </li>
+                                    <li class="footer_social_item">
+                                        <a href="#"><i class="fa fa-twitter"></i></a>
+                                    </li>
+                                    <li class="footer_social_item">
+                                        <a href="#"><i class="fa fa-dribbble"></i></a>
+                                    </li>
+                                    <li class="footer_social_item">
+                                        <a href="#"><i class="fa fa-behance"></i></a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Footer Column -->
+                    <div class="col-lg-3 footer_column">
+                        <div class="footer_col">
+                            <div class="footer_title">services</div>
+                            <div class="footer_content footer_blog">
+                                <!-- Footer blog item -->
+                                <div class="footer_blog_item clearfix">
+                                    <div class="footer_blog_image">
+                                        <img src="image/images (91).jpg" alt="" />
+                                    </div>
+                                    <div class="footer_blog_content">
+                                        <div class="footer_blog_title">
+                                            <a href="blog.html">Travel with us this year</a>
+                                        </div>
+                                        <div class="footer_blog_date">Nov 29, 2024</div>
+                                    </div>
+                                </div>
+
+                                <!-- Footer blog item -->
+                                <div class="footer_blog_item clearfix">
+                                    <div class="footer_blog_image">
+                                        <img src="image/images (88).jpg" alt="" />
+                                    </div>
+                                    <div class="footer_blog_content">
+                                        <div class="footer_blog_title">
+                                            <a href="blog.html">New destinations for you</a>
+                                        </div>
+                                        <div class="footer_blog_date">Nov 29, 2024</div>
+                                    </div>
+                                </div>
+
+                                <!-- Footer blog item -->
+                                <div class="footer_blog_item clearfix">
+                                    <div class="footer_blog_image">
+                                        <img src="image/images (95).jpg" alt="" />
+                                    </div>
+                                    <div class="footer_blog_content">
+                                        <div class="footer_blog_title">
+                                            <a href="blog.html">Travel with us this year</a>
+                                        </div>
+                                        <div class="footer_blog_date">Nov 29, 2024</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Footer Column -->
+                    <div class="col-lg-3 footer_column">
+                        <div class="footer_col">
+                            <div class="footer_title">tags</div>
+                            <div class="footer_content footer_tags">
+                                <ul class="tags_list clearfix">
+                                    <li class="tag_item"><a href="telefrik.html">Telefrik</a></li>
+                                    <li class="tag_item"><a href="castle.html">Castle</a></li>
+                                    <li class="tag_item"><a href="cabins.html">cabins</a></li>
+                                    <li class="tag_item"><a href="forest_reserve.html">Forest Reserve</a></li>
+                                    <li class="tag_item"><a href="zipline.html">Hiking Zipline</a></li>
+                                    <li class="tag_item"><a href="rajeb_waterfalls.html">Rajib</a></li>
+                                    <li class="tag_item"><a href="natural_trails.html">trails</a></li>
+                                    <li class="tag_item"><a href="mar_elias.html">Mar Elias</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Footer Column -->
+                    <div class="col-lg-3 footer_column">
+                        <div class="footer_col">
+                            <div class="footer_title">contact info</div>
+                            <div class="footer_content footer_contact">
+                                <ul class="contact_info_list">
+                                    <li class="contact_info_item d-flex flex-row">
+                                        <div>
+                                            <div class="contact_info_icon">
+                                                <img src="images/placeholder.svg" alt="" />
+                                            </div>
+                                        </div>
+                                        <div class="contact_info_text">
+                                            4127 Raoul Wallenber 45b-c Gibraltar
+                                        </div>
+                                    </li>
+                                    <li class="contact_info_item d-flex f lex-row">
+                                        <div>
+                                            <div class="contact_info_icon">
+                                                <img src="images/phone-call.svg" alt="" />
+                                            </div>
+                                        </div>
+                                        <div class="contact_info_text">2556-808-8613</div>
+                                    </li>
+                                    <li class="contact_info_item d-flex flex-row">
+                                        <div>
+                                            <div class="contact_info_icon">
+                                                <img src="images/message.svg" alt="" />
+                                            </div>
+                                        </div>
+                                        <div class="contact_info_text">
+                                            <a href="mailto:contactme@gmail.com?Subject=Hello"
+                                                target="_top">contactme@gmail.com</a>
+                                        </div>
+                                    </li>
+                                    <li class="contact_info_item d-flex flex-row">
+                                        <div>
+                                            <div class="contact_info_icon">
+                                                <img src="images/planet-earth.svg" alt="" />
+                                            </div>
+                                        </div>
+                                        <div class="contact_info_text">
+                                            <a href="https://colorlib.com">www.info.com</a>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+        <!-- Copyright -->
+
+        <div class="copyright">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-3 order-lg-1 order-2">
+                        <div class="copyright_content d-flex flex-row align-items-center">
+                            <div>
+                                <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                                &copy;
+
+                                All rights reserved | <a href="" target="_blank" style="color: white">Ahmad Onizat</a>
+
+                                <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-9 order-lg-2 order-1">
+                        <div class="footer_nav_container d-flex flex-row align-items-center justify-content-lg-end">
+                            <div class="footer_nav">
+                                <ul class="footer_nav_list">
+                                    <li class="footer_nav_item"><a href="index.html">home</a></li>
+                                    <li class="footer_nav_item">
+                                        <a href="contact.html">contact us</a>
+                                    </li>
+                                    <li class="footer_nav_item">
+                                        <a href="about.html">about us</a>
+                                    </li>
+                                    <li class="footer_nav_item">
+                                        <a href="offers.html">offers</a>
+                                    </li>
+                                    <li class="footer_nav_item">
+                                        <!-- <a href="blog.html">news</a> -->
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/jquery-3.2.1.min.js"></script>
+    <script src="styles/bootstrap4/popper.js"></script>
+    <script src="styles/bootstrap4/bootstrap.min.js"></script>
+    <script src="plugins/greensock/TweenMax.min.js"></script>
+    <script src="plugins/greensock/TimelineMax.min.js"></script>
+    <script src="plugins/scrollmagic/ScrollMagic.min.js"></script>
+    <script src="plugins/greensock/animation.gsap.min.js"></script>
+    <script src="plugins/greensock/ScrollToPlugin.min.js"></script>
+    <script src="plugins/progressbar/progressbar.min.js"></script>
+    <script src="plugins/jquery-circle-progress-1.2.2/circle-progress.js"></script>
+    <script src="plugins/parallax-js-master/parallax.min.js"></script>
+    <script src="js/telefrik_custom.js"></script>
+    <script src="js/telefrik.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const form = document.getElementById('payment-form');
+            const cardNumber = document.getElementById('card-number');
+            const expiry = document.getElementById('expiry');
+            const cvv = document.getElementById('cvv');
+            const paymentMethods = document.querySelectorAll('.payment-method');
+
+            // Payment method selection
+            paymentMethods.forEach(method => {
+                method.addEventListener('click', () => {
+                    paymentMethods.forEach(m => m.classList.remove('active'));
+                    method.classList.add('active');
+                    const selectedMethod = method.dataset.method;
+                    document.getElementById('card-payment-fields').style.display = selectedMethod === 'card' ? 'block' : 'none';
+                    document.getElementById('paypal-fields').style.display = selectedMethod === 'paypal' ? 'block' : 'none';
+                    document.getElementById('orange-money-fields').style.display = selectedMethod === 'orange-money' ? 'block' : 'none';
+                });
+            });
+
+            // Form submission
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                if (validateForm()) {
+                    simulatePayment();
+                }
+            });
+
+            // Card number formatting
+            cardNumber.addEventListener('input', (e) => {
+                let value = e.target.value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
+                let formattedValue = '';
+                for (let i = 0; i < value.length; i++) {
+                    if (i % 4 === 0 && i > 0) formattedValue += ' ';
+                    formattedValue += value[i];
+                }
+                e.target.value = formattedValue;
+            });
+
+            // Expiry date formatting
+            expiry.addEventListener('input', (e) => {
+                let value = e.target.value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
+                if (value.length > 2) {
+                    value = value.slice(0, 2) + '/' + value.slice(2);
+                }
+                e.target.value = value;
+            });
+
+            // Form validation
+            function validateForm() {
+                let isValid = true;
+                const activeMethod = document.querySelector('.payment-method.active').dataset.method;
+
+                if (activeMethod === 'card') {
+                    if (!/^\d{4}\s\d{4}\s\d{4}\s\d{4}$/.test(cardNumber.value)) {
+                        alert('Please enter a valid card number.');
+                        isValid = false;
+                    }
+                    if (!/^\d{2}\/\d{2}$/.test(expiry.value)) {
+                        alert('Please enter a valid expiry date (MM/YY).');
+                        isValid = false;
+                    }
+                    if (!/^\d{3}$/.test(cvv.value)) {
+                        alert('Please enter a valid CVV.');
+                        isValid = false;
+                    }
+                } else if (activeMethod === 'paypal') {
+                    const paypalEmail = document.getElementById('paypal-email');
+                    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(paypalEmail.value)) {
+                        alert('Please enter a valid PayPal email address.');
+                        isValid = false;
+                    }
+                } else if (activeMethod === 'orange-money') {
+                    const phoneNumber = document.getElementById('phone-number');
+                    if (!/^\d{10}$/.test(phoneNumber.value)) {
+                        alert('Please enter a valid phone number (10 digits).');
+                        isValid = false;
+                    }
+                }
+
+                return isValid;
+            }
+
+            // Simulated payment processing
+            function simulatePayment() {
+                const btn = document.querySelector('.btn');
+                btn.disabled = true;
+                btn.textContent = 'Processing...';
+
+                setTimeout(() => {
+                    btn.textContent = 'Payment Successful!';
+                    btn.style.backgroundColor = '#27ae60';
+                    alert('Payment processed successfully! Thank you for your booking.');
+                    form.reset();
+                    setTimeout(() => {
+                        btn.disabled = false;
+                        btn.textContent = 'Pay Now';
+                        btn.style.backgroundColor = '';
+                    }, 3000);
+                }, 2000);
+            }
+        });
+    </script>
+</body>
+
+</html>
