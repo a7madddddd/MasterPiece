@@ -77,20 +77,25 @@ function parseJwt(token) {
 fetch('https://localhost:44321/api/Services')
     .then(response => response.json())
     .then(data => {
+        // Access the $values array which holds the actual service objects
         const servicesArray = data.$values;
 
+        // Check if servicesArray is an array and has elements
         if (!Array.isArray(servicesArray) || servicesArray.length === 0) {
             throw new Error('No services data received from the API');
         }
 
+        // Get the container where services will be displayed
         const servicesContainer = document.getElementById('services-container');
         if (!servicesContainer) {
             console.error('Services container element not found');
             return;
         }
 
+        // Clear the container before adding new content
         servicesContainer.innerHTML = '';
 
+        // Iterate over each service and create the HTML content
         servicesArray.forEach(service => {
             const cardHTML = `
                 <div class="col-lg-4 wow fadeInUp" data-wow-delay="0.2s">
@@ -112,6 +117,7 @@ fetch('https://localhost:44321/api/Services')
                     </div>
                 </div>
             `;
+            // Append each card to the container
             servicesContainer.innerHTML += cardHTML;
         });
 
@@ -134,6 +140,8 @@ fetch('https://localhost:44321/api/Services')
                 document.getElementById('popup').style.display = 'block';
             });
         });
+
+        console.log('Services loaded successfully');
     })
     .catch(error => {
         console.error('Error fetching the services:', error);
@@ -160,6 +168,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const popup = document.getElementById('popup');
 
     closePopupButton.addEventListener('click', function () {
+        // Validate form inputs
         var name = document.getElementById('name-city').value.trim();
         var email = document.getElementById('email-city').value.trim();
         var date = document.getElementById('date-city').value;
@@ -177,6 +186,7 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
+        // Validate email format
         var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailPattern.test(email)) {
             Swal.fire({
@@ -187,6 +197,7 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
+        // Validate number of guests
         if (guests <= 0) {
             Swal.fire({
                 icon: 'error',
@@ -248,6 +259,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     title: 'Booking Successful',
                     text: 'Your booking will be displayed on the profile page.'
                 });
+
+                // Hide the popup
+                popup.style.display = 'none';
                 console.log('Booking data:', data);
                 popup.style.display = 'none'; // Hide popup after successful booking
             })
