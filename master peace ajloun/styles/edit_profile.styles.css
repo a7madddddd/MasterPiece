@@ -1,0 +1,227 @@
+.gradient-custom {
+    /* fallback for old browsers */
+    background: green;
+
+    /* Chrome 10-25, Safari 5.1-6 */
+    background: -webkit-linear-gradient(to right bottom, rgba(0, 128, 0, 1), rgba(0, 100, 0, 1));
+
+    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background: linear-gradient(to right bottom, rgba(0, 128, 0, 1), rgba(0, 100, 0, 1))
+}
+
+.d-flexjustify-content-start i {
+    padding: 0 10%;
+}
+
+.vh-100 {
+    width: 100%;
+}
+
+body {
+    align-items: center;
+}
+
+
+
+
+
+
+#profile-content {
+    /* Card container */
+    background: #f7f7f7;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    height: 200px;
+    width: 95%;
+    margin: 20px auto;
+
+}
+
+
+
+#profile-content p {
+    padding: 2%;
+    font: 1.2em bold;
+}
+
+
+
+
+
+#profile-content img {
+
+
+    border-radius: 50%;
+}
+
+
+
+
+
+
+#profile-content {
+    /* Card container */
+    background: #fff;
+    /* changed to white background */
+    border: none;
+    /* removed border */
+    border-radius: 20px;
+    /* increased border radius */
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    /* increased box shadow */
+    padding: 30px;
+    /* increased padding */
+    margin-bottom: 30px;
+    /* increased margin bottom */
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    height: 20%;
+    /* increased height */
+    width: 97%;
+    /* increased width */
+    margin: 2% auto;
+    /* increased margin */
+
+    /* Add a gradient background */
+    background: linear-gradient(to right bottom, rgba(0, 128, 0, 1), rgba(0, 100, 0, 1));
+
+
+    /* Add a hover effect */
+    transition: transform 0.3s ease-in-out;
+
+    &:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+    }
+}
+
+#profile-content img {
+    width: 10%;
+    /* set image width */
+    height: 12vh;
+    /* set image height */
+    border-radius: 50%;
+    /* keep image rounded */
+    margin: 10px;
+    /* add margin to image */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    /* add box shadow to image */
+}
+
+#profile-content p {
+    font-size: 1.2em;
+    /* increase font size */
+    color: white;
+    /* change text color */
+    margin-bottom: 10px;
+    /* add margin bottom to paragraph */
+}
+
+/* Add this to your CSS file */
+
+.payment_button {
+    background-color: #4CAF50;
+    /* Green background */
+    color: #ffffff;
+    /* White text */
+    border: none;
+    padding: 5px 10px;
+    /* Reduced padding */
+    font-size: 14px;
+    /* Reduced font size */
+    cursor: pointer;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.payment_button:hover {
+    background-color: #3e8e41;
+    /* Darker green on hover */
+}
+
+.payment_button svg {
+    width: 18px;
+    /* Reduced icon size */
+    height: 18px;
+    /* Reduced icon size */
+    margin-right: 5px;
+    /* Reduced margin */
+    vertical-align: middle;
+}
+
+.payment_button span {
+    vertical-align: middle;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.titlepages {
+    width: 12vw;
+    margin: 5% auto;
+    text-align: center;
+    display: flex;
+    /* make it a flex container */
+    justify-content: center;
+    /* center the content vertically */
+    align-items: center;
+    /* center the content horizontally */
+}
+
+.titlepages {
+    display: grid;
+    place-items: center;
+    /* center the content both horizontally and vertically */
+    width: 12vw;
+    height: 7vh;
+}
