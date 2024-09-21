@@ -121,36 +121,29 @@ CREATE TABLE Reviews (
 
 
 
-CREATE TABLE Proposal (
-    Proposal INT IDENTITY(1,1) PRIMARY KEY,
-    
+DROP TABLE IF EXISTS ServicesGallery;
+
+CREATE TABLE ServicesGallery (
+    GalleryId INT PRIMARY KEY Identity,
     ServiceID INT,
-    description Varchar(max),
-    image VArchar(max),
+    image1 VARCHAR(MAX),
+    image2 VARCHAR(MAX),
+    image3 VARCHAR(MAX),
+    image4 VARCHAR(MAX),
+    image5 VARCHAR(MAX),
+    image6 VARCHAR(MAX),
     
-    FOREIGN KEY (UserID) REFERENCES Users(UserID),
     FOREIGN KEY (ServiceID) REFERENCES Services(ServiceID)
 );
+
 
 --/////////////////////////////////////////////////////////////
 
 
 
-CREATE TABLE service_details (
-    DetailID INT Identity PRIMARY KEY,
-    ServiceID INT,
-    UserID INT,
-    Review TEXT,
-    Rating DECIMAL(3,2),
-    ReviewDate DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (ServiceID) REFERENCES Services(ServiceID)
-);
 
 
-ALTER TABLE Services
-ADD
-    
-    Link VARCHAR(Max);
+
 
 CREATE TABLE tourism_statistics (
     year INT,
@@ -197,3 +190,27 @@ ADD CONSTRAINT FK_UserID FOREIGN KEY (UserID) REFERENCES Users(UserID);
 
 ALTER TABLE Users
 ADD Password INT;
+
+
+
+
+
+
+
+ALTER TABLE JoinRequests
+ALTER COLUMN ServiceImage VARCHAR(MAX);
+
+
+
+
+
+
+
+
+
+ALTER TABLE Offers ADD PricePerNight DECIMAL(10,2) NOT NULL DEFAULT 0;
+ALTER TABLE Offers ADD Rating DECIMAL(3,1);
+ALTER TABLE Offers ADD ReviewCount INT;
+ALTER TABLE Offers ADD AccommodationType VARCHAR(50);
+ALTER TABLE Offers ADD ImageURL VARCHAR(255);
+ALTER TABLE Offers ADD Amenities VARCHAR(MAX);
