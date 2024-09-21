@@ -142,12 +142,22 @@ public partial class MyDbContext : DbContext
             entity.HasKey(e => e.OfferId).HasName("PK__Offers__8EBCF0B1BE0333FB");
 
             entity.Property(e => e.OfferId).HasColumnName("OfferID");
+            entity.Property(e => e.AccommodationType)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.Amenities).IsUnicode(false);
             entity.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
             entity.Property(e => e.Description).HasColumnType("text");
             entity.Property(e => e.DiscountPercentage).HasColumnType("decimal(5, 2)");
+            entity.Property(e => e.ImageUrl)
+                .HasMaxLength(255)
+                .IsUnicode(false)
+                .HasColumnName("ImageURL");
             entity.Property(e => e.IsActive).HasDefaultValue(true);
+            entity.Property(e => e.PricePerNight).HasColumnType("decimal(10, 2)");
+            entity.Property(e => e.Rating).HasColumnType("decimal(3, 1)");
             entity.Property(e => e.Title)
                 .HasMaxLength(200)
                 .IsUnicode(false);

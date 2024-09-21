@@ -5,7 +5,7 @@ namespace MasterPieceApi.Models;
 
 public partial class JoinRequest
 {
-    public int? RequestId { get; set; }
+    public int RequestId { get; set; }
 
     public string Name { get; set; } = null!;
 

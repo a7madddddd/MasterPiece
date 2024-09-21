@@ -20,4 +20,16 @@ public partial class Offer
     public bool? IsActive { get; set; }
 
     public DateTime? CreatedAt { get; set; }
+
+    public decimal PricePerNight { get; set; }
+
+    public decimal? Rating { get; set; }
+
+    public int? ReviewCount { get; set; }
+
+    public string? AccommodationType { get; set; }
+
+    public string? ImageUrl { get; set; }
+
+    public string? Amenities { get; set; }
 }

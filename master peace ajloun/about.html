@@ -15,7 +15,7 @@
   <link rel="stylesheet" type="text/css" href="styles/about_responsive.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <link href="plugins/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
-  
+  <script src="js/aboutApi.js"></script>
 </head>
 
 <body>
@@ -189,143 +189,29 @@
       <div class="container">
         <div class="row">
           <div class="col text-center">
-            <div class="section_title">years statistics</div>
+            <div class="section_title">Years Statistics</div>
           </div>
         </div>
         <div class="row">
           <div class="col-lg-10 offset-lg-1 text-center">
             <p class="stats_text">
-              Discover how Ajloun's tourism has grown over the years. Our yearly statistics provide insights into visitor trends
+              Discover how Ajloun's tourism has grown over the years. Our yearly statistics provide insights into visitor
+              trends
             </p>
           </div>
         </div>
         <div class="row">
           <div class="col">
             <div class="stats_years">
-              <div class="stats_years_last">2016</div>
-              <div class="stats_years_new float-right">2017</div>
+              <div class="stats_years_last" id="previousYear"></div>
+              <div class="stats_years_new float-right" id="currentYear"></div>
             </div>
           </div>
         </div>
         <div class="row">
           <div class="col">
-            <div class="stats_contents">
-              <!-- Stats Item -->
-              <div class="stats_item d-flex flex-md-row flex-column clearfix">
-                <div class="stats_last order-md-1 order-3">
-                  <div class="stats_last_icon d-flex flex-column align-items-center justify-content-end">
-                    <i class="fas fa-users custom-icon"></i>
-
-                  </div>
-                  <div class="stats_last_content">
-                    <div class="stats_number">1642</div>
-                    <div class="stats_type">Clients</div>
-                  </div>
-                </div>
-                <div class="stats_bar order-md-2 order-2" data-x="1642" data-y="3527" data-color="darkgreen">
-                  <div class="stats_bar_perc">
-                    <div>
-                      <div class="stats_bar_value"></div>
-                    </div>
-                  </div>
-                </div>
-                <div class="stats_new order-md-3 order-1 text-right">
-                  <div class="stats_new_icon d-flex flex-column align-items-center justify-content-end">
-                    <i class="fas fa-users custom-icon"></i>
-                  </div>
-                  <div class="stats_new_content">
-                    <div class="stats_number">3527</div>
-                    <div class="stats_type">Clients</div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Stats Item -->
-              <div class="stats_item d-flex flex-md-row flex-column clearfix">
-                <div class="stats_last order-md-1 order-3">
-                  <div class="stats_last_icon d-flex flex-column align-items-center justify-content-end">
-                    <i class="fa-solid fa-people-arrows custom-icon"></i>
-                  </div>
-                  <div class="stats_last_content">
-                    <div class="stats_number">768</div>
-                    <div class="stats_type">Returning Clients</div>
-                  </div>
-                </div>
-                <div class="stats_bar order-md-2 order-2" data-x="768" data-y="145" data-color="darkgreen">
-                  <div class="stats_bar_perc">
-                    <div>
-                      <div class="stats_bar_value"></div>
-                    </div>
-                  </div>
-                </div>
-                <div class="stats_new order-md-3 order-1 text-right">
-                  <div class="stats_new_icon d-flex flex-column align-items-center justify-content-end">
-                    <i class="fa-solid fa-people-arrows custom-icon"></i>
-                  </div>
-                  <div class="stats_new_content">
-                    <div class="stats_number">145</div>
-                    <div class="stats_type">Returning Clients</div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Stats Item -->
-              <div class="stats_item d-flex flex-md-row flex-column clearfix">
-                <div class="stats_last order-md-1 order-3">
-                  <div class="stats_last_icon d-flex flex-column align-items-center justify-content-end">
-                    <i class="fa-solid fa-paste custom-icon"></i>
-                  </div>
-                  <div class="stats_last_content">
-                    <div class="stats_number">11546</div>
-                    <div class="stats_type">Reservations</div>
-                  </div>
-                </div>
-                <div class="stats_bar order-md-2 order-2" data-x="11546" data-y="9321" data-color="green">
-                  <div class="stats_bar_perc">
-                    <div>
-                      <div class="stats_bar_value"></div>
-                    </div>
-                  </div>
-                </div>
-                <div class="stats_new order-md-3 order-1 text-right">
-                  <div class="stats_new_icon d-flex flex-column align-items-center justify-content-end">
-                    <i class="fa-solid fa-paste custom-icon"></i>
-                  </div>
-                  <div class="stats_new_content">
-                    <div class="stats_number">9321</div>
-                    <div class="stats_type">Reservations</div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Stats Item -->
-              <div class="stats_item d-flex flex-md-row flex-column clearfix">
-                <div class="stats_last order-md-1 order-3">
-                  <div class="stats_last_icon d-flex flex-column align-items-center justify-content-end">
-                    <i class="fa-solid fa-percent custom-icon"></i>
-                  </div>
-                  <div class="stats_last_content">
-                    <div class="stats_number">3729</div>
-                    <div class="stats_type">Items</div>
-                  </div>
-                </div>
-                <div class="stats_bar order-md-2 order-2" data-x="3729" data-y="17429" data-color="lightseagreen">
-                  <div class="stats_bar_perc">
-                    <div>
-                      <div class="stats_bar_value"></div>
-                    </div>
-                  </div>
-                </div>
-                <div class="stats_new order-md-3 order-1 text-right">
-                  <div class="stats_new_icon d-flex flex-column align-items-center justify-content-end">
-                    <i class="fa-solid fa-percent custom-icon"></i> 
-                  </div>
-                  <div class="stats_new_content">
-                    <div class="stats_number">17429</div>
-                    <div class="stats_type">More Items</div>
-                  </div>
-                </div>
-              </div>
+            <div class="stats_contents" id="statsContainer">
+              <!-- Stats items will be dynamically inserted here -->
             </div>
           </div>
         </div>
@@ -355,56 +241,13 @@
     </div>
 
     <!-- Milestones -->
-
-    <div class="milestones">
-      <div class="container">
-        <div class="row">
-          <!-- Milestone -->
-          <div class="col-lg-3 milestone_col">
-            <div class="milestone text-center">
-              <div class="milestone_icon">
-                <img src="images/milestone_1.png" alt="" />
-              </div>
-              <div class="milestone_counter" data-end-value="255">0</div>
-              <div class="milestone_text">Clients</div>
-            </div>
-          </div>
-
-          <!-- Milestone -->
-          <div class="col-lg-3 milestone_col">
-            <div class="milestone text-center">
-              <div class="milestone_icon">
-                <img src="images/milestone_2.png" alt="" />
-              </div>
-              <div class="milestone_counter" data-end-value="1176">0</div>
-              <div class="milestone_text">Projects</div>
-            </div>
-          </div>
-
-          <!-- Milestone -->
-          <div class="col-lg-3 milestone_col">
-            <div class="milestone text-center">
-              <div class="milestone_icon">
-                <img src="images/milestone_3.png" alt="" />
-              </div>
-              <div class="milestone_counter" data-end-value="39">0</div>
-              <div class="milestone_text">Countries</div>
-            </div>
-          </div>
-
-          <!-- Milestone -->
-          <div class="col-lg-3 milestone_col">
-            <div class="milestone text-center">
-              <div class="milestone_icon">
-                <img src="images/milestone_4.png" alt="" />
-              </div>
-              <div class="milestone_counter" data-end-value="127">0</div>
-              <div class="milestone_text">Coffees</div>
-            </div>
-          </div>
-        </div>
-      </div>
+<div class="milestones">
+  <div class="container">
+    <div class="row" id="milestonesContainer">
+      <!-- Milestone items will be dynamically inserted here -->
     </div>
+  </div>
+</div>
 
     <!-- Footer -->
     <footer class="footer">
