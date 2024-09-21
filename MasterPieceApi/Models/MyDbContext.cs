@@ -130,9 +130,7 @@ public partial class MyDbContext : DbContext
             entity.Property(e => e.Phone)
                 .HasMaxLength(20)
                 .IsUnicode(false);
-            entity.Property(e => e.ServiceImage)
-                .HasMaxLength(255)
-                .IsUnicode(false);
+            entity.Property(e => e.ServiceImage).IsUnicode(false);
             entity.Property(e => e.Status)
                 .HasMaxLength(20)
                 .IsUnicode(false)

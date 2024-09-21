@@ -197,11 +197,14 @@ namespace MasterPieceApi.Controllers
 
             // Create claims for the JWT payload (You can add more claims as needed)
             var claims = new[]
-            {
-        new Claim(JwtRegisteredClaimNames.Sub, user.Username),
-        new Claim(JwtRegisteredClaimNames.Email, user.Email),
-        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-    };
+{
+    new Claim(JwtRegisteredClaimNames.Sub, user.UserId.ToString()), // Use UserId as the subject
+    new Claim(JwtRegisteredClaimNames.Name, user.Username), // Add username as a separate claim
+    new Claim(JwtRegisteredClaimNames.Email, user.Email),
+    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+    new Claim("userId", user.UserId.ToString()), // Keep this custom claim for consistency
+};
+
 
             // Define token options
             var tokenOptions = new JwtSecurityToken(
@@ -215,9 +218,9 @@ namespace MasterPieceApi.Controllers
             // Create and return the JWT token
             var tokenString = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
             return tokenString;
+
+
+
         }
-
-
-
     }
 }

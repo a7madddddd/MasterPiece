@@ -1,6 +1,6 @@
 ﻿public class UserDTO
 {
-    public int? UserId { get; set; } // Matches UserID in the database
+    public int UserId { get; set; } // Matches UserID in the database
 
     public string Username { get; set; } = null!; // Matches Username in the database
 

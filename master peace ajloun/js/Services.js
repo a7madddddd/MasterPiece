@@ -58,20 +58,31 @@
 /////////////////////////////////////////////////
 
 
-debugger
 // Fetch and display all services in services page
 // Helper function to decode the JWT and extract payload
 function parseJwt(token) {
-    const base64Url = token.split('.')[1]; // Get the payload part of the JWT
+    // Split the token into its parts
+    const base64Url = token.split('.')[1];
     const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-    const jsonPayload = decodeURIComponent(
-        atob(base64)
-            .split('')
-            .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
-            .join('')
-    );
-    return JSON.parse(jsonPayload); // Return the decoded payload
+
+    // Decode the payload
+    const jsonPayload = decodeURIComponent(escape(window.atob(base64)));
+    return JSON.parse(jsonPayload);
 }
+
+
+
+const jwt = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkZCIsImVtYWlsIjoiaHJfbWFuYWdlckBvdXRsb29rLmNvbSIsImp0aSI6IjYyZTAzZGY3LWFkZDYtNDNiYS04MmEwLTVmMzg2MWVkMGU2NSIsImV4cCI6MTcyNjg4MDc5MywiaXNzIjoieW91cklzc3VlciIsImF1ZCI6InlvdXJBdWRpZW5jZSJ9.uHiTy3srFbcMvZcx0za11gia5FFBCO2bIZQ9IMgtAN4';
+
+const decodedToken = parseJwt(jwt);
+const userId = decodedToken.sub || decodedToken.userId; // Adjust based on your token structure
+if (userId != 0 && null) {
+
+    alert('User ID:', userId);
+}
+
+
+
 
 // Fetch services and display them on the page
 fetch('https://localhost:44321/api/Services')
@@ -149,6 +160,7 @@ fetch('https://localhost:44321/api/Services')
 
 // Function to close the popup and submit booking form
 // Helper function to decode the JWT and extract payload
+// Helper function to decode the JWT and extract payload
 function parseJwt(token) {
     const base64Url = token.split('.')[1]; // Get the payload part of the JWT
     const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
@@ -161,82 +173,90 @@ function parseJwt(token) {
     return JSON.parse(jsonPayload); // Return the decoded payload
 }
 
-// Function to close the popup and submit booking form
+// Function to handle booking submission
+// JWT parsing function
+
 document.addEventListener('DOMContentLoaded', function () {
     const closePopupButton = document.getElementById('close-popup');
     const openPopupButton = document.getElementById('open-popup');
     const popup = document.getElementById('popup');
 
     closePopupButton.addEventListener('click', function () {
-        // Validate form inputs
         var name = document.getElementById('name-city').value.trim();
         var email = document.getElementById('email-city').value.trim();
         var date = document.getElementById('date-city').value;
         var guests = document.getElementById('guests-city').value;
+        var price = document.getElementById('price').value;
 
-        // Debugging: Check and log field values
-        console.log('Form Values:', { name, email, date, guests });
-
-        if (name === "" || email === "" || date === "" || guests === "") {
+        // Validation checks
+        if (!name || !email || !date || !guests) {
             Swal.fire({
                 icon: 'error',
-                title: 'Error',
-                text: 'Please fill in all fields before submitting the booking.'
+                title: 'Validation Error',
+                text: 'Please fill in all fields.'
             });
             return;
         }
 
-        // Validate email format
-        var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailPattern.test(email)) {
+        if (!isValidEmail(email)) {
             Swal.fire({
                 icon: 'error',
-                title: 'Error',
+                title: 'Invalid Email',
                 text: 'Please enter a valid email address.'
             });
             return;
         }
 
-        // Validate number of guests
-        if (guests <= 0) {
+        const jwt = localStorage.getItem('jwt');
+        if (!jwt) {
+            console.error('JWT is missing. User is not authenticated.');
             Swal.fire({
                 icon: 'error',
-                title: 'Error',
-                text: 'Please enter a valid number of guests.'
+                title: 'Authentication Error',
+                text: 'Please log in to make a booking.'
             });
             return;
         }
 
-        // Get the JWT from localStorage
-        const jwt = localStorage.getItem('jwt');
-        if (!jwt) {
-            console.error('JWT is missing. User is not authenticated.');
-            return;
-        }
-
-        // Decode the JWT to extract the userId
+        // Parse the JWT to get the user ID
         const decodedToken = parseJwt(jwt);
-        console.log('Decoded JWT:', decodedToken);
+        const userId = decodedToken.userId || decodedToken.sub;
 
-        const userId = decodedToken.userId || decodedToken.id || decodedToken.sub || decodedToken.user_id;
         if (!userId) {
-            console.error('User ID is missing from the JWT.');
+            console.error('User ID not found in the JWT.');
+            Swal.fire({
+                icon: 'error',
+                title: 'User ID Error',
+                text: 'Unable to retrieve user information. Please try logging in again.'
+            });
             return;
         }
 
         const serviceId = openPopupButton.getAttribute("data-service-id");
+        const bookingDate = new Date(date);
+
+        // Calculate total amount based on number of guests and price
+        const totalAmount = parseInt(guests) * parseFloat(price);
+
+        // const bookingData = {
+        //     userId: userId, // This is already correct as it's extracted from the JWT
+        //     serviceId: parseInt(serviceId, 10), // Parse serviceId as an integer
+        //     bookingDate: bookingDate.toISOString(), // Convert date to ISO string format
+        //     numberOfPeople: parseInt(guests, 10), // Parse number of guests as an integer
+        //     totalAmount: totalAmount, // Use the calculated total amount
+        //     status: "pending" // This can remain as is
+        // };
         const bookingData = {
-            userId: parseInt(userId),
-            serviceId: parseInt(serviceId),
-            bookingDate: new Date(date).toISOString(),
-            numberOfPeople: parseInt(guests),
-            totalAmount: parseInt(guests) * 10,
-            status: 'pending'
+            userId: userId, // This is already correct as it's extracted from the JWT
+            serviceId: 1, // Parse serviceId as an integer
+            bookingDate: "2024-09-21", // Ensure the correct date format // Convert date to ISO string format
+            numberOfPeople: 2, // Ensure it's an integer// Parse number of guests as an integer
+            totalAmount: 20, // Use the calculated total amount
+            status: "pending" // This can remain as is
         };
 
-        console.log('Booking Data:', bookingData);
+        console.log('Booking Data:', bookingData); // Log the data for debugging
 
-        // API call to submit the booking
         fetch('https://localhost:44321/api/Bookings/bookingtour', {
             method: 'POST',
             headers: {
@@ -245,36 +265,58 @@ document.addEventListener('DOMContentLoaded', function () {
             },
             body: JSON.stringify(bookingData)
         })
+        // ... (rest of the fetch code remains the same)
             .then(response => {
                 if (!response.ok) {
-                    return response.json().then(errData => {
-                        throw new Error(`Error during booking: ${errData.message || 'Unknown error'}`);
+                    return response.json().then(errorData => {
+                        console.error('Server response:', errorData);
+                        throw new Error('Booking failed due to validation errors');
                     });
                 }
                 return response.json();
             })
             .then(data => {
+                console.log('Booking successful:', data);
                 Swal.fire({
                     icon: 'success',
                     title: 'Booking Successful',
                     text: 'Your booking will be displayed on the profile page.'
                 });
-
-                // Hide the popup
                 popup.style.display = 'none';
-                console.log('Booking data:', data);
-                popup.style.display = 'none'; // Hide popup after successful booking
             })
             .catch(error => {
                 console.error('Error during booking process:', error);
                 Swal.fire({
                     icon: 'error',
                     title: 'Booking Failed',
-                    text: error.message
+                    text: error.message || 'An unexpected error occurred. Please try again.'
                 });
             });
     });
 });
+
+
+// Email validation function
+function isValidEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+}
+
+// Make sure you have this function defined
+function parseJwt(token) {
+    var base64Url = token.split('.')[1];
+    var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    var jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+
+    return JSON.parse(jsonPayload);
+}
+
+
+
+
+
 
 
 

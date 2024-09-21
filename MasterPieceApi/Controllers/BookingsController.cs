@@ -131,13 +131,13 @@ namespace MasterPieceApi.Controllers
             // Create a new Booking entity
             var newBooking = new Booking
             {
-                UserId = 7,
+                UserId = bookingDto.UserId,  // Use the UserId from the bookingDto
                 ServiceId = bookingDto.ServiceId,
-                BookingDate = DateOnly.FromDateTime(bookingDto.BookingDate), // Convert DateTime to DateOnly
+                BookingDate = DateOnly.FromDateTime(bookingDto.BookingDate),  // Convert DateTime to DateOnly
                 NumberOfPeople = bookingDto.NumberOfPeople,
                 TotalAmount = bookingDto.TotalAmount,
-                Status = bookingDto.Status ?? "Pending", // Set default status to "Pending"
-                CreatedAt = DateTime.UtcNow // Set the current UTC time as CreatedAt
+                Status = bookingDto?.Status ?? "Pending",  // Default status to "Pending" if not provided
+                CreatedAt = DateTime.UtcNow  // Set the current UTC time as CreatedAt
             };
 
             // Add the new booking to the database
@@ -148,23 +148,26 @@ namespace MasterPieceApi.Controllers
             return CreatedAtAction(nameof(GetBookingById), new { id = newBooking.BookingId }, newBooking);
         }
 
-        [HttpGet("booking{id}")]
+
+        [HttpGet("booking/{id}")]
         public async Task<IActionResult> GetBookingById(int id)
         {
             var booking = await _context.Bookings
-                                        .Where(b => b.BookingId == id)
-                                        .Select(b => new BookingDto
-                                        {
-                                            BookingId = b.BookingId,
-                                            UserId = b.UserId,
-                                            ServiceId = b.ServiceId,
-                                            BookingDate = b.BookingDate.HasValue ? b.BookingDate.Value.ToDateTime(new TimeOnly(0, 0)) : DateTime.MinValue,
-                                            NumberOfPeople = b.NumberOfPeople,
-                                            TotalAmount = b.TotalAmount,
-                                            Status = b.Status,
-                                            CreatedAt = b.CreatedAt
-                                        })
-                                        .FirstOrDefaultAsync();
+                .Where(b => b.BookingId == id)
+                .Select(b => new BookingDto
+                {
+                    BookingId = b.BookingId,
+                    UserId = b.UserId ?? 0, // Provide a default value if UserId is nullable
+                    ServiceId = b.ServiceId ?? 0, // Provide a default value if ServiceId is nullable
+                    BookingDate = b.BookingDate.HasValue
+                        ? b.BookingDate.Value.ToDateTime(new TimeOnly(0, 0))
+                        : DateTime.MinValue,
+                    NumberOfPeople = b.NumberOfPeople ?? 0, // Provide a default value if NumberOfPeople is nullable
+                    TotalAmount = b.TotalAmount ?? 0, // Provide a default value if TotalAmount is nullable
+                    Status = b.Status ?? string.Empty, // Provide a default value if Status is nullable
+                    CreatedAt = b.CreatedAt ?? DateTime.MinValue // Provide a default value if CreatedAt is nullable
+                })
+                .FirstOrDefaultAsync();
 
             if (booking == null)
             {

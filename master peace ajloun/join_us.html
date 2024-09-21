@@ -15,10 +15,19 @@
     <link rel="stylesheet" href="/path/to/cdn/bootstrap.min.css" />
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- SweetAlert CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    
+    <!-- SweetAlert JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
+
     <style>
         .titlepages {
             width: 10%;
         }
+
+      
+
     </style>
 </head>
 
@@ -211,33 +220,34 @@
                 <div class="col-md-8">
                     <div class="card p-4">
                         <h4 class="mb-4">Join Us</h4>
-                        <form>
+                        <form id="joinRequestForm" enctype="multipart/form-data">
                             <div class="mb-3">
                                 <label for="name" class="form-label">Full Name</label>
-                                <input type="text" class="form-control" id="name" placeholder="Name">
+                                <input type="text" class="form-control" id="name" name="name" required>
                             </div>
                             <div class="mb-3">
                                 <label for="email" class="form-label">Email Address</label>
-                                <input type="email" class="form-control" id="email" placeholder="Email">
+                                <input type="email" class="form-control" id="email" name="email" required>
                             </div>
                             <div class="mb-3">
-                                <label for="subject" class="form-label">Subject</label>
-                                <input type="text" class="form-control" id="subject" placeholder="Subject">
-                            </div>
-                            <div class="mb-3">
-                                <label for="photo" class="form-label">Image </label>
-                                <input type="file" class="form-control" id="photo" placeholder="photo">
+                                <label for="phone" class="form-label">Phone</label>
+                                <input type="tel" class="form-control" id="phone" name="phone">
                             </div>
                             <div class="mb-3">
                                 <label for="message" class="form-label">Message</label>
-                                <textarea class="form-control" id="message" rows="4" placeholder="Message"></textarea>
+                                <textarea class="form-control" id="message" name="message" rows="4"></textarea>
                             </div>
-                            <button type="submit" class="btn btn-primary">Send Message</button>
+                            <div class="mb-3">
+                                <label for="serviceImage" class="form-label">Service Image</label>
+                                <input type="file" class="form-control" id="serviceImage" name="serviceImage" accept="image/*">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Send Request</button>
                         </form>
+
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <img src="image/images (94).jpg" alt="" class="img-fluid rounded">
+                    <img src="image2/join.jpg" alt="" class="img-fluid rounded">
                 </div>
             </div>
         </div>
@@ -456,7 +466,7 @@
             </div>
         </div>
     </div>
-
+    <script src="js/JoinUsApi.js"></script>
     <script src="js/jquery-3.2.1.min.js"></script>
     <script src="styles/bootstrap4/popper.js"></script>
     <script src="styles/bootstrap4/bootstrap.min.js"></script>
