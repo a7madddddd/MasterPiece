@@ -1,61 +1,3 @@
-////////////////function to display all services in services page 
-
-// fetch('https://localhost:44321/api/Services')
-//     .then(response => response.json())
-//     .then(data => {
-//         // Access the $values array which holds the actual service objects
-//         const servicesArray = data.$values;
-
-//         // Check if servicesArray is an array and has elements
-//         if (!Array.isArray(servicesArray) || servicesArray.length === 0) {
-//             throw new Error('No services data received from the API');
-//         }
-
-//         // Get the container where services will be displayed
-//         const servicesContainer = document.getElementById('services-container');
-//         if (!servicesContainer) {
-//             console.error('Services container element not found');
-//             return;
-//         }
-
-//         // Clear the container before adding new content
-//         servicesContainer.innerHTML = '';
-
-//         // Iterate over each service and create the HTML content
-//         servicesArray.forEach(service => {
-//             const cardHTML = `
-//                 <div class="col-lg-4 wow fadeInUp" data-wow-delay="0.2s">
-//                     <div class="blog-item">
-//                         <div class="blog-img">
-//                             <a href="service-details.html?id=${service.serviceId}">
-//                                 <img src="${service.image}" class="img-fluid w-100 rounded-top" alt="${service.serviceName}" style="width: 100%; height: 30vh" />
-//                             </a>
-//                             <div class="blog-category py-2 px-4">${service.serviceName}</div>
-//                             <div class="blog-date">
-//                                 <i class="fas fa-clock me-2"></i>${service.dates}
-//                             </div>
-//                         </div>
-//                         <div class="blog-content p-4">
-//                             <a href="service-details.html?id=${service.serviceId}" class="h4 d-inline-block mb-4">
-//                                 ${service.question}
-//                             </a>
-//                             <p class="mb-4">${service.description}</p>
-//                             <a href="service-details.html?id=${service.serviceId}" class="btn btn-primary rounded-pill py-2 px-4">Read More <i class="fas fa-arrow-right ms-2"></i></a>
-//                         </div>
-//                     </div>
-//                 </div>
-//             `;
-//             // Append each card to the container
-//             servicesContainer.innerHTML += cardHTML;
-//         });
-
-//         console.log('Services loaded successfully');
-//     })
-//     .catch(error => {
-//         console.error('Error fetching the services:', error);
-//     });
-
-/////////////////////////////////////////////////
 
 
 // Fetch and display all services in services page
@@ -72,14 +14,14 @@ function parseJwt(token) {
 
 
 
-const jwt = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkZCIsImVtYWlsIjoiaHJfbWFuYWdlckBvdXRsb29rLmNvbSIsImp0aSI6IjYyZTAzZGY3LWFkZDYtNDNiYS04MmEwLTVmMzg2MWVkMGU2NSIsImV4cCI6MTcyNjg4MDc5MywiaXNzIjoieW91cklzc3VlciIsImF1ZCI6InlvdXJBdWRpZW5jZSJ9.uHiTy3srFbcMvZcx0za11gia5FFBCO2bIZQ9IMgtAN4';
+// const jwt = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkZCIsImVtYWlsIjoiaHJfbWFuYWdlckBvdXRsb29rLmNvbSIsImp0aSI6IjYyZTAzZGY3LWFkZDYtNDNiYS04MmEwLTVmMzg2MWVkMGU2NSIsImV4cCI6MTcyNjg4MDc5MywiaXNzIjoieW91cklzc3VlciIsImF1ZCI6InlvdXJBdWRpZW5jZSJ9.uHiTy3srFbcMvZcx0za11gia5FFBCO2bIZQ9IMgtAN4';
 
-const decodedToken = parseJwt(jwt);
-const userId = decodedToken.sub || decodedToken.userId; // Adjust based on your token structure
-if (userId != 0 && null) {
+// const decodedToken = parseJwt(jwt);
+// const userId = decodedToken.sub || decodedToken.userId; // Adjust based on your token structure
+// if (userId != 0 && null) {
 
-    alert('User ID:', userId);
-}
+//     alert('User ID:', userId);
+// }
 
 
 
@@ -127,13 +69,14 @@ fetch('https://localhost:44321/api/Services')
                         </div>
                     </div>
                 </div>
-           
+            
             
                 `;
+                
             // Append each card to the container
             servicesContainer.innerHTML += cardHTML;
         });
-
+       
         console.log('Services loaded successfully');
 
         // Add event listeners to all "Book Now" buttons
@@ -148,6 +91,11 @@ fetch('https://localhost:44321/api/Services')
                 document.getElementById('open-popup').setAttribute('data-service-id', serviceId);
                 document.getElementById('open-popup').setAttribute('data-service', serviceName);
                 document.getElementById('open-popup').setAttribute('data-image', serviceImage);
+                
+               
+
+                
+
 
                 // Show the popup
                 document.getElementById('popup').style.display = 'block';
@@ -182,7 +130,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const closePopupButton = document.getElementById('close-popup');
     const openPopupButton = document.getElementById('open-popup');
     const popup = document.getElementById('popup');
-
+    debugger
     closePopupButton.addEventListener('click', function () {
         var name = document.getElementById('name-city').value.trim();
         var email = document.getElementById('email-city').value.trim();
@@ -233,12 +181,13 @@ document.addEventListener('DOMContentLoaded', function () {
             });
             return;
         }
-
-        const serviceId = openPopupButton.getAttribute("data-service-id");
+        debugger
+        
         const bookingDate = new Date(date);
+        var price = document.getElementById('price').textContent.trim(); // or .innerText
 
         // Calculate total amount based on number of guests and price
-        const totalAmount = parseInt(guests) * parseFloat(price);
+        const totalAmountFinal = parseInt(guests) * parseFloat(price);
 
         // const bookingData = {
         //     userId: userId, // This is already correct as it's extracted from the JWT
@@ -248,17 +197,26 @@ document.addEventListener('DOMContentLoaded', function () {
         //     totalAmount: totalAmount, // Use the calculated total amount
         //     status: "pending" // This can remain as is
         // };
+        
+        // Extract the 'id' from the URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const serviceId1 = parseInt(urlParams.get('id')); // Parse the service ID as an integer
+
+        // Create booking data with the extracted serviceId
         const bookingData = {
             userId: userId, // This is already correct as it's extracted from the JWT
-            serviceId: 1, // Parse serviceId as an integer
-            bookingDate: "2024-09-21", // Ensure the correct date format // Convert date to ISO string format
-            numberOfPeople: 2, // Ensure it's an integer// Parse number of guests as an integer
-            totalAmount: 20, // Use the calculated total amount
+            serviceId: serviceId1, // Use the extracted serviceId from the URL
+            bookingDate: bookingDate, // Ensure the correct date format
+            numberOfPeople: guests, // Ensure it's an integer
+            totalAmount: totalAmountFinal, // Use the calculated total amount
             status: "pending" // This can remain as is
         };
 
-        console.log('Booking Data:', bookingData); // Log the data for debugging
+        console.log(bookingData);
 
+
+        console.log('Booking Data:', bookingData); // Log the data for debugging
+        debugger
         fetch('https://localhost:44321/api/Bookings/bookingtour', {
             method: 'POST',
             headers: {
@@ -360,6 +318,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 document.querySelector('.description').textContent = service.description2;
                 document.querySelector('.price').textContent = service.price;
                 document.querySelector('.question').textContent = service.question;
+                document.querySelector('#tour_name').textContent = service.serviceName;
+                document.querySelector('#tour_price').textContent = service.price;
+
 
 
             })
@@ -428,6 +389,38 @@ document.addEventListener('DOMContentLoaded', loadProposalServices);
 
 
 
+// Function to extract the serviceId from the URL
+function getServiceIdFromUrl() {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get('id');  // Get the 'id' parameter from the URL
+}
+
+// Fetch data for the specific service
+function fetchServiceData(serviceId) {
+    fetch(`https://localhost:44321/api/Services/${serviceId}`)
+        .then(response => response.json())
+        .then(service => {
+            // Dynamically update the service name and price if data is valid
+            if (service) {
+                document.getElementById('bar_service_name').textContent = `Explore ${service.serviceName} today!`;
+                document.getElementById('bar_button').textContent = `Book Now for $${service.price}`;
+            } else {
+                document.getElementById('bar_service_name').textContent = "Service not found";
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching service data:', error);
+            document.getElementById('bar_service_name').textContent = "Error loading service.";
+        });
+}
+
+// Get the serviceId from the URL and fetch the service data
+const serviceId = getServiceIdFromUrl();
+if (serviceId) {
+    fetchServiceData(serviceId);
+} else {
+    document.getElementById('bar_service_name').textContent = "No service ID provided.";
+}
 
 
 ////////////////////////////////////// for chack the user id for booking button document.getElementById('open-popup').addEventListener('click', function() {
