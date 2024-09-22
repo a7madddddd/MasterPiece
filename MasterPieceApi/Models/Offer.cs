@@ -11,15 +11,15 @@ public partial class Offer
 
     public string? Description { get; set; }
 
-    public DateOnly? StartDate { get; set; }
+    public string? StartDate { get; set; }
 
-    public DateOnly? EndDate { get; set; }
+    public string? EndDate { get; set; }
 
     public decimal? DiscountPercentage { get; set; }
 
     public bool? IsActive { get; set; }
 
-    public DateTime? CreatedAt { get; set; }
+    public string? CreatedAt { get; set; }
 
     public decimal PricePerNight { get; set; }
 

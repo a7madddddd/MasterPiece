@@ -127,7 +127,9 @@ fetch('https://localhost:44321/api/Services')
                         </div>
                     </div>
                 </div>
-            `;
+           
+            
+                `;
             // Append each card to the container
             servicesContainer.innerHTML += cardHTML;
         });
@@ -265,7 +267,7 @@ document.addEventListener('DOMContentLoaded', function () {
             },
             body: JSON.stringify(bookingData)
         })
-        // ... (rest of the fetch code remains the same)
+            // ... (rest of the fetch code remains the same)
             .then(response => {
                 if (!response.ok) {
                     return response.json().then(errorData => {
@@ -433,6 +435,3 @@ document.addEventListener('DOMContentLoaded', loadProposalServices);
 
 
 
-
-
-///////////////////////////////////////
