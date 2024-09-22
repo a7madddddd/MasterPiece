@@ -12,6 +12,9 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Configuration;
+using Microsoft.AspNetCore.Http; // Add this for IFormFile
+using Microsoft.AspNetCore.Cryptography.KeyDerivation; // For password hashing
+using System.Security.Cryptography; // For using Rfc2898DeriveBytes
 
 namespace MasterPieceApi.Controllers
 {
@@ -197,30 +200,132 @@ namespace MasterPieceApi.Controllers
 
             // Create claims for the JWT payload (You can add more claims as needed)
             var claims = new[]
-{
-    new Claim(JwtRegisteredClaimNames.Sub, user.UserId.ToString()), // Use UserId as the subject
-    new Claim(JwtRegisteredClaimNames.Name, user.Username), // Add username as a separate claim
-    new Claim(JwtRegisteredClaimNames.Email, user.Email),
-    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-    new Claim("userId", user.UserId.ToString()), // Keep this custom claim for consistency
-};
+                {
+                    new Claim(JwtRegisteredClaimNames.Sub, user.UserId.ToString()), // Use UserId as the subject
+                    new Claim(JwtRegisteredClaimNames.Name, user.Username), // Add username as a separate claim
+                    new Claim(JwtRegisteredClaimNames.Email, user.Email),
+                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                    new Claim("userId", user.UserId.ToString()), // Keep this custom claim for consistency
+                };
 
 
             // Define token options
-            var tokenOptions = new JwtSecurityToken(
-                issuer: jwtSettings["Issuer"],
-                audience: jwtSettings["Audience"],
-                claims: claims,
-                expires: DateTime.Now.AddMinutes(Convert.ToDouble(jwtSettings["ExpirationMinutes"])),
-                signingCredentials: signinCredentials
-            );
+                    var tokenOptions = new JwtSecurityToken(
+                        issuer: jwtSettings["Issuer"],
+                        audience: jwtSettings["Audience"],
+                        claims: claims,
+                        expires: DateTime.Now.AddMinutes(Convert.ToDouble(jwtSettings["ExpirationMinutes"])),
+                        signingCredentials: signinCredentials
+                    );
 
-            // Create and return the JWT token
-            var tokenString = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
-            return tokenString;
+                    // Create and return the JWT token
+                    var tokenString = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
+                    return tokenString;
 
+                }
 
+        [HttpGet("GetUserProfile{userId}")]
+        public async Task<IActionResult> GetUserProfile(int userId)
+        {
+            var user = await _context.Users.FindAsync(userId);
+            if (user == null)
+            {
+                return NotFound(new { message = "User not found" });
+            }
 
+            var userResponse = new UserResponseDTO
+            {
+                UserId = user.UserId,
+                Username = user.Username,
+                Email = user.Email,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                ProfileImage = user.ProfileImage,
+                Phone = user.Phone,
+            };
+
+            return Ok(userResponse);
         }
+
+        // PUT: api/users/UserProfile/{userId}
+        [HttpPut("UpdateUserProfile/{userId}")]
+        public async Task<IActionResult> UpdateUser(int userId, [FromForm] UserResponseDTO userDto, IFormFile? profileImage)
+        {
+            if (userId != userDto.UserId)
+            {
+                return BadRequest(new { message = "User ID mismatch" });
+            }
+
+            var user = await _context.Users.FindAsync(userId);
+            if (user == null)
+            {
+                return NotFound(new { message = "User not found" });
+            }
+
+            // Update user properties
+            user.Username = userDto?.Username;
+            user.Email = userDto.Email;
+            user.FirstName = userDto?.FirstName;
+            user.LastName = userDto?.LastName;
+            user.ProfileImage = userDto?.ProfileImage;
+            user.Phone = userDto?.Phone;
+
+            // Handle file upload for profile image
+            if (profileImage != null && profileImage.Length > 0)
+            {
+                var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "UserProfileimages");
+
+                // Ensure the uploads directory exists
+                if (!Directory.Exists(uploadsFolder))
+                {
+                    Directory.CreateDirectory(uploadsFolder);
+                }
+
+                var fileName = Guid.NewGuid() + Path.GetExtension(profileImage.FileName); // Generate unique file name
+                var filePath = Path.Combine(uploadsFolder, fileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await profileImage.CopyToAsync(stream);
+                }
+
+                user.ProfileImage = $"/UserProfileimages/{fileName}"; // Update with the new file path
+            }
+
+            // Hash the password if provided
+            if (!string.IsNullOrEmpty(userDto.Password))
+            {
+                user.PasswordHash = HashPassword(userDto.Password);
+            }
+
+            // Save changes to the database
+            await _context.SaveChangesAsync();
+
+            return NoContent(); // Return 204 No Content status
+        }
+
+        // Method to hash password
+        private string HashPassword(string password)
+        {
+            // Generate a salt
+            var salt = new byte[16];
+            using (var rng = RandomNumberGenerator.Create())
+            {
+                rng.GetBytes(salt);
+            }
+
+            // Hash the password
+            var hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+                password: password,
+                salt: salt,
+                prf: KeyDerivationPrf.HMACSHA256,
+                iterationCount: 10000,
+                numBytesRequested: 32));
+
+            // Store the salt and hashed password together (you can adjust this based on your database schema)
+            return $"{Convert.ToBase64String(salt)}.{hashed}";
+        }
+
+
     }
 }

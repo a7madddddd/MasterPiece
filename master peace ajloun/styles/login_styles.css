@@ -2186,12 +2186,7 @@ strong {
 }
 
 
-.input:focus, input:hover {
-    outline: none;
-    padding: .2rem 1rem;
-    border-radius: 1rem;
-    border-color: green;
-}
+
 
 .input::placeholder {
     color: #777;

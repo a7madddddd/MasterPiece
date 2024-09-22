@@ -65,7 +65,7 @@ CREATE TABLE Payments (
     FOREIGN KEY (UserID) REFERENCES Users(UserID)
 );
 
-CREATE TABLE Offers (
+drop TABLE Offers (
     OfferID INT IDENTITY(1,1) PRIMARY KEY,
     Title VARCHAR(200) NOT NULL,
     Description TEXT,
@@ -208,9 +208,23 @@ ALTER COLUMN ServiceImage VARCHAR(MAX);
 
 
 
-ALTER TABLE Offers ADD PricePerNight DECIMAL(10,2) NOT NULL DEFAULT 0;
-ALTER TABLE Offers ADD Rating DECIMAL(3,1);
-ALTER TABLE Offers ADD ReviewCount INT;
-ALTER TABLE Offers ADD AccommodationType VARCHAR(50);
-ALTER TABLE Offers ADD ImageURL VARCHAR(255);
-ALTER TABLE Offers ADD Amenities VARCHAR(MAX);
+-- Drop the existing Offers table
+DROP TABLE IF EXISTS Offers;
+
+-- Create the new Offers table with additional columns
+CREATE TABLE Offers (
+    OfferID INT IDENTITY(1,1) PRIMARY KEY,
+    Title VARCHAR(200) NOT NULL,
+    Description TEXT,
+    StartDate VARCHAR(50),
+    EndDate VARCHAR(50),
+    DiscountPercentage DECIMAL(5,2),
+    IsActive BIT DEFAULT 1,
+    CreatedAt VARCHAR(50),
+    PricePerNight DECIMAL(10,2) NOT NULL DEFAULT 0,
+    Rating DECIMAL(3,1),
+    ReviewCount INT,
+    AccommodationType VARCHAR(50),
+    ImageURL VARCHAR(MAX),
+    Amenities VARCHAR(MAX)
+);

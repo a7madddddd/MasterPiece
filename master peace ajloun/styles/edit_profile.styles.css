@@ -225,3 +225,292 @@ body {
     width: 12vw;
     height: 7vh;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.col-12.bg-white.px-3.mb-3.pb-3 {
+    background-color: #ffffff;
+    /* white background */
+    padding: 3px;
+    /* horizontal padding */
+    margin-bottom: 3px;
+    /* bottom margin */
+    padding-bottom: 3px;
+    /* bottom padding */
+    border-radius: 10px;
+    /* rounded corners */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    /* subtle shadow */
+}
+
+.d-flex {
+    margin-bottom: 20px;
+    /* spacing between form rows */
+}
+
+.d-flex:last-child {
+    margin-bottom: 0;
+    /* no margin for the last row */
+}
+
+.py-2 {
+    padding-top: 10px;
+    /* vertical padding for labels */
+    padding-bottom: 10px;
+}
+
+.form-control {
+    width: 70%;
+    /* input field width */
+    height: 40px;
+    /* input field height */
+    padding: 10px;
+    /* input field padding */
+    border: 1px solid #ccc;
+    /* input field border */
+    border-radius: 5px;
+    /* input field rounded corners */
+}
+
+.form-control:focus {
+    border-color: #aaa;
+    /* input field focus border color */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    /* input field focus shadow */
+}
+
+.border-bottom {
+    border-bottom: 1px solid #ccc;
+    /* bottom border for form rows */
+}
+
+.btn.btn-primary.follow {
+    background-color: darkgreen;
+    /* primary button color */
+    color: #ffffff;
+    /* primary button text color */
+    padding: 10px 20px;
+    /* primary button padding */
+    border: none;
+    /* no border for primary button */
+    border-radius: 5px;
+    /* primary button rounded corners */
+    cursor: pointer;
+    /* primary button cursor */
+}
+
+.btn.btn-primary.follow:hover {
+    background-color: darkgreen;
+    /* primary button hover color */
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
+
+
+body {
+    background-color: #e2e8f0;
+}
+
+#editProfile .breadcrumb {
+    background-color: #c5cee4;
+
+}
+
+#editProfile .breadcrumb a {
+    text-decoration: none;
+    color: white;
+}
+
+#editProfile {
+    max-width: 80%;
+    padding: 0;
+    margin-bottom: 10%;
+}
+
+#editProfile p {
+    margin: 0;
+}
+
+#editProfile .d-flex a {
+    text-decoration: none;
+    color: #686868;
+}
+
+#editProfile img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+#editProfile .fab.fa-twitter {
+    color: #8ab7f1;
+}
+
+#editProfile .fab.fa-instagram {
+    color: #E1306C;
+}
+
+#editProfile .fab.fa-facebook-f {
+    color: #5999ec;
+}
+
+#editProfile input {
+    width: 50%;
+}
+
+#editProfile h6 {
+    color: #686868;
+}
+
+.table-custom {
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+}
+
+#editProfile input{
+    padding-top: 0 !important;
+    margin: 0 !important;
+
+}.table-custom thead th {
+    background-color: #f7f7f7;
+    border-bottom: none;
+    padding: 1rem;
+    text-align: center;
+    width: 15%;
+}
+
+.table-custom tbody tr {
+    border-bottom: 1px solid #ddd;
+}
+
+.table-custom tbody tr:last-child {
+    border-bottom: none;
+}
+
+.table-custom tbody td {
+    padding: 1rem;
+    text-align: center;
+    width: 15%;
+}
+
+.table-custom tbody td:first-child {
+    border-left: none;
+}
+
+.table-custom tbody td:last-child {
+    border-right: none;
+}
+
+.table-custom tbody td img {
+    width: 100%;
+    height: auto;
+}
+
+
+
+
+
+.col-12.bg-white.px-3.mb-3.pb-3 {
+    background-color: #ffffff;
+    padding: 3px;
+    margin-bottom: 3px;
+    padding-bottom: 3px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.d-flex {
+    margin-bottom: 20px;
+}
+
+.d-flex:last-child {
+    margin-bottom: 0;
+}
+
+.py-2 {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.form-control {
+    width: 70%;
+    height: 40px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.form-control:focus {
+    border-color: #aaa;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.border-bottom {
+    border-bottom: 1px solid #ccc;
+}
+
+.btn.btn-primary.follow {
+    background-color: green;
+    color: #ffffff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn.btn-primary.follow:hover {
+    background-color: darkgreen;
+}
+
+.file-input {
+    position: relative;
+    display: inline-block;
+}
+
+.file-input input[type="file"] {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.file-input label {
+    display: inline-block;
+    padding: 10px 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f7f7f7;
+    cursor: pointer;
+}
+
+.file-input label i {
+    font-size: 18px;
+    margin-right: 10px;
+}
+
+.file-input label span {
+    font-size: 14px;
+    color: #666;
+}
+
+.file-input label:hover {
+    background-color: #eee;
+}
