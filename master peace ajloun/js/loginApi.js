@@ -93,7 +93,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-
 document.addEventListener('DOMContentLoaded', function () {
     // Login functionality
     document.querySelector('#loginForm').addEventListener('submit', async function (event) {
@@ -105,8 +104,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Create a plain JavaScript object with the necessary properties
         const loginDto = {
-            email: email,
-            password: password
+            Email: email,       // Ensure the key matches your DTO property
+            Password: password   // Ensure the key matches your DTO property
         };
 
         try {
@@ -143,12 +142,12 @@ document.addEventListener('DOMContentLoaded', function () {
             // window.location.href = '/dashboard'; // Example redirection
 
         } catch (error) {
-            console.error("Login failed:", error.message);
+            console.error("Login failed:");
             // Show error alert
             await Swal.fire({
                 icon: 'error',
                 title: 'Login failed',
-                
+                text: error.message, // Show error message
             });
         }
     });

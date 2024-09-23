@@ -136,6 +136,13 @@ namespace MasterPieceApi.Controllers
                 return BadRequest("Password is required.");
             }
 
+            // Check if a user with the same email already exists
+            var existingUser = _context.Users.FirstOrDefault(u => u.Email == registerDto.Email);
+            if (existingUser != null)
+            {
+                return Conflict("User with this email already exists.");
+            }
+
             // Hash the password
             var passwordHash = BCrypt.Net.BCrypt.HashPassword(registerDto.Password);
 
@@ -144,18 +151,21 @@ namespace MasterPieceApi.Controllers
                 Username = registerDto.Username,
                 Email = registerDto.Email,
                 PasswordHash = passwordHash,
-                FirstName = null, // Set or retrieve as needed
-                LastName = null,  // Set or retrieve as needed
-                UserRole = "User", // Default role, change as necessary
+                UserRole = "User", // Default role
                 ProfileImage = null, // Set or retrieve as needed
-                Phone = null // Set or retrieve as needed
             };
 
             _context.Users.Add(newUser);
             _context.SaveChanges();
 
-            return Ok("User registered successfully.");
+            return CreatedAtAction(nameof(Register), new { id = newUser.UserId }, new
+            {
+                Username = newUser.Username,
+                Email = newUser.Email,
+                Message = "User registered successfully."
+            });
         }
+
 
 
 
@@ -246,7 +256,7 @@ namespace MasterPieceApi.Controllers
         }
 
         [HttpPut("UpdateUserProfile/{userId}")]
-        public async Task<IActionResult> UpdateUser(int userId, [FromForm] UserResponseDTO userDto, IFormFile? profileImage)
+        public async Task<IActionResult> UpdateUser(int userId, [FromForm] UserResponseDTO userDto, IFormFile? usersImagesFile)
         {
             if (userId != userDto.UserId)
             {
@@ -267,17 +277,24 @@ namespace MasterPieceApi.Controllers
 
 
             // Handle file upload for profile image
-            if (profileImage != null && profileImage.Length > 0)
+            if (usersImagesFile != null && usersImagesFile.Length > 0)
             {
-                var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "UserProfileimages");
+                // Change the folder path to the specified directory
+                var uploadsFolder = @"C:\Users\Orange\Desktop\test_ajloun\master peace ajloun";
+
+                // Create the directory if it does not exist
                 Directory.CreateDirectory(uploadsFolder);
-                var fileName = Guid.NewGuid() + Path.GetExtension(profileImage.FileName);
+
+                var fileName = Guid.NewGuid() + Path.GetExtension(usersImagesFile.FileName);
                 var filePath = Path.Combine(uploadsFolder, fileName);
+
                 using (var stream = new FileStream(filePath, FileMode.Create))
                 {
-                    await profileImage.CopyToAsync(stream);
+                    await usersImagesFile.CopyToAsync(stream);
                 }
-                user.ProfileImage = $"/UserProfileimages/{fileName}";
+
+                // Update the profile image path (if needed)
+                user.ProfileImage = $"/master peace ajloun/{fileName}"; // Adjust this line as necessary
             }
 
             // Hash the password if provided

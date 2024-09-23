@@ -159,3 +159,56 @@ function fetchOpeningHours() {
 
 // Call the function when the DOM is fully loaded
 document.addEventListener('DOMContentLoaded', fetchOpeningHours);
+
+
+///// function to display the user name from api 
+document.addEventListener('DOMContentLoaded', function () {
+    // Assuming JWT token is stored in localStorage
+    const jwt = localStorage.getItem('jwt');
+    const loadingText = document.querySelector('.loading-text');
+
+    if (jwt) {
+        // Extract user ID from JWT (if you need it)
+        const decodedToken = parseJwt(jwt);
+        const userId = decodedToken.userId || decodedToken.sub;
+
+        // Fetch user details
+        fetch(`https://localhost:44321/api/Users/${userId}`, {
+            headers: {
+                'Authorization': `Bearer ${jwt}`
+            }
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(user => {
+                // Update the loading text with the user's first name
+                loadingText.textContent = `Welcome ${user.firstName} ...`;
+            })
+            .catch(error => {
+                console.error('Error fetching user data:', error);
+                // Set loading text to "Guest" if there is an error (e.g., user not logged in)
+                loadingText.textContent = 'Welcome Guest ...';
+            });
+    } else {
+        // If no JWT is present, set loading text to "Guest"
+        loadingText.textContent = 'Welcome Guest ...';
+    }
+
+    // Function to parse JWT
+    function parseJwt(token) {
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(
+            atob(base64)
+                .split('')
+                .map(function (c) {
+                    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+                }).join('')
+        );
+        return JSON.parse(jsonPayload);
+    }
+});
