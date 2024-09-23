@@ -139,7 +139,6 @@ document.addEventListener("DOMContentLoaded", function () {
             document.getElementById("email").value = user.email || '';
             document.getElementById("phone").value = user.phone || ''; // Assuming you have a phone field in your DTO
             document.getElementById('password').placeholder = '*******';
-            document.getElementById("userPhoto").src = user.profileImage || 'default-image-url.jpg'; // Use default image if not available
             document.getElementById('userName').textContent = user.username; // Display username
             document.getElementById('userLocation').textContent = user.email;
         })
@@ -179,4 +178,4 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 
-// "C:\Users\Orange\Desktop\test_ajloun\MasterPieceApi\wwwroot\UserProfileimages\25d205f4-61d0-4ff4-a68b-7d3e6e2b5e10.jpg"
+// "C:\Users\Orange\Desktop\test_ajloun/MasterPieceApi/wwwroot/UserProfileimages/25d205f4-61d0-4ff4-a68b-7d3e6e2b5e10.jpg"
