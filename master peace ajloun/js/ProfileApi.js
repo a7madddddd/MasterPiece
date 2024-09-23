@@ -113,14 +113,14 @@ document.addEventListener("DOMContentLoaded", function () {
 //         });
 // });
 
-
+// JavaScript code
 document.addEventListener("DOMContentLoaded", function () {
     const token = localStorage.getItem('jwt');
     const decodedToken = jwt_decode(token);
     const userId = decodedToken.userId;
 
     // Fetch user data
-    fetch(`https://localhost:44321/api/Users/GetUserProfile${userId}`)
+    fetch(`https://localhost:44321/api/Users/GetUserProfile/${userId}`)
         .then(response => {
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
@@ -129,20 +129,12 @@ document.addEventListener("DOMContentLoaded", function () {
         })
         .then(user => {
             // Set values with user data
-            const fields = ['username', 'firstName', 'lastName', 'email', 'phone'];
-            fields.forEach(field => {
-                const element = document.getElementById(field);
-                if (element) element.value = user[field] || '';
-            });
-
-            const passwordElement = document.getElementById('password');
-            if (passwordElement) passwordElement.placeholder = '*******';
-
-            const userNameElement = document.getElementById('userName');
-            if (userNameElement) userNameElement.textContent = user.username;
-
-            const userLocationElement = document.getElementById('userLocation');
-            if (userLocationElement) userLocationElement.textContent = user.email;
+            document.getElementById("username").value = user.username || '';
+            document.getElementById("firstName").value = user.firstName || '';
+            document.getElementById("lastName").value = user.lastName || '';
+            document.getElementById("email").value = user.email || '';
+            document.getElementById("phone").value = user.phone || '';
+            document.getElementById('password').placeholder = 'Enter New Password';
         })
         .catch(error => {
             console.error("There was an error fetching the user data:", error);
@@ -156,24 +148,22 @@ document.addEventListener("DOMContentLoaded", function () {
             const formData = new FormData();
             formData.append('UserId', userId);
 
-            // Only append non-empty values
-            const fields = ['Username', 'Email', 'FirstName', 'LastName', 'Phone', 'Password'];
+            // Append form fields
+            const fields = ['username', 'firstName', 'lastName', 'email', 'phone', 'Password'];
             fields.forEach(field => {
-                const element = document.getElementById(field.toLowerCase());
+                const element = document.getElementById(field);
                 if (element && element.value) {
                     formData.append(field, element.value);
                 }
             });
 
-            // Handle file upload
-            const profilePicture = document.getElementById('profile-picture');
-            if (profilePicture && profilePicture.files[0]) {
-                formData.append('profileImage', profilePicture.files[0]);
-            }
-
             fetch(`https://localhost:44321/api/Users/UpdateUserProfile/${userId}`, {
                 method: 'PUT',
-                body: formData
+                body: formData,
+                headers: {
+                    'Accept': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
             })
                 .then(response => {
                     if (!response.ok) {
@@ -185,8 +175,12 @@ document.addEventListener("DOMContentLoaded", function () {
                 })
                 .then(data => {
                     alert(data.message);
+                    document.getElementById('password').value = '';
                 })
-                .catch(error => console.error('Error:', error));
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Failed to update profile. Please try again.');
+                });
         });
     } else {
         console.error("User profile form not found");

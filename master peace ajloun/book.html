@@ -21,7 +21,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css">
-
+    <script src="js/bookApi.js"></script>
     <style>
         :root {
             --primary-color: #34495e;
@@ -473,23 +473,15 @@
                 </div>
                 <div class="order-summary">
                     <h2>Order Summary</h2>
-                    <div class="order-item">
-                        <span>Deluxe Tour Package</span>
-                        <span>$1500</span>
-                    </div>
-                    <div class="order-item">
-                        <span>Travel Insurance</span>
-                        <span>$100</span>
-                    </div>
-                    <div class="order-item">
-                        <span>Taxes & Fees</span>
-                        <span>$160</span>
-                    </div>
+                    <!-- Container to append fetched bookings dynamically -->
+                    <div id="order-items"></div>
+                    <!-- Total price display -->
                     <div class="total">
-                        <span>Total</span>
-                        <span>$1760</span>
+                        <span>Total : </span>
+                        <span id="total-price">$0</span>
                     </div>
                 </div>
+
             </div>
         </div>
 

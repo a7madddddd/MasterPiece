@@ -210,21 +210,21 @@ namespace MasterPieceApi.Controllers
 
 
             // Define token options
-                    var tokenOptions = new JwtSecurityToken(
-                        issuer: jwtSettings["Issuer"],
-                        audience: jwtSettings["Audience"],
-                        claims: claims,
-                        expires: DateTime.Now.AddMinutes(Convert.ToDouble(jwtSettings["ExpirationMinutes"])),
-                        signingCredentials: signinCredentials
-                    );
+            var tokenOptions = new JwtSecurityToken(
+                issuer: jwtSettings["Issuer"],
+                audience: jwtSettings["Audience"],
+                claims: claims,
+                expires: DateTime.Now.AddMinutes(Convert.ToDouble(jwtSettings["ExpirationMinutes"])),
+                signingCredentials: signinCredentials
+            );
 
-                    // Create and return the JWT token
-                    var tokenString = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
-                    return tokenString;
+            // Create and return the JWT token
+            var tokenString = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
+            return tokenString;
 
-                }
+        }
 
-        [HttpGet("GetUserProfile{userId}")]
+        [HttpGet("GetUserProfile/{userId}")]
         public async Task<IActionResult> GetUserProfile(int userId)
         {
             var user = await _context.Users.FindAsync(userId);
@@ -232,7 +232,6 @@ namespace MasterPieceApi.Controllers
             {
                 return NotFound(new { message = "User not found" });
             }
-
             var userResponse = new UserResponseDTO
             {
                 UserId = user.UserId,
@@ -243,12 +242,9 @@ namespace MasterPieceApi.Controllers
                 ProfileImage = user.ProfileImage,
                 Phone = user.Phone,
             };
-
             return Ok(userResponse);
         }
 
-
-        // C# Controller method
         [HttpPut("UpdateUserProfile/{userId}")]
         public async Task<IActionResult> UpdateUser(int userId, [FromForm] UserResponseDTO userDto, IFormFile? profileImage)
         {
@@ -263,20 +259,18 @@ namespace MasterPieceApi.Controllers
             }
 
             // Update user properties
-            if (!string.IsNullOrEmpty(userDto.Username)) user.Username = userDto.Username;
-            if (!string.IsNullOrEmpty(userDto.Email)) user.Email = userDto.Email;
-            if (!string.IsNullOrEmpty(userDto.FirstName)) user.FirstName = userDto.FirstName;
-            if (!string.IsNullOrEmpty(userDto.LastName)) user.LastName = userDto.LastName;
-            if (!string.IsNullOrEmpty(userDto.Phone)) user.Phone = userDto.Phone;
+            user.Username = userDto.Username ?? user.Username;
+            user.Email = userDto.Email ?? user.Email;
+            user.FirstName = userDto.FirstName ?? user.FirstName;
+            user.LastName = userDto.LastName ?? user.LastName;
+            user.Phone = userDto.Phone ?? user.Phone;
+
 
             // Handle file upload for profile image
             if (profileImage != null && profileImage.Length > 0)
             {
-                var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "UserProfileimages");
-                if (!Directory.Exists(uploadsFolder))
-                {
-                    Directory.CreateDirectory(uploadsFolder);
-                }
+                var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "UserProfileimages");
+                Directory.CreateDirectory(uploadsFolder);
                 var fileName = Guid.NewGuid() + Path.GetExtension(profileImage.FileName);
                 var filePath = Path.Combine(uploadsFolder, fileName);
                 using (var stream = new FileStream(filePath, FileMode.Create))
@@ -318,6 +312,29 @@ namespace MasterPieceApi.Controllers
             return $"{Convert.ToBase64String(salt)}.{hashed}";
         }
 
+        // GET: api/Bookings/user/{userId}/services
+        [HttpGet("user/{userId}/services")]
+        public async Task<ActionResult<IEnumerable<UserServiceDto>>> GetServicesByUserId(int userId)
+        {
+            // Get the list of services booked by the user
+            var services = await _context.Bookings
+                .Where(b => b.UserId == userId)
+                .Include(b => b.Service) // Assuming Booking has a navigation property to Service
+                .Select(b => new UserServiceDto
+                {
+                    ServiceId = b.Service.ServiceId,
+                    ServiceName = b.Service.ServiceName,
+                    Price = b.Service.Price
+                })
+                .ToListAsync();
 
+            if (services == null || services.Count == 0)
+            {
+                return NotFound($"No services found for user with ID {userId}");
+            }
+
+            return Ok(services);
+        }
     }
 }
+
