@@ -114,17 +114,13 @@ document.addEventListener("DOMContentLoaded", function () {
 // });
 
 
-
-
 document.addEventListener("DOMContentLoaded", function () {
     const token = localStorage.getItem('jwt');
-
-
     const decodedToken = jwt_decode(token);
     const userId = decodedToken.userId;
 
     // Fetch user data
-    fetch(`https://localhost:44321/api/Users/GetUserProfile${userId}`) // Fixed URL with slash
+    fetch(`https://localhost:44321/api/Users/GetUserProfile${userId}`)
         .then(response => {
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
@@ -133,49 +129,66 @@ document.addEventListener("DOMContentLoaded", function () {
         })
         .then(user => {
             // Set values with user data
-            document.getElementById("username").value = user.username || ''; // Set username and disable it
-            document.getElementById("firstName").value = user.firstName || '';
-            document.getElementById("lastName").value = user.lastName || '';
-            document.getElementById("email").value = user.email || '';
-            document.getElementById("phone").value = user.phone || ''; // Assuming you have a phone field in your DTO
-            document.getElementById('password').placeholder = '*******';
-            document.getElementById('userName').textContent = user.username; // Display username
-            document.getElementById('userLocation').textContent = user.email;
+            const fields = ['username', 'firstName', 'lastName', 'email', 'phone'];
+            fields.forEach(field => {
+                const element = document.getElementById(field);
+                if (element) element.value = user[field] || '';
+            });
+
+            const passwordElement = document.getElementById('password');
+            if (passwordElement) passwordElement.placeholder = '*******';
+
+            const userNameElement = document.getElementById('userName');
+            if (userNameElement) userNameElement.textContent = user.username;
+
+            const userLocationElement = document.getElementById('userLocation');
+            if (userLocationElement) userLocationElement.textContent = user.email;
         })
         .catch(error => {
             console.error("There was an error fetching the user data:", error);
         });
 
     // Function to update user data
-    document.getElementById('userProfileForm').addEventListener('submit', function (event) {
-        event.preventDefault();
+    const form = document.getElementById('userProfileForm');
+    if (form) {
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();
+            const formData = new FormData();
+            formData.append('UserId', userId);
 
-
-
-        const formData = new FormData(this);
-        formData.append('UserId', userId); // Ensure the user ID is added
-
-        // Include the username and email in FormData
-        formData.append('Username', document.getElementById('username').value); // Add username value
-        formData.append('Email', document.getElementById('email').value); // Add email value
-
-        console.log([...formData]); // Log FormData contents for debugging
-
-        fetch(`https://localhost:44321/api/Users/UpdateUserProfile/${userId}`, {
-            method: 'PUT',
-            body: formData
-        })
-            .then(response => {
-                if (!response.ok) {
-                    return response.text().then(err => {
-                        throw new Error(`Failed to update user data: ${err}`);
-                    });
+            // Only append non-empty values
+            const fields = ['Username', 'Email', 'FirstName', 'LastName', 'Phone', 'Password'];
+            fields.forEach(field => {
+                const element = document.getElementById(field.toLowerCase());
+                if (element && element.value) {
+                    formData.append(field, element.value);
                 }
-                alert('User data updated successfully');
+            });
+
+            // Handle file upload
+            const profilePicture = document.getElementById('profile-picture');
+            if (profilePicture && profilePicture.files[0]) {
+                formData.append('profileImage', profilePicture.files[0]);
+            }
+
+            fetch(`https://localhost:44321/api/Users/UpdateUserProfile/${userId}`, {
+                method: 'PUT',
+                body: formData
             })
-            .catch(error => console.error('Error:', error));
-    });
-
+                .then(response => {
+                    if (!response.ok) {
+                        return response.text().then(err => {
+                            throw new Error(`Failed to update user data: ${err}`);
+                        });
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    alert(data.message);
+                })
+                .catch(error => console.error('Error:', error));
+        });
+    } else {
+        console.error("User profile form not found");
+    }
 });
-
-// "C:\Users\Orange\Desktop\test_ajloun/MasterPieceApi/wwwroot/UserProfileimages/25d205f4-61d0-4ff4-a68b-7d3e6e2b5e10.jpg"

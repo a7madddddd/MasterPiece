@@ -247,7 +247,8 @@ namespace MasterPieceApi.Controllers
             return Ok(userResponse);
         }
 
-        // PUT: api/users/UserProfile/{userId}
+
+        // C# Controller method
         [HttpPut("UpdateUserProfile/{userId}")]
         public async Task<IActionResult> UpdateUser(int userId, [FromForm] UserResponseDTO userDto, IFormFile? profileImage)
         {
@@ -255,7 +256,6 @@ namespace MasterPieceApi.Controllers
             {
                 return BadRequest(new { message = "User ID mismatch" });
             }
-
             var user = await _context.Users.FindAsync(userId);
             if (user == null)
             {
@@ -263,33 +263,27 @@ namespace MasterPieceApi.Controllers
             }
 
             // Update user properties
-            user.Username = userDto?.Username;
-            user.Email = userDto.Email;
-            user.FirstName = userDto?.FirstName;
-            user.LastName = userDto?.LastName;
-            user.ProfileImage = userDto?.ProfileImage;
-            user.Phone = userDto?.Phone;
+            if (!string.IsNullOrEmpty(userDto.Username)) user.Username = userDto.Username;
+            if (!string.IsNullOrEmpty(userDto.Email)) user.Email = userDto.Email;
+            if (!string.IsNullOrEmpty(userDto.FirstName)) user.FirstName = userDto.FirstName;
+            if (!string.IsNullOrEmpty(userDto.LastName)) user.LastName = userDto.LastName;
+            if (!string.IsNullOrEmpty(userDto.Phone)) user.Phone = userDto.Phone;
 
             // Handle file upload for profile image
             if (profileImage != null && profileImage.Length > 0)
             {
                 var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "UserProfileimages");
-
-                // Ensure the uploads directory exists
                 if (!Directory.Exists(uploadsFolder))
                 {
                     Directory.CreateDirectory(uploadsFolder);
                 }
-
-                var fileName = Guid.NewGuid() + Path.GetExtension(profileImage.FileName); // Generate unique file name
+                var fileName = Guid.NewGuid() + Path.GetExtension(profileImage.FileName);
                 var filePath = Path.Combine(uploadsFolder, fileName);
-
                 using (var stream = new FileStream(filePath, FileMode.Create))
                 {
                     await profileImage.CopyToAsync(stream);
                 }
-
-                user.ProfileImage = $"/UserProfileimages/{fileName}"; // Update with the new file path
+                user.ProfileImage = $"/UserProfileimages/{fileName}";
             }
 
             // Hash the password if provided
@@ -300,10 +294,8 @@ namespace MasterPieceApi.Controllers
 
             // Save changes to the database
             await _context.SaveChangesAsync();
-
-            return NoContent(); // Return 204 No Content status
+            return Ok(new { message = "User profile updated successfully" });
         }
-
         // Method to hash password
         private string HashPassword(string password)
         {
