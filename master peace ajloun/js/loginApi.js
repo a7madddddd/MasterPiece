@@ -62,30 +62,30 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
     // // Sign In functionality
-    // document.getElementById('loginForm').addEventListener('submit', async function (event) {
-    //     event.preventDefault(); // Prevent default form submission
-    //     const email = document.getElementById('loginUsername').value; // Should correspond to Email in DTO
-    //     const password = document.getElementById('loginPassword').value; // Corresponds to Password in DTO
+        // document.getElementById('loginForm').addEventListener('submit', async function (event) {
+        //     event.preventDefault(); // Prevent default form submission
+        //     const email = document.getElementById('loginUsername').value; // Should correspond to Email in DTO
+        //     const password = document.getElementById('loginPassword').value; // Corresponds to Password in DTO
 
-    //     const response = await fetch('https://localhost:44321/api/Users/Login', {
-    //         method: 'POST',
-    //         headers: {
-    //             'Content-Type': 'application/json'
-    //         },
-    //         body: JSON.stringify({ email: email, password: password })
-    //     });
+        //     const response = await fetch('https://localhost:44321/api/Users/Login', {
+        //         method: 'POST',
+        //         headers: {
+        //             'Content-Type': 'application/json'
+        //         },
+        //         body: JSON.stringify({ email: email, password: password })
+        //     });
 
 
-    //     if (response.ok) {
-    //         const result = await response.json();
-    //         alert(`Welcome back, ${result.email}`);
-    //         localStorage.setItem('jwt', result.token);
-    //     } else {
-    //         const error = await response.json();
-    //         alert(error.message); // Display the error message from the API
-    //     }
+        //     if (response.ok) {
+        //         const result = await response.json();
+        //         alert(`Welcome back, ${result.email}`);
+        //         localStorage.setItem('jwt', result.token);
+        //     } else {
+        //         const error = await response.json();
+        //         alert(error.message); // Display the error message from the API
+        //     }
 
-    // });
+        // });
 
 
 
