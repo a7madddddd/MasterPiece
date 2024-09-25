@@ -145,7 +145,7 @@ public partial class MyDbContext : DbContext
             entity.Property(e => e.AccommodationType)
                 .HasMaxLength(50)
                 .IsUnicode(false);
-            entity.Property(e => e.Amenities).IsUnicode(false);
+           
             entity.Property(e => e.CreatedAt)
                 .HasMaxLength(50)
                 .IsUnicode(false);
@@ -163,9 +163,7 @@ public partial class MyDbContext : DbContext
             entity.Property(e => e.StartDate)
                 .HasMaxLength(50)
                 .IsUnicode(false);
-            entity.Property(e => e.Title)
-                .HasMaxLength(200)
-                .IsUnicode(false);
+           
         });
 
         modelBuilder.Entity<Payment>(entity =>

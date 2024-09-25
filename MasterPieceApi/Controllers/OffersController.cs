@@ -103,5 +103,31 @@ namespace MasterPieceApi.Controllers
         {
             return _context.Offers.Any(e => e.OfferId == id);
         }
+
+
+        [HttpGet("AllOffers")]
+        public IActionResult GetOffersWithServices()
+        {
+            var offersWithServices = _context.Offers
+                .Include(o => o.Service) 
+                .Select(o => new
+                {
+                    o.OfferId,
+                    //o.Description,
+                    Description = o.Service.Description,
+                    o.Rating,
+                    o.ReviewCount,
+                    o.DiscountPercentage,
+                    o.IsActive,
+                    ServiceId = o.Service.ServiceId,
+                    pricePerNight = o.Service.Price,
+                    ServiceName = o.Service.ServiceName, 
+                    ServiceImage = o.Service.Image
+                })
+                .ToList();
+
+            return Ok(new { values = offersWithServices });
+        }
+
     }
 }

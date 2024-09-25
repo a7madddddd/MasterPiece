@@ -620,8 +620,10 @@
                     <option>03</option>
                   </select>
                 </div>
-                <button class="button search_button">
+                
+                  <button type="button" class="button search_button" id="search_button"></button>
                   search
+
                   <span></span>
                   <span></span>
                   <span></span>
@@ -633,6 +635,13 @@
       </div>
     </div>
 
+  <!-- Modal Structure -->
+  <div id="serviceModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <div id="serviceResults"></div> <!-- Where the services will be displayed -->
+    </div>
+  </div>
 
 
     <div class="loading">

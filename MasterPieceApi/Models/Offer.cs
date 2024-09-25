@@ -7,8 +7,6 @@ public partial class Offer
 {
     public int OfferId { get; set; }
 
-    public string Title { get; set; } = null!;
-
     public string? Description { get; set; }
 
     public string? StartDate { get; set; }
@@ -31,5 +29,7 @@ public partial class Offer
 
     public string? ImageUrl { get; set; }
 
-    public string? Amenities { get; set; }
+    public int ServiceId { get; set; }
+
+    public virtual Service Service { get; set; } = null!;
 }

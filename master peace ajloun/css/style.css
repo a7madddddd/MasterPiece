@@ -1,5 +1,18 @@
 /*** Spinner Start ***/
 /*** Spinner ***/
+
+.day-mode {
+    background-color: white;
+    color: black;
+}
+
+.night-mode {
+    background-color: black;
+    color: white;
+}
+
+
+
 #spinner {
     opacity: 0;
     visibility: hidden;
@@ -648,6 +661,7 @@
 .gallery {
     width: 100%;
 }
+
 .gallery .gallery-item {
     position: relative;
     overflow: hidden;
@@ -1055,4 +1069,165 @@
 
 a:hover {
     color: whitesmoke;
+}
+
+
+
+
+
+
+
+
+
+.modal {
+    display: none;
+    /* Hidden by default */
+    position: fixed;
+    z-index: 999;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    overflow: auto;
+    /* Make the modal scrolling */
+    background-color: rgba(0, 0, 0, 0.7);
+    /* Darker background for a more polished look */
+}
+
+.modal-content {
+    background-color: #ffffff;
+    margin: 10% auto;
+    padding: 20px;
+    border-radius: 10px;
+    width: 70%;
+    max-height: 90vh;
+    /* Set a maximum height for the modal content */
+    overflow-y: auto;
+    /* Make the modal content scrolling */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease-in-out;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.modal-content img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    /* Ensures the image doesn't get distorted */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    transition: transform 0.2s;
+}
+
+.modal-content img:hover {
+    transform: scale(1.1);
+    /* Zoom effect on image hover */
+}
+
+.modal-content h3 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.modal-content p {
+    font-size: 1.2rem;
+    color: #666;
+    margin-bottom: 15px;
+    line-height: 1.5;
+    /* Improve the line height of paragraph */
+    max-width: 80%;
+    /* Set a maximum width for the paragraph text */
+    text-align: justify;
+    /* Justify the text */
+}
+
+.modal-content a {
+    display: inline-block;
+
+    padding: 10px 20px;
+    background-color: #28a745;
+    /* Green color for the CTA button */
+    color: #ffffff;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+
+}
+
+.modal-content a:hover {
+    background-color: #218838;
+    /* Darker green on hover */
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    /* Add cursor pointer to indicate it's clickable */
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+}
+
+/* Service card styles */
+.service-card {
+    display: flex;
+    align-items: center;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+}
+
+.service-card:hover {
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+}
+
+.service-card img {
+    flex-shrink: 0;
+    /* Ensures the image doesn’t shrink */
+    margin-right: 20px;
+    border-radius: 10px;
+    /* Add border radius to image */
+}
+
+.service-card h3 {
+    font-size: 1.25rem;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.service-card h4 {
+    font-size: 1.25rem;
+    color: #333;
+    margin-bottom: 10px;
+    padding-right: 2%;
+    width: 50%;
+}
+
+.service-card p {
+    color: #555;
+    font-size: 0.95rem;
+    padding: 8%;
+}
+
+.service-card .price {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #28a745;
+    margin-top: 10px;
+
 }

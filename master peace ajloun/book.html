@@ -12,15 +12,15 @@
     <link rel="stylesheet" type="text/css" href="styles/telefrik_styles.css" />
     <link rel="stylesheet" type="text/css" href="styles/telefrik_responsive.css" />
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css" />
-    <link rel="stylesheet" href="/path/to/cdn/bootstrap.min.css" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="styles/bootstrap4/bootstrap.min.css">
+    
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" /> -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" />
-    <script src="/path/to/cdn/bootstrap.bundle.min.js"></script>
+    <script src="styles/bootstrap4/bootstrap.min.js"></script>
     <link rel="stylesheet" href="styles/bookong_style.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css">
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"> -->
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"> -->
     <script src="js/bookApi.js"></script>
     <style>
         :root {
@@ -235,6 +235,10 @@
                 position: static;
             }
         }
+
+        #paypal-button-container {
+            display: none; /* Initially hidden */
+        }
     </style>
 </head>
 
@@ -411,34 +415,34 @@
                     <form id="payment-form">
                         <div class="payment-methods">
                             <div class="payment-method active" data-method="card">
-                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQfKI3h7qkMUuliQA1ui6n_eDkwCTbNS3WvLA&s" alt="Credit Card" />
+                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQfKI3h7qkMUuliQA1ui6n_eDkwCTbNS3WvLA&s"
+                                    alt="Credit Card" />
                                 <p>Credit Card</p>
                             </div>
                             <div class="payment-method" data-method="paypal">
-                                <img src="data:image/png;base64,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" alt="PayPal" />
+                                <img src="data:image/png;base64,... (PayPal Logo)" alt="PayPal" />
                                 <p>PayPal</p>
                             </div>
                             <div class="payment-method" data-method="orange-money">
-                                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAAAeFBMVEX///8AAABCQkKvr6+ioqLNzc3m5ub39/elpaWpqamGhoZkZGRRUVGUlJQxMTGDg4NMTExqamrr6+tgYGDBwcE6OjoiIiKamppycnLx8fG3t7fd3d15eXnU1NS+vr5HR0cYGBgmJiYREREsLCwbGxs2NjYjIyONjY26lgp8AAAHTklEQVR4nO2c6XqyMBCFA4qIaxWrgKCtS73/O/yYScJWUL5uBJ/z/ugjEG2OM9lmEoUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPw+0XG79Z2ua/GL+BYTd12PX+PVUuy6rskv8WJluF3XpYJ7GN5hUyq7GUaj+k8pCLQMa4pz6wHDrOiQr1d1JrKL7xj8Xe1bED8SaFlzVVR/F/bnT3kpvcEoGzqPBVrWnovus+tPXUlZoFnt0G+jcMlFl/mNyofY5eJm9aVtBCq3LOgIS59RseC0Cx3NfE1hqT81W6CYflthxUVX3ehoplVPc0+h4RZMCb6n0HyBQuy+o9B0F5WEkVdgUKO4UWEfLPiZilnuKeylQHfR3kv74aIV3FerhnqFvbSgqLNgg8JeCqx10QaFT+Si9Qp7acEGF61VOOujwKqLru4oPD+Di97COwr7aMGqiy7FqK3Cfgisumi6qm+rsJ8uOhGtFfbDgp9dVLRV2A+BNS4qWirsr4uKdgqDDqv9H9RasJ3C6Wqas1oaFQnOqHdR0b4vLfJiVCxY0uCi4msKrWNXOpppsuAXFRqWlLnjouKrCl+6EdJEs4uKryqspjQ65o4FU/n5A9m6jm0EnrrQ0UglGLysPN5mT2QC8WEqlTBqm0JYrtuk+jzKHq35et1G4f7PZdzhcNeCKXoNfKh9Qy3jP1XwiMEDgUJ4l/TJMcmukwdN8WrYpCYp1O2TiypGSTkZGiZOI8n69+v8n1zuW/AJ2Dy7wKwlzh+X7C3r3dS/NWxyAgAAAAAA4C9xnc1m88Rz043aVHHyuq7JL1HYjrB4SjuWd8WYF4X4NnzWYjt0koj3x7x3XZ8fhw9Q+DIhxrtK89MxQqfJ3Gq+rHh996EJkAlPulJ08OIiRBTEwVp4tpX2PO5u9m6drlPOJ03ieCmS6cVaxKrB7uzTaXYQcRzLMEg0PVvv/qHuP3XFqWg2Nmgibunf0ZFju3nM+xwK8ZH6s46wUmB7/SZfk/Ep4RTqLI9BWdKRrqyEdnLtODnBjdLjx3bAFzFncU5a8asqru/MUnt/0AtWXXMsqiM4SJ9f+hxWVOmX6eoQqyhcIostpOwR906hDNNt3HCgFFKWZ7J2R/QpxmRJB2WFVMdAKuQEUuz7M3a4XCG79NWiw2k0zvDRxCErpCyP3HmSvrj+sZBGoiaF22KpcJ4rHOlyG5G9N2SF9G0d3BTuvkwZWJ2yQrLKhBXqCHEyXKWdqZUr5LsTds+8vbHCwrk2bVwD4Pxhli1yT9yCSGEkH6vOcXtqobCcbDWmIdpWYdsW++yIFcohjWx63h1GbpMNlf0zG94GCs+YGe6waER6/SJyhTRY8DSuViEfTee3elk7jLrQ8IDcpRJO2icFhZSYutGLfa1CmhmcEmV62Zfa2WNzxnx5NG878+WmDEqTZgpJ2CWtamjXKpQ7Nc4yBTmTyzA/cfdL/cUYQj4x000yb4c8P5m91Pel+cHF+E3OabIJj/XWlZpa9vmWGrnIv2UKdRJ8RSLXnDDm+0upUIyCVJs9kD1Namt9QOFojo9KnPj1/WMxHah6OWNvrLrC9c2+2rGjbg08b1gtwasnck/1Sfb1NTBlLPw283ROx5s0qL0+ZZacBolzaso9rTGM2ib0Y/DwsuBmbNROr58jzKJYJg0OP0symc78wAsfl+yKUURkU++EL5+qSXl6MJdc+Wp47x19Q8WVlBHVlmCzNhd+E6VQ9YTj51Wo3NR+YoU8z9IbhpXCfeTpTidcr9fpFO4wPmQLWzcZeA71oW76TPWlay5mFqSQxu1AX1y0wqFcFC14TUvxQVfGYdRBNRVxXMoFxoLv0TzdnECpgkTdtJuSjolSmP+y0kReXfQdXmBlRxhsuYZmW9+y1YlBkMK5Wu2RkwZDqZBjvsF8pZxWqpvKTGPqqLRKsieTKwue6zkNPTRt2SRtmEjL0FJ4s2NJWbB/I2vNCtPGFtIa98B32a9J6Z4Kn4VcYZh3FnHAbviWyWCDjPmv/LWugCX5eh5w4we+7n33bL6j/Dp2ljlR0hypMAsOrljCmG0je80DF/B1UxuwwvQb2e7mKVT6ysa/ybGmUzG1SIXspo6l42djDlfIFpWwQ5YVVo6hcETqjT3bwCWGVMghphWr+opCduWRZxm5DFYK1egWi1ovvdV4aSm3RObfzWRO0TSUQvVziI5WWNfTFBTmX8BGLr0smdowcbqnFIoP5W9KYd1oUVBIXQvH1ugFxcuVD5i4ENYKOX1B4TKpkHtXK7jxODgQVYXcbZ6WN5rZsGfKZZeRvzygFXIVKTKoFBZ+aZD6x6rCMD+XKL2VAzbmDYZCrvF5cagD9hPdAtXq/52D3zOtkO5S8tSdyMe+csxKtrwn7O/vV3Q2GyebhXrWk8aEGTdyojfl5M+Jiu6YOBj+EEqhgfOZn2L0/nE5B8bk7QEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwmH8rnFVtWWKRlgAAAABJRU5ErkJggg==" alt="Orange Money" />
+                                <img src="data:image/png;base64,... (Orange Money Logo)" alt="Orange Money" />
                                 <p>Orange Money</p>
                             </div>
                         </div>
+        
+                        <!-- Credit Card Fields -->
                         <div id="card-payment-fields">
                             <div class="form-group">
                                 <label for="name">Full Name</label>
                                 <input type="text" id="name" name="name" required>
-                                <i class="input-icon fas fa-user"></i>
                             </div>
                             <div class="form-group">
                                 <label for="email">Email Address</label>
                                 <input type="email" id="email" name="email" required>
-                                <i class="input-icon fas fa-envelope"></i>
                             </div>
                             <div class="form-group">
                                 <label for="card-number">Card Number</label>
                                 <input type="text" id="card-number" name="card-number" placeholder="1234 5678 9012 3456"
                                     required>
-                                <i class="input-icon fas fa-credit-card"></i>
                             </div>
                             <div class="form-group card-details">
                                 <div>
@@ -451,20 +455,24 @@
                                 </div>
                             </div>
                         </div>
+        
+                        <!-- PayPal Fields -->
                         <div id="paypal-fields" style="display: none;">
                             <div class="form-group">
                                 <label for="paypal-email">PayPal Email</label>
-                                <input type="email" id="paypal-email" name="paypal-email">
-                                <i class="input-icon fab fa-paypal"></i>
+                                <input type="email" id="paypal-email" name="paypal-email" required>
                             </div>
+                            <div id="paypal-button-container"></div>
                         </div>
+        
+                        <!-- Orange Money Fields -->
                         <div id="orange-money-fields" style="display: none;">
                             <div class="form-group">
                                 <label for="phone-number">Phone Number</label>
-                                <input type="tel" id="phone-number" name="phone-number">
-                                <i class="input-icon fas fa-phone"></i>
+                                <input type="tel" id="phone-number" name="phone-number" required>
                             </div>
                         </div>
+        
                         <button type="submit" class="btn">Pay Now</button>
                     </form>
                     <div class="secure-badge">
@@ -478,10 +486,9 @@
                     <!-- Total price display -->
                     <div class="total">
                         <span>Total : </span>
-                        <span id="total-price">$0</span>
+                        <span id="total-price">$5.00</span> <!-- Example total price -->
                     </div>
                 </div>
-
             </div>
         </div>
 
@@ -716,109 +723,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
 
 
-    <script>
-        document.addEventListener('DOMContentLoaded', (event) => {
-            const form = document.getElementById('payment-form');
-            const cardNumber = document.getElementById('card-number');
-            const expiry = document.getElementById('expiry');
-            const cvv = document.getElementById('cvv');
-            const paymentMethods = document.querySelectorAll('.payment-method');
-
-            // Payment method selection
-            paymentMethods.forEach(method => {
-                method.addEventListener('click', () => {
-                    paymentMethods.forEach(m => m.classList.remove('active'));
-                    method.classList.add('active');
-                    const selectedMethod = method.dataset.method;
-                    document.getElementById('card-payment-fields').style.display = selectedMethod === 'card' ? 'block' : 'none';
-                    document.getElementById('paypal-fields').style.display = selectedMethod === 'paypal' ? 'block' : 'none';
-                    document.getElementById('orange-money-fields').style.display = selectedMethod === 'orange-money' ? 'block' : 'none';
-                });
-            });
-
-            // Form submission
-            form.addEventListener('submit', (e) => {
-                e.preventDefault();
-                if (validateForm()) {
-                    simulatePayment();
-                }
-            });
-
-            // Card number formatting
-            cardNumber.addEventListener('input', (e) => {
-                let value = e.target.value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
-                let formattedValue = '';
-                for (let i = 0; i < value.length; i++) {
-                    if (i % 4 === 0 && i > 0) formattedValue += ' ';
-                    formattedValue += value[i];
-                }
-                e.target.value = formattedValue;
-            });
-
-            // Expiry date formatting
-            expiry.addEventListener('input', (e) => {
-                let value = e.target.value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
-                if (value.length > 2) {
-                    value = value.slice(0, 2) + '/' + value.slice(2);
-                }
-                e.target.value = value;
-            });
-
-            // Form validation
-            function validateForm() {
-                let isValid = true;
-                const activeMethod = document.querySelector('.payment-method.active').dataset.method;
-
-                if (activeMethod === 'card') {
-                    if (!/^\d{4}\s\d{4}\s\d{4}\s\d{4}$/.test(cardNumber.value)) {
-                        alert('Please enter a valid card number.');
-                        isValid = false;
-                    }
-                    if (!/^\d{2}\/\d{2}$/.test(expiry.value)) {
-                        alert('Please enter a valid expiry date (MM/YY).');
-                        isValid = false;
-                    }
-                    if (!/^\d{3}$/.test(cvv.value)) {
-                        alert('Please enter a valid CVV.');
-                        isValid = false;
-                    }
-                } else if (activeMethod === 'paypal') {
-                    const paypalEmail = document.getElementById('paypal-email');
-                    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(paypalEmail.value)) {
-                        alert('Please enter a valid PayPal email address.');
-                        isValid = false;
-                    }
-                } else if (activeMethod === 'orange-money') {
-                    const phoneNumber = document.getElementById('phone-number');
-                    if (!/^\d{10}$/.test(phoneNumber.value)) {
-                        alert('Please enter a valid phone number (10 digits).');
-                        isValid = false;
-                    }
-                }
-
-                return isValid;
-            }
-
-            // Simulated payment processing
-            function simulatePayment() {
-                const btn = document.querySelector('.btn');
-                btn.disabled = true;
-                btn.textContent = 'Processing...';
-
-                setTimeout(() => {
-                    btn.textContent = 'Payment Successful!';
-                    btn.style.backgroundColor = '#27ae60';
-                    alert('Payment processed successfully! Thank you for your booking.');
-                    form.reset();
-                    setTimeout(() => {
-                        btn.disabled = false;
-                        btn.textContent = 'Pay Now';
-                        btn.style.backgroundColor = '';
-                    }, 3000);
-                }, 2000);
-            }
-        });
-    </script>
 </body>
 
 </html>

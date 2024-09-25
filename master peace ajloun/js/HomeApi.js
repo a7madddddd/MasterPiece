@@ -212,3 +212,135 @@ document.addEventListener('DOMContentLoaded', function () {
         return JSON.parse(jsonPayload);
     }
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+document.addEventListener('DOMContentLoaded', function () {
+    // Function to fetch services from the API
+    async function fetchServices() {
+        try {
+            const response = await fetch('https://localhost:44321/api/Services');
+            console.log("Response status:", response.status);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const data = await response.json();
+            console.log("Services data:", data);
+
+            // Access the $values array inside the response object
+            if (data && Array.isArray(data.$values)) {
+                return data.$values; // Return the services array
+            } else {
+                console.error("Expected an array but got:", data);
+                return []; // Return an empty array if it's not formatted as expected
+            }
+        } catch (error) {
+            console.error("Error fetching services:", error);
+            return []; // Return an empty array in case of an error
+        }
+    }
+
+    // Function to display services inside the modal
+    function displayServices(services) {
+        const resultsContainer = document.getElementById('serviceResults');
+        resultsContainer.innerHTML = ''; // Clear previous results
+
+        if (Array.isArray(services)) {
+            services.forEach(service => {
+                const serviceCard = document.createElement('div');
+                serviceCard.className = 'service-card';
+                serviceCard.innerHTML = `
+                    <img src="${service.image}" alt="${service.serviceName}">
+                    <h3>${service.serviceName}</h3>
+                    <p>${service.description}</p>
+                    <h4>Price: ${service.price} jd</h4>
+                    <a href="/service-details.html?id=${service.serviceId}">Explore</a>
+                `;
+                resultsContainer.appendChild(serviceCard);
+            });
+        } else {
+            console.error("displayServices expected an array, but got:", services);
+        }
+    }
+
+    // Function to handle search and open modal
+    async function handleSearch(event) {
+        event.preventDefault();
+
+        // Fetch services after search
+        const services = await fetchServices();
+
+        // Check if services is an array before filtering
+        if (Array.isArray(services)) {
+            // Get search criteria from the form inputs
+            const destination = document.querySelector('.destination.search_input').value.toLowerCase();
+            const checkIn = document.querySelector('.check_in.search_input').value;
+            const checkOut = document.querySelector('.check_out.search_input').value;
+
+            // Filter services based on search criteria (case-insensitive)
+            const filteredServices = services.filter(service =>
+                service.serviceName.toLowerCase().includes(destination) ||
+                service.description.toLowerCase().includes(destination)
+            );
+
+            // If matches found, display them in the modal
+            if (filteredServices.length > 0) {
+                displayServices(filteredServices);  // Display only filtered services
+                openModal(); // Open the modal
+            } else {
+                alert('No matching services found. Please try a different search.');
+            }
+        } else {
+            console.error("handleSearch expected an array but got:", services);
+        }
+    }
+
+    // Function to open the modal
+    function openModal() {
+        const modal = document.getElementById('serviceModal');
+        modal.style.display = 'block'; // Show the modal
+    }
+
+    // Function to close the modal
+    function closeModal() {
+        const modal = document.getElementById('serviceModal');
+        modal.style.display = 'none'; // Hide the modal
+    }
+
+    // Add event listener to the search button
+    const searchButton = document.querySelector('.search_button');
+    if (searchButton) {
+        searchButton.addEventListener('click', handleSearch);
+    } else {
+        console.error("Search button not found");
+    }
+
+    // Add event listener to the close button
+    const closeButton = document.querySelector('.modal .close');
+    if (closeButton) {
+        closeButton.addEventListener('click', closeModal);
+    } else {
+        console.error("Close button not found");
+    }
+
+    // Close the modal if the user clicks outside of the modal content
+    window.onclick = function (event) {
+        const modal = document.getElementById('serviceModal');
+        if (event.target === modal) {
+            closeModal();
+        }
+    };
+});
