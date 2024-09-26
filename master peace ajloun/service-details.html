@@ -64,28 +64,42 @@
                 <div class="container">
                     <div class="row">
                         <div class="col d-flex flex-row">
-                            <div class="phone"><sup>Ajloun Tour
+                            <div class="phone">
+                                <sup>Ajloun Tour
                                     <sup>360</sup>
-                                </sup></div>
+                                </sup>
+                            </div>
                             <div class="social">
                                 <ul class="social_list">
                                     <li class="social_list_item">
-                                        <a href="#"><i class="fa fa-pinterest" aria-hidden="true"></i></a>
+                                        <!-- <a href="#">
+                                  <i class="fa fa-pinterest" aria-hidden="true"></i>
+                                </a> -->
                                     </li>
                                     <li class="social_list_item">
-                                        <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+                                        <a href="#">
+                                            <i class="fa fa-facebook" aria-hidden="true"></i>
+                                        </a>
                                     </li>
                                     <li class="social_list_item">
-                                        <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+                                        <a href="#">
+                                            <i class="fa fa-twitter" aria-hidden="true"></i>
+                                        </a>
                                     </li>
                                     <li class="social_list_item">
-                                        <a href="#"><i class="fa fa-dribbble" aria-hidden="true"></i></a>
+                                        <a href="#">
+                                            <i class="fa fa-dribbble" aria-hidden="true"></i>
+                                        </a>
                                     </li>
                                     <li class="social_list_item">
-                                        <a href="#"><i class="fa fa-behance" aria-hidden="true"></i></a>
+                                        <a href="#">
+                                            <i class="fa fa-behance" aria-hidden="true"></i>
+                                        </a>
                                     </li>
                                     <li class="social_list_item">
-                                        <a href="#"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
+                                        <a href="#">
+                                            <i class="fa fa-linkedin" aria-hidden="true"></i>
+                                        </a>
                                     </li>
                                 </ul>
                             </div>
@@ -97,12 +111,14 @@
                                     <a href="login.html">register</a>
                                 </div>
                             </div>
+            
+                            <!-- <div>
+                                <a href="edit_profile.html" class="profileimga">
+                                  <img src="image/2.png" alt="" class="profileimg">
+                                  <i class="fa-solid fa-circle-user"></i>     
+                                </a>
+                              </div> -->
                         </div>
-                        <!-- <div>
-                            <a href="edit_profile.html" class="profileimga">
-                                <img src="image/2.png" alt="" class="profileimg">
-                            </a>
-                        </div> -->
                     </div>
                 </div>
             </div>
@@ -660,7 +676,35 @@
     <script src="js/profile.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+<script>
+    // Function to open the popup
+        function openPopup() {
+            const popup = document.getElementById('popup');
+            popup.style.display = 'block';
+        }
 
+        // Function to close the popup
+        function closePopup() {
+            const popup = document.getElementById('popup');
+            popup.style.display = 'none';
+        }
+
+        // Event listeners for opening and closing the popup
+        document.getElementById('open-popup').addEventListener('click', openPopup);
+        document.getElementById('close-popup').addEventListener('click', function (event) {
+            event.preventDefault(); // Prevent form submission if you want to just close the popup
+            closePopup();
+        });
+
+        // Optional: Close the popup if the user clicks outside of it
+        window.addEventListener('click', function (event) {
+            const popup = document.getElementById('popup');
+            if (event.target === popup) {
+                closePopup();
+            }
+        });
+
+</script>
 </body>
 
 </html> 

@@ -1092,6 +1092,7 @@ a:hover {
     /* Make the modal scrolling */
     background-color: rgba(0, 0, 0, 0.7);
     /* Darker background for a more polished look */
+    padding-bottom: 16%;
 }
 
 .modal-content {
@@ -1106,8 +1107,8 @@ a:hover {
     /* Make the modal content scrolling */
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
     transition: transform 0.3s ease-in-out;
-    position: relative;
-    top: 50%;
+    position:  relative;
+    top: 45%;
     transform: translateY(-50%);
 }
 
@@ -1142,7 +1143,7 @@ a:hover {
     /* Improve the line height of paragraph */
     max-width: 80%;
     /* Set a maximum width for the paragraph text */
-    text-align: justify;
+    text-align: start;
     /* Justify the text */
 }
 

@@ -2061,7 +2061,7 @@ strong {
 	border-top: 1px solid #ddd;
 }
 
-/* #close-popup {
+#close-popup {
 	background-color: #4CAF50;
 	color: #fff;
 	padding: 10px 20px;
@@ -2073,7 +2073,7 @@ strong {
 
 #close-popup:hover {
 	background-color: #3e8e41;
-} */
+}
 
 /* Animation */
 @keyframes fadeIn {
@@ -2314,3 +2314,13 @@ button {
 
 
 
+sup {
+	top: -0.5em;
+}
+
+sub, sup {
+	position: relative;
+	font-size: 0.75em;
+	line-height: 0;
+	vertical-align: baseline;
+}

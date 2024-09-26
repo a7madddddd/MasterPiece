@@ -25,21 +25,29 @@ function generateStars(rating) {
   return starsHTML;
 }
 
+
 // Function to generate HTML for a single offer with service details
 function generateOfferHTML(offer) {
+  const imagePath = offer.serviceImage ? offer.serviceImage : 'image/default.jpg';
+
+  // Assuming offer.price is the original price and offer.discountPercentage is the discount percentage
+  const originalPrice = offer.pricePerNight || 0; // Use the original price
+  const discountPercentage = offer.discountPercentage || 0; // Use the discount percentage (default to 0 if not provided)
+  const discountedPrice = originalPrice - (originalPrice * (discountPercentage / 100)); // Calculate the discounted price
+
   return `
     <div class="offers_item rating_${Math.round(offer.rating || 0)}">
       <div class="row">
         <div class="col-lg-1 temp_col"></div>
         <div class="col-lg-3 col-1680-4">
           <div class="offers_image_container">
-            <div class="offers_image_background" style="background-image:url(${offer.serviceImage || 'image/default.jpg'})"></div>
+            <div class="offers_image_background" style="background-image:url('${imagePath}')"></div>
             <div class="offer_name"><a href="#">${offer.serviceName}</a></div>
           </div>
         </div>
         <div class="col-lg-8">
           <div class="offers_content">
-            <div class="offers_price">$${offer.pricePerNight || 0}<span>per tour  </span></div>
+            <div class="offers_price">${discountedPrice.toFixed(2)} jd<span> per tour</span></div>
             <div class="rating_r rating_r_${Math.round(offer.rating || 0)} offers_rating" data-rating="${Math.round(offer.rating || 0)}">
               ${generateStars(Math.round(offer.rating || 0))}
             </div>
@@ -66,6 +74,7 @@ function generateOfferHTML(offer) {
   `;
 }
 
+
 // Function to render offers with services into the DOM
 async function renderOffersWithServices() {
   const offersContainer = document.getElementById('offersContainer');
@@ -73,10 +82,18 @@ async function renderOffersWithServices() {
 
   console.log('Fetched offers:', offers); // Log the fetched offers to inspect its structure
 
-  if (!Array.isArray(offers) || offers.length === 0) {
+  // Use a Set to track unique service names
+  const uniqueServiceNames = new Set();
+  const filteredOffers = offers.filter(offer => {
+    const isUniqueService = !uniqueServiceNames.has(offer.serviceName); // Change 'serviceName' to your unique property
+    uniqueServiceNames.add(offer.serviceName); // Add to the Set
+    return isUniqueService; // Keep only unique service names
+  });
+
+  if (filteredOffers.length === 0) {
     offersContainer.innerHTML = '<p>No offers available at the moment.</p>';
   } else {
-    offersContainer.innerHTML = offers.map(offer => generateOfferHTML(offer)).join('');
+    offersContainer.innerHTML = filteredOffers.map(offer => generateOfferHTML(offer)).join('');
   }
 }
 

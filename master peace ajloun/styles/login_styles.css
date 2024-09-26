@@ -2415,4 +2415,13 @@ strong {
 
 
 
-/* Add this code to your CSS file or inside a <style> tag */
+sup {
+    top: -0.5em;
+}
+
+sub, sup {
+    position: relative;
+    font-size: 0.75em;
+    line-height: 0;
+    vertical-align: baseline;
+}

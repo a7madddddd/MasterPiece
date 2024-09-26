@@ -194,12 +194,12 @@ sup {
 }
 
 a {
-    color: #3cbeee;
+    color: whitesmoke;
     text-decoration: none
 }
 
 a:hover {
-    color: #3098be
+    color: white;
 }
 
 .h4:hover{

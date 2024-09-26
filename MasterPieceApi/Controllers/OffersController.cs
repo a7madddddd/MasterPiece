@@ -128,6 +128,7 @@ namespace MasterPieceApi.Controllers
 
             return Ok(new { values = offersWithServices });
         }
-
     }
 }
+
+

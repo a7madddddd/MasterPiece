@@ -212,14 +212,14 @@ sup {
 }
 
 a {
-    color: #007bff;
+   
     text-decoration: none;
     background-color: transparent;
     -webkit-text-decoration-skip: objects
 }
 
 a:hover {
-    color: #0056b3;
+  
     text-decoration: underline
 }
 
@@ -246,7 +246,7 @@ pre {
     margin-top: 0;
     margin-bottom: 1rem;
     overflow: auto;
-    -ms-overflow-style: scrollbar
+    -ms-overflow-style: scrollbar;
 }
 
 figure {
