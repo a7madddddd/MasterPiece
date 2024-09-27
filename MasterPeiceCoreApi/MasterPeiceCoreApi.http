@@ -1,6 +1,0 @@
-@MasterPeiceCoreApi_HostAddress = http://localhost:5039
-
-GET {{MasterPeiceCoreApi_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
