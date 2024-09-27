@@ -174,6 +174,7 @@ namespace MasterPieceApi.Controllers
             return Ok(new
             {
                 OfferId = newOffer.OfferId,
+                Description = newOffer.Description,
                 ServiceName = service.ServiceName, // Returning ServiceName
                 PricePerNight = newOffer.PricePerNight,
                 DiscountPercentage = newOffer.DiscountPercentage,

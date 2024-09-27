@@ -188,3 +188,91 @@ document.addEventListener('DOMContentLoaded', fetchServices);
 
 
 ///////////////// add offer
+let selectedServiceName = '';
+
+document.addEventListener('DOMContentLoaded', function () {
+    const searchButton = document.getElementById('searchServiceButton');
+    const offerForm = document.getElementById('offerForm');
+
+    searchButton.addEventListener('click', searchService);
+    offerForm.addEventListener('submit', function (event) {
+        event.preventDefault();
+        addOffer();
+    });
+});
+
+async function searchService() {
+    const serviceNameInput = document.getElementById("serviceNameSearch");
+    const serviceName = serviceNameInput.value.trim();
+
+    if (!serviceName) {
+        alert("Please enter a service name to search.");
+        return;
+    }
+
+    try {
+        const response = await fetch(`https://localhost:44321/api/Services/searchServiceByName?serviceName=${encodeURIComponent(serviceName)}`);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const services = await response.json();
+        if (services.length > 0) {
+            selectedServiceName = services[0].serviceName;
+            document.getElementById("selectedServiceInfo").innerText = `${services[0].serviceName} (ID: ${services[0].serviceId})`;
+            document.getElementById("serviceDetails").style.display = "block";
+            document.getElementById("offerForm").style.display = "block";
+        } else {
+            throw new Error("Service not found!");
+        }
+    } catch (error) {
+        alert(error.message);
+        document.getElementById("serviceDetails").style.display = "none";
+        document.getElementById("offerForm").style.display = "none";
+        selectedServiceName = '';
+    }
+}
+
+async function addOffer() {
+    if (!selectedServiceName) {
+        alert("Please select a service first.");
+        return;
+    }
+
+    const offerData = {
+        serviceName: selectedServiceName,
+        description: document.getElementById("Description").value,
+        imageUrl: document.getElementById("imageUrl").value,
+        pricePerTour: parseFloat(document.getElementById("pricePerTour").value),
+        discountPercentage: parseFloat(document.getElementById("discountPercentage").value),
+        isActive: document.getElementById("isActive").checked,
+        startDate: document.getElementById("startDate").value,
+        endDate: document.getElementById("endDate").value
+    };
+
+    try {
+        const response = await fetch('https://localhost:44321/api/Offers/AddOfferByServiceName', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(offerData),
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const result = await response.json();
+        alert("Offer added successfully!");
+        console.log("Added offer:", result);
+
+        // Reset form and hide it
+        document.getElementById("offerForm").reset();
+        document.getElementById("offerForm").style.display = "none";
+        document.getElementById("serviceDetails").style.display = "none";
+        document.getElementById("serviceNameSearch").value = "";
+        selectedServiceName = '';
+    } catch (error) {
+        alert(`Failed to add offer: ${error.message}`);
+    }
+}

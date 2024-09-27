@@ -3,7 +3,7 @@
     public class OfferDTO
     {
         public int? ServiceId { get; set; }
-        public string Description { get; set; } // Add description for offers
+        public string? Description { get; set; }
         public string ServiceName { get; set; }  // From the Service table
         public string ImageUrl { get; set; }     // From the Service table
         public decimal PricePerTour { get; set; }
