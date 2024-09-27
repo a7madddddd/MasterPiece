@@ -124,3 +124,26 @@ function clearForm() {
     document.getElementById("password").value = '';
     document.getElementById("role").value = '';
 }
+
+
+////// delete user
+
+async function deleteUser() {
+    const username = document.getElementById("usernameDelete").value;
+
+    try {
+        const response = await fetch(`https://localhost:44321/api/Users/username/${username}`, {
+            method: 'DELETE',
+        });
+
+        if (response.ok) {
+            showToast(`User ${username} deleted successfully!`, 'success');
+            document.getElementById("usernameDelete").value = ''; // Clear input field
+        } else {
+            const errorText = await response.text();
+            showToast(errorText || `Failed to delete user ${username}.`, 'error');
+        }
+    } catch (error) {
+        showToast("Error deleting user: " + error.message, 'error');
+    }
+}

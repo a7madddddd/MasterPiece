@@ -94,7 +94,11 @@ namespace MasterPieceApi.Controllers
 
             return CreatedAtAction("GetUser", new { id = user.UserId }, user);
         }
-
+        /// <summary>
+        /// ////////
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         // DELETE: api/Users/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(int id)
@@ -117,7 +121,25 @@ namespace MasterPieceApi.Controllers
         }
 
 
+        /// <summary>
+        /// ///////
+        /// </summary>
+        /// <param name="username"></param>
+        /// <returns></returns>
+        [HttpDelete("username/{username}")]
+        public async Task<IActionResult> DeleteUserByUsername(string username)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
+            if (user == null)
+            {
+                return NotFound($"User with username {username} not found.");
+            }
 
+            _context.Users.Remove(user);
+            await _context.SaveChangesAsync();
+
+            return NoContent(); // Successfully deleted
+        }
 
 
         /////////////////////////////
