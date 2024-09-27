@@ -194,12 +194,12 @@ sup {
 }
 
 a {
-    color: #EB1616;
+    color: rgb(22, 124, 22);
     text-decoration: none
 }
 
 a:hover {
-    color: #bc1212
+    color: rgb(29, 171, 29);
 }
 
 a:not([href]):not([class]), a:not([href]):not([class]):hover {
@@ -232,7 +232,7 @@ pre code {
 
 code {
     font-size: .875em;
-    color: #d63384;
+    color: rgb(29, 171, 31);
     word-wrap: break-word
 }
 
@@ -2097,9 +2097,9 @@ progress {
 .form-control:focus {
     color: #6C7293;
     background-color: #000;
-    border-color: #f58b8b;
+    border-color: rgb(29, 171, 34);
     outline: 0;
-    box-shadow: 0 0 0 .25rem rgba(235, 22, 22, 0.25)
+    box-shadow: 0 0 0 .25rem rgb(29, 171, 32, 0.25);
 }
 
 .form-control::-webkit-date-and-time-value {
@@ -2272,9 +2272,9 @@ textarea.form-control-lg {
 }
 
 .form-select:focus {
-    border-color: #f58b8b;
+    border-color: rgb(29, 171, 34);
     outline: 0;
-    box-shadow: 0 0 0 .25rem rgba(235, 22, 22, 0.25)
+    box-shadow: 0 0 0 .25rem rgb(29, 171, 31, 0.25);
 }
 
 .form-select[multiple], .form-select[size]:not([size="1"]) {
@@ -2344,14 +2344,14 @@ textarea.form-control-lg {
 }
 
 .form-check-input:focus {
-    border-color: #f58b8b;
+    border-color: rgb(29, 171, 34);
     outline: 0;
-    box-shadow: 0 0 0 .25rem rgba(235, 22, 22, 0.25)
+    box-shadow: 0 0 0 .25rem rgb(29, 171, 31, 0.25);
 }
 
 .form-check-input:checked {
-    background-color: #EB1616;
-    border-color: #EB1616
+    background-color: rgb(22, 124, 22);
+    border-color: rgb(22, 124, 22);
 }
 
 .form-check-input:checked[type="checkbox"] {
@@ -2363,8 +2363,8 @@ textarea.form-control-lg {
 }
 
 .form-check-input[type="checkbox"]:indeterminate {
-    background-color: #EB1616;
-    border-color: #EB1616;
+    background-color: rgb(22, 124, 22);
+    border-color: rgb(22, 124, 22);
     background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M6 10h8'/%3e%3c/svg%3e")
 }
 
@@ -2436,11 +2436,11 @@ textarea.form-control-lg {
 }
 
 .form-range:focus::-webkit-slider-thumb {
-    box-shadow: 0 0 0 1px #000, 0 0 0 .25rem rgba(235, 22, 22, 0.25)
+    box-shadow: 0 0 0 1px #000, 0 0 0 .25rem rgb(29, 171, 31, 0.25);
 }
 
 .form-range:focus::-moz-range-thumb {
-    box-shadow: 0 0 0 1px #000, 0 0 0 .25rem rgba(235, 22, 22, 0.25)
+    box-shadow: 0 0 0 1px #000, 0 0 0 .25rem rgb(29, 171, 31, 0.25);
 }
 
 .form-range::-moz-focus-outer {
@@ -2451,7 +2451,7 @@ textarea.form-control-lg {
     width: 1rem;
     height: 1rem;
     margin-top: -.25rem;
-    background-color: #EB1616;
+    background-color: rgb(22, 124, 22);
     border: 0;
     border-radius: 1rem;
     transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
@@ -2465,7 +2465,7 @@ textarea.form-control-lg {
 }
 
 .form-range::-webkit-slider-thumb:active {
-    background-color: #f9b9b9
+    background-color: rgb(30, 210, 100);
 }
 
 .form-range::-webkit-slider-runnable-track {
@@ -2481,7 +2481,7 @@ textarea.form-control-lg {
 .form-range::-moz-range-thumb {
     width: 1rem;
     height: 1rem;
-    background-color: #EB1616;
+    background-color: rgb(22, 124, 22);
     border: 0;
     border-radius: 1rem;
     transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
@@ -2495,7 +2495,7 @@ textarea.form-control-lg {
 }
 
 .form-range::-moz-range-thumb:active {
-    background-color: #f9b9b9
+    background-color: rgb(29, 171, 31, 100);
 }
 
 .form-range::-moz-range-track {

@@ -39,6 +39,16 @@ namespace MasterPieceApi.Controllers
             return service;
         }
 
+        [HttpGet("searchServiceByName")]
+
+        public IActionResult searchSeviceByNAme(string serviceName) {
+
+
+            var serviceByName = _context.Services.Where(s => s.ServiceName == serviceName);
+            return Ok(serviceByName);
+        }
+
+
         // PUT: api/Services/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]

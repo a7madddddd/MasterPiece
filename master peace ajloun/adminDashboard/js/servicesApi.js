@@ -184,3 +184,7 @@ async function fetchServices() {
 
 // Call the fetchServices function on page load
 document.addEventListener('DOMContentLoaded', fetchServices);
+
+
+
+///////////////// add offer

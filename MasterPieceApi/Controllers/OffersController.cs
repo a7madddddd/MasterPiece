@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MasterPieceApi.Models;
+using MasterPieceApi.DTOs;
 
 namespace MasterPieceApi.Controllers
 {
@@ -109,7 +110,7 @@ namespace MasterPieceApi.Controllers
         public IActionResult GetOffersWithServices()
         {
             var offersWithServices = _context.Offers
-                .Include(o => o.Service) 
+                .Include(o => o.Service)
                 .Select(o => new
                 {
                     o.OfferId,
@@ -121,14 +122,70 @@ namespace MasterPieceApi.Controllers
                     o.IsActive,
                     ServiceId = o.Service.ServiceId,
                     pricePerNight = o.Service.Price,
-                    ServiceName = o.Service.ServiceName, 
+                    ServiceName = o.Service.ServiceName,
                     ServiceImage = o.Service.Image
                 })
                 .ToList();
 
             return Ok(new { values = offersWithServices });
         }
+
+        /// <summary>
+        /// //////////////
+        /// </summary>
+        /// <param name="offerDto"></param>
+        /// <returns></returns>
+
+        [HttpPost("AddOfferByServiceName")]
+        public async Task<IActionResult> AddOfferByServiceName([FromBody] OfferDTO offerDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            // Find the service by ServiceName
+            var service = await _context.Services
+                .FirstOrDefaultAsync(s => s.ServiceName == offerDto.ServiceName);
+
+            if (service == null)
+            {
+                return NotFound($"Service with name {offerDto.ServiceName} not found.");
+            }
+
+            // Map the DTO to the Offer entity
+            var newOffer = new Offer
+            {
+                ServiceId = service.ServiceId,
+                Description = offerDto.Description,
+                PricePerNight = offerDto.PricePerTour, // Mapping PricePerTour to PricePerNight
+                DiscountPercentage = offerDto.DiscountPercentage,
+                IsActive = offerDto.IsActive,
+                StartDate = offerDto.StartDate.ToString("yyyy-MM-dd"), // Formatting to string if needed
+                EndDate = offerDto.EndDate.ToString("yyyy-MM-dd"),
+                ImageUrl = offerDto.ImageUrl
+            };
+
+            // Add the new offer to the database
+            _context.Offers.Add(newOffer);
+            await _context.SaveChangesAsync();
+
+            // Return success response
+            return Ok(new
+            {
+                OfferId = newOffer.OfferId,
+                ServiceName = service.ServiceName, // Returning ServiceName
+                PricePerNight = newOffer.PricePerNight,
+                DiscountPercentage = newOffer.DiscountPercentage,
+                IsActive = newOffer.IsActive,
+                StartDate = newOffer.StartDate,
+                EndDate = newOffer.EndDate,
+                ImageUrl = newOffer.ImageUrl
+            });
+        }
+
     }
 }
+
 
 

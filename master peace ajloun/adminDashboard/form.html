@@ -311,11 +311,13 @@
                                     <tr>
                                         <th scope="col">#</th>
                                         <th scope="col">Service Name</th>
-                                        <th scope="col" style="width: 40em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Description</th>
+                                        <th scope="col"
+                                            style="width: 40%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; ">
+                                            Description</th>
                                         <th scope="col">End Date</th>
                                         <th scope="col">Price</th>
                                         <th scope="col">Active</th>
-                                        
+
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -341,7 +343,7 @@
                             <button type="submit" class="btn btn-primary">Sign in</button>
                             </form>
                         </div>
-                    </div> -->
+                    </div>  -->
 
                     <!-- <div class="col-sm-12 col-xl-6">
                         <div class="bg-secondary rounded h-100 p-4">
@@ -371,7 +373,7 @@
                                 <option value="3">Three</option>
                             </select>
                         </div>
-                    </div> -->
+                    </div>  -->
                     <!-- <div class="col-sm-12 col-xl-6">
                         <div class="bg-secondary rounded h-100 p-4">
                             <h6 class="mb-4">Check, Radio & Switch</h6>
@@ -457,18 +459,43 @@
                             </div>
                         </div>
                     </div> -->
+
                     
-                    <!-- <div class="col-sm-12 col-xl-6">
-                        <div class="bg-secondary rounded h-100 p-4">
-                            <h6 class="mb-4">Sizing</h6>
-                            <input class="form-control form-control-lg mb-3" type="text" placeholder=".form-control-lg"
-                                aria-label=".form-control-lg example">
-                            <input class="form-control mb-3" type="text" placeholder="Default input"
-                                aria-label="default input example">
-                            <input class="form-control form-control-sm" type="text" placeholder=".form-control-sm"
-                                aria-label=".form-control-sm example">
+                        <div class="col-sm-12 col-xl-6">
+                            <div class="bg-secondary rounded h-100 p-4">
+                                <h6 class="mb-4">Add Offer</h6>
+                        
+                                <!-- Input for searching service name -->
+                                <div class="mb-3">
+                                    <input id="serviceName" class="form-control" type="text" placeholder="Search Service by Name"
+                                        aria-label="Search Service Name">
+                                </div>
+                                <button id="searchServiceButton" class="btn btn-primary mb-3">Search Service</button>
+                        
+                                <!-- Service details -->
+                                <div id="serviceDetails" style="display:none;">
+                                    <h6 class="mt-4">Selected Service</h6>
+                                    <p id="selectedService"></p>
+                                </div>
+                        
+                                <!-- Offer details inputs -->
+                                <form id="offerForm">
+                                    <input id="description" class="form-control mb-3" type="text" placeholder="Offer Description" required>
+                                    <input id="pricePerTour" class="form-control mb-3" type="number" placeholder="Price Per Tour" required>
+                                    <input id="discountPercentage" class="form-control mb-3" type="number" placeholder="Discount Percentage"
+                                        required>
+                                    <div class="form-check mb-3">
+                                        <input id="isActive" class="form-check-input" type="checkbox" aria-label="Is Active">
+                                        <label class="form-check-label" for="isActive">Is Active</label>
+                                    </div>
+                                    <input id="startDate" class="form-control mb-3" type="date" placeholder="Start Date" required>
+                                    <input id="endDate" class="form-control mb-3" type="date" placeholder="End Date" required>
+                                    <input id="imageUrl" class="form-control mb-3" type="text" placeholder="Image URL" required>
+                        
+                                    <button type="submit" class="btn btn-success">Add Offer</button>
+                                </form>
+                            </div>
                         </div>
-                    </div>  -->
                 </div>
             </div>
             <!-- Form End -->
@@ -522,23 +549,81 @@
     <script>
 
         function showToast(message, type) {
-                const toast = document.getElementById('toast');
-                toast.innerText = message;
-                toast.style.backgroundColor = type === 'success' ? 'green' : 'red';
-                toast.style.display = 'block';
+            const toast = document.getElementById('toast');
+            toast.innerText = message;
+            toast.style.backgroundColor = type === 'success' ? 'green' : 'red';
+            toast.style.display = 'block';
 
-                // Hide toast after 3 seconds
-                setTimeout(() => {
-                    toast.style.display = 'none';
-                }, 3000);
-            }
+            // Hide toast after 3 seconds
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 3000);
+        }
 
         // Example usage
         // Call this function when needed
 
-
-
         
+            debugger
+            document.addEventListener('DOMContentLoaded', function () {
+                const searchButton = document.getElementById('searchServiceButton');
+                const offerForm = document.getElementById('offerForm');
+                const serviceNameInput = document.getElementById("serviceName");
+
+                searchButton.addEventListener('click', searchService);
+                offerForm.addEventListener('submit', function (event) {
+                    event.preventDefault();
+                    addOffer();
+                });
+
+                // Add an event listener for the input field
+                serviceNameInput.addEventListener('input', function () {
+                    console.log('Service name input changed:', this.value);
+                });
+            });
+
+            async function searchService() {
+                const serviceNameInput = document.getElementById("serviceName");
+                const serviceName = serviceNameInput.value.trim();
+
+                console.log('Search button clicked');
+                console.log('Service name input value:', serviceNameInput.value);
+                console.log('Trimmed service name:', serviceName);
+
+                if (!serviceName) {
+                    console.log('Service name is empty after trimming');
+                    alert("Please enter a service name to search.");
+                    return;
+                }
+
+                try {
+                    console.log('Fetching service:', serviceName);
+                    const response = await fetch(`https://localhost:44321/api/Services/searchServiceByName?serviceName=${encodeURIComponent(serviceName)}`);
+                    console.log('Fetch response status:', response.status);
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+
+                    const services = await response.json();
+                    console.log('Fetched services:', services);
+
+                    if (services.length > 0) {
+                        selectedServiceId = services[0].serviceId;
+                        document.getElementById("selectedService").innerText = `${services[0].serviceName} (ID: ${services[0].serviceId})`;
+                        document.getElementById("serviceDetails").style.display = "block";
+                    } else {
+                        throw new Error("Service not found!");
+                    }
+                } catch (error) {
+                    console.error('Error in searchService:', error);
+                    alert(error.message);
+                    document.getElementById("serviceDetails").style.display = "none";
+                    selectedServiceId = null;
+                }
+            }
+
+
 
 
 
