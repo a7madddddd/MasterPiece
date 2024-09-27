@@ -174,7 +174,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (token) {
             // If user is logged in (JWT token found), show profile link
             userBox.innerHTML = `
-            <a href="edit_profile.html" id ="profile_icon">Profile</a>         <small style="color: whitesmoke;">|</small>
+            <a href="edit_profile.html" id ="profile_icon">Profile</a>  <small style="color: whitesmoke;">|</small>
 
 
 

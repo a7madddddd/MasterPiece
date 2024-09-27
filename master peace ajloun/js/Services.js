@@ -479,3 +479,85 @@ function logout() {
     alert("Logged out successfully!");
     window.location.reload(); // Reload the page to refresh the navbar
 }
+
+
+
+
+
+
+
+document.addEventListener('DOMContentLoaded', function () {
+    var openPopupButton = document.getElementById('open-popup');
+    var popup = document.getElementById('popup');
+    var closePopupButton = document.getElementById('close-popup');
+    var overlay = document.getElementById('overlay');
+
+    function openPopup() {
+        console.log("Opening popup");
+        const jwt = localStorage.getItem('jwt');
+        if (!jwt) {
+            console.log("No JWT found");
+            return;
+        }
+        popup.style.display = 'block';
+        overlay.style.display = 'block';
+        setTimeout(() => {
+            popup.classList.add('show');
+            overlay.classList.add('show');
+        }, 10);
+    }
+
+    function closePopup() {
+        console.log("Closing popup");
+        popup.classList.remove('show');
+        overlay.classList.remove('show');
+        setTimeout(() => {
+            popup.style.display = 'none';
+            overlay.style.display = 'none';
+        }, 300);
+    }
+
+    openPopupButton.addEventListener('click', openPopup);
+
+    closePopupButton.addEventListener('click', function () {
+        var name = document.getElementById('name-city').value.trim();
+        var email = document.getElementById('email-city').value.trim();
+        var date = document.getElementById('date-city').value;
+        var guests = document.getElementById('guests-city').value;
+
+        // Validation checks
+        if (name === "" || email === "" || date === "" || guests === "") {
+            console.log("Validation failed: Empty fields");
+            return;
+        }
+
+        var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailPattern.test(email)) {
+            console.log("Validation failed: Invalid email");
+            return;
+        }
+
+        if (guests <= 0) {
+            console.log("Validation failed: Invalid number of guests");
+            return;
+        }
+
+        closePopup();
+    });
+
+    overlay.addEventListener('click', closePopup);
+
+    // Close popup when clicking outside
+    window.addEventListener('click', function (event) {
+        if (event.target === popup) {
+            closePopup();
+        }
+    });
+
+    // Close popup with Escape key
+    document.addEventListener('keydown', function (event) {
+        if (event.key === "Escape") {
+            closePopup();
+        }
+    });
+});

@@ -63,9 +63,9 @@ window.addEventListener('scroll', function () {
 }, false);
 
 // Optional: Make the "Book Now" button in the bar open the popup
-// document.querySelector('.bar-button').addEventListener('click', function () {
-//     document.getElementById('popup').style.display = 'block';
-// });
+document.querySelector('.bar-button').addEventListener('click', function () {
+    document.getElementById('popup').style.display = 'block';
+});
 
 
 

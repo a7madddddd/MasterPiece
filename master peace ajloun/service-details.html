@@ -236,7 +236,7 @@
                 <h3 class="question"></h3>
                 <p class="description"></p>
 
-                <div id="popup" style="display: none">
+                <div id="popup" style="display: none" class="popup">
                     <div class="popcontainer">
                         <h1>Tourism Booking</h1>
                         <div class="popcard-container">
@@ -279,7 +279,10 @@
                 <button id="open-popup" class="read-more" data-service="Ajloun Castle"
                     data-image="image2/castle8.jpg">BOOK
                     →</button>
+                    <div id="overlay" class="overlay"></div>
             </div>
+
+
         </div>
 
 
@@ -425,7 +428,7 @@
                 </div>
             </div>
         </div>
-
+    </div>
 
         <!-- Footer -->
 
@@ -666,32 +669,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
-        // Function to open the popup
-        function openPopup() {
-            const popup = document.getElementById('popup');
-            popup.style.display = 'block';
-        }
 
-        // Function to close the popup
-        function closePopup() {
-            const popup = document.getElementById('popup');
-            popup.style.display = 'none';
-        }
-
-        // Event listeners for opening and closing the popup
-        document.getElementById('open-popup').addEventListener('click', openPopup);
-        document.getElementById('close-popup').addEventListener('click', function (event) {
-            event.preventDefault(); // Prevent form submission if you want to just close the popup
-            closePopup();
-        });
-
-        // Optional: Close the popup if the user clicks outside of it
-        window.addEventListener('click', function (event) {
-            const popup = document.getElementById('popup');
-            if (event.target === popup) {
-                closePopup();
-            }
-        });
 
 
 
