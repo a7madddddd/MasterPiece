@@ -212,46 +212,49 @@
                         <div class="bg-secondary rounded h-100 p-4">
                             <h6 class="mb-4">Add Service</h6>
                             <form id="serviceForm">
+                                <label for="ServiceName">Service Name</label>
                                 <div class="form-floating mb-3">
                                     <input type="text" class="form-control" id="ServiceName" placeholder="Service Name"
                                         required>
-                                    <label for="ServiceName">Service Name</label>
                                 </div>
+                                <label for="Description">Description</label>
                                 <div class="form-floating mb-3">
                                     <textarea class="form-control" id="Description" placeholder="Description"
                                         required></textarea>
-                                    <label for="Description">Description</label>
                                 </div>
 
+                                <label for="Price">Price</label>
                                 <div class="form-floating mb-3">
                                     <input type="number" class="form-control" id="Price" placeholder="Price" required>
-                                    <label for="Price">Price</label>
                                 </div>
+                                <label for="Dates">Date</label>
                                 <div class="form-floating mb-3">
                                     <input type="date" class="form-control" id="Dates" placeholder="Date" required>
-                                    <label for="Dates">Date</label>
                                 </div>
+                                <label for="Description2">Additional Description</label>
                                 <div class="form-floating mb-3">
                                     <input type="text" class="form-control" id="Description2"
                                         placeholder="Additional Description" required>
-                                    <label for="Description2">Additional Description</label>
                                 </div>
+                                <label for="Question">Question</label>
                                 <div class="form-floating mb-3">
                                     <input type="text" class="form-control" id="Question" placeholder="Question"
                                         required>
-                                    <label for="Question">Question</label>
                                 </div>
+                                <label for="ImageFile">Upload Image</label>
                                 <div class="form-floating mb-3">
                                     <input type="file" class="form-control" id="ImageFile">
-                                    <label for="ImageFile">Upload Image</label>
                                 </div>
+                                <br>
                                 <label>Is Active:</label>
+                                <br>
                                 <div>
                                     <input type="radio" id="isActiveYes" name="isActive" value="true" required>
                                     <label for="isActiveYes">Yes</label>
                                     <input type="radio" id="isActiveNo" name="isActive" value="false" required>
                                     <label for="isActiveNo">No</label>
                                 </div>
+                                <br>
                                 <button type="submit" class="btn btn-primary">Add Service</button>
                             </form>
                         </div>
@@ -292,6 +295,7 @@
                                     <label for="imageFile" class="form-label">Upload Image</label>
                                     <input type="file" class="form-control" id="imageFile">
                                 </div>
+                                <br><br>
                                 <button type="submit" class="btn btn-primary">Update Service</button>
                                 <button type="button" class="btn btn-danger" id="deleteServiceBtn">Delete
                                     Service</button>
@@ -321,11 +325,6 @@
                         </div>
                     </div>
 
-
-
-
-
-
                     <!-- <div class="col-sm-12 col-xl-6">
                         <div class="bg-secondary rounded h-100 p-4">
                             <div class="row mb-3">
@@ -342,15 +341,9 @@
                             <button type="submit" class="btn btn-primary">Sign in</button>
                             </form>
                         </div>
-                    </div>
+                    </div> -->
 
-                    
-
-
-
-
-                    
-                    <div class="col-sm-12 col-xl-6">
+                    <!-- <div class="col-sm-12 col-xl-6">
                         <div class="bg-secondary rounded h-100 p-4">
                             <h6 class="mb-4">Select</h6>
                             <select class="form-select form-select-sm mb-3" aria-label=".form-select-sm example">
@@ -378,8 +371,8 @@
                                 <option value="3">Three</option>
                             </select>
                         </div>
-                    </div>
-                    <div class="col-sm-12 col-xl-6">
+                    </div> -->
+                    <!-- <div class="col-sm-12 col-xl-6">
                         <div class="bg-secondary rounded h-100 p-4">
                             <h6 class="mb-4">Check, Radio & Switch</h6>
                             <div class="form-check">
@@ -463,42 +456,9 @@
                                     switch checkbox input</label>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-sm-12 col-xl-6">
-                        <div class="bg-secondary rounded h-100 p-4">
-                            <h6 class="mb-4">Input Group</h6>
-                            <div class="input-group mb-3">
-                                <span class="input-group-text" id="basic-addon1">@</span>
-                                <input type="text" class="form-control" placeholder="Username" aria-label="Username"
-                                    aria-describedby="basic-addon1">
-                            </div>
-                            <div class="input-group mb-3">
-                                <input type="text" class="form-control" placeholder="Recipient's username"
-                                    aria-label="Recipient's username" aria-describedby="basic-addon2">
-                                <span class="input-group-text" id="basic-addon2">@example.com</span>
-                            </div>
-                            <label for="basic-url" class="form-label">Your vanity URL</label>
-                            <div class="input-group mb-3">
-                                <span class="input-group-text" id="basic-addon3">https://example.com/users/</span>
-                                <input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3">
-                            </div>
-                            <div class="input-group mb-3">
-                                <span class="input-group-text">$</span>
-                                <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
-                                <span class="input-group-text">.00</span>
-                            </div>
-                            <div class="input-group mb-3">
-                                <input type="text" class="form-control" placeholder="Username" aria-label="Username">
-                                <span class="input-group-text">@</span>
-                                <input type="text" class="form-control" placeholder="Server" aria-label="Server">
-                            </div>
-                            <div class="input-group">
-                                <span class="input-group-text">With textarea</span>
-                                <textarea class="form-control" aria-label="With textarea"></textarea>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-12 col-xl-6">
+                    </div> -->
+                    
+                    <!-- <div class="col-sm-12 col-xl-6">
                         <div class="bg-secondary rounded h-100 p-4">
                             <h6 class="mb-4">Sizing</h6>
                             <input class="form-control form-control-lg mb-3" type="text" placeholder=".form-control-lg"
@@ -508,7 +468,7 @@
                             <input class="form-control form-control-sm" type="text" placeholder=".form-control-sm"
                                 aria-label=".form-control-sm example">
                         </div>
-                    </div> -->
+                    </div>  -->
                 </div>
             </div>
             <!-- Form End -->
@@ -533,12 +493,13 @@
         </div>
         <!-- Content End -->
 
+        <div id="toast"
+            style="display:none; position:fixed; bottom:20px; right:20px; z-index:1000; background-color:green; color:white; padding:10px; border-radius:5px;">
+        </div>
 
         <!-- Back to Top -->
         <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
-        <div id="toast"
-            style="display:none; position:fixed; top:10px; right:10px; z-index:1000; background-color:green; color:white; padding:10px; border-radius:5px;">
-        </div>
+
 
 
     </div>
@@ -561,16 +522,25 @@
     <script>
 
         function showToast(message, type) {
-            const toast = document.getElementById('toast');
-            toast.innerText = message;
-            toast.style.backgroundColor = type === 'success' ? 'green' : 'red';
-            toast.style.display = 'block';
+                const toast = document.getElementById('toast');
+                toast.innerText = message;
+                toast.style.backgroundColor = type === 'success' ? 'green' : 'red';
+                toast.style.display = 'block';
 
-            // Hide toast after 3 seconds
-            setTimeout(() => {
-                toast.style.display = 'none';
-            }, 3000);
-        }
+                // Hide toast after 3 seconds
+                setTimeout(() => {
+                    toast.style.display = 'none';
+                }, 3000);
+            }
+
+        // Example usage
+        // Call this function when needed
+
+
+
+        
+
+
 
     </script>
 </body>

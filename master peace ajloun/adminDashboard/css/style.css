@@ -299,4 +299,6 @@
     opacity: 0.9;
     transition: opacity 0.5s;
     z-index: 1000;
+    display: none;
+    /* Ensure it starts hidden */
 }

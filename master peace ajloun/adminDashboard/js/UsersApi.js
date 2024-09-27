@@ -1,3 +1,21 @@
+function showToast(message, type) {
+    const toast = document.getElementById('toast');
+    toast.innerText = message;
+    toast.style.backgroundColor = type === 'success' ? 'green' : 'red';
+    toast.style.display = 'block';
+
+    // Hide toast after 3 seconds
+    setTimeout(() => {
+        toast.style.display = 'none';
+    }, 3000);
+}
+
+
+
+
+
+
+
 document.addEventListener('DOMContentLoaded', function () {
     fetch('https://localhost:44321/api/Users')
         .then(response => response.json())
@@ -31,7 +49,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-/////////////////
+///////////////// search for users bookings 
 async function fetchUserBookings() {
     const username = document.getElementById("usernameSearch").value;
     const response = await fetch(`https://localhost:44321/api/Users/user/username/${username}/bookings`);
@@ -62,4 +80,47 @@ function populateTable(bookings) {
                     </tr>`;
         tableBody.innerHTML += row;
     });
+}
+
+
+///////// add users 
+async function addUsersss() {
+    const username = document.getElementById("username").value;
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+    const role = document.getElementById("role").value || "User"; // Default role
+
+    const registerDto = {
+        username: username,
+        email: email,
+        password: password,
+    };
+
+    try {
+        const response = await fetch('https://localhost:44321/api/Users/Register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(registerDto),
+        });
+
+        if (response.ok) {
+            const result = await response.json();
+            showToast(result.message || "User added successfully!", "success"); // Use toast for success
+            clearForm();
+        } else {
+            const errorText = await response.text();
+            showToast(errorText || "Error adding user.", "error"); // Use toast for error
+        }
+    } catch (error) {
+        showToast("Error adding user: " + error.message, "error"); // Use toast for error
+    }
+}
+
+function clearForm() {
+    document.getElementById("username").value = '';
+    document.getElementById("email").value = '';
+    document.getElementById("password").value = '';
+    document.getElementById("role").value = '';
 }

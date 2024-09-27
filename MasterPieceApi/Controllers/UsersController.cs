@@ -122,7 +122,11 @@ namespace MasterPieceApi.Controllers
 
         /////////////////////////////
 
-
+        /// <summary>
+        /// ///////////
+        /// </summary>
+        /// <param name="registerDto"></param>
+        /// <returns></returns>
         [HttpPost("Register")]
         public IActionResult Register(Register registerDto)
         {
@@ -166,12 +170,11 @@ namespace MasterPieceApi.Controllers
             });
         }
 
-
-
-
-
-
-
+        /// <summary>
+        /// ///////////
+        /// </summary>
+        /// <param name="loginDto"></param>
+        /// <returns></returns>
         [HttpPost("Login")]
         public IActionResult Login(LoginDTO loginDto)
         {
@@ -192,10 +195,6 @@ namespace MasterPieceApi.Controllers
 
             return Ok(new { token });
         }
-
-
-
-
 
         // Method to generate the JWT token
         private string GenerateJwtToken(User user)
@@ -233,7 +232,11 @@ namespace MasterPieceApi.Controllers
             return tokenString;
 
         }
-
+        /// <summary>
+        /// ////////////////
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         [HttpGet("GetUserProfile/{userId}")]
         public async Task<IActionResult> GetUserProfile(int userId)
         {
@@ -254,7 +257,13 @@ namespace MasterPieceApi.Controllers
             };
             return Ok(userResponse);
         }
-
+        /// <summary>
+        /// ////////////////
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="userDto"></param>
+        /// <param name="usersImagesFile"></param>
+        /// <returns></returns>
         [HttpPut("UpdateUserProfile/{userId}")]
         public async Task<IActionResult> UpdateUser(int userId, [FromForm] UserResponseDTO userDto, IFormFile? usersImagesFile)
         {
@@ -328,7 +337,11 @@ namespace MasterPieceApi.Controllers
             // Store the salt and hashed password together (you can adjust this based on your database schema)
             return $"{Convert.ToBase64String(salt)}.{hashed}";
         }
-
+        /// <summary>
+        /// ////////////
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         // GET: api/Bookings/user/{userId}/services
         [HttpGet("user/{userId}/services")]
         public async Task<ActionResult<IEnumerable<UserServiceDto>>> GetServicesByUserId(int userId)
@@ -353,7 +366,7 @@ namespace MasterPieceApi.Controllers
             return Ok(services);
         }
 
-
+        //////////////////////
         //////////////
         ///
         [HttpGet("user/username/{username}/bookings")]
