@@ -25,7 +25,6 @@ function generateStars(rating) {
   return starsHTML;
 }
 
-
 // Function to generate HTML for a single offer with service details
 function generateOfferHTML(offer) {
   const imagePath = offer.serviceImage ? offer.serviceImage : 'image/default.jpg';
@@ -41,7 +40,7 @@ function generateOfferHTML(offer) {
         <div class="col-lg-1 temp_col"></div>
         <div class="col-lg-3 col-1680-4">
           <div class="offers_image_container">
-            <div class="offers_image_background" style="background-image:url('${imagePath}')"></div>
+            <div class="offers_image_background" style="background-image:url('${imagePath}') ;position: absolute; left: 0px; top: 0px;"></div>
             <div class="offer_name"><a href="#">${offer.serviceName}</a></div>
           </div>
         </div>
