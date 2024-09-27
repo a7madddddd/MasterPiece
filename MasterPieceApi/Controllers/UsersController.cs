@@ -352,6 +352,40 @@ namespace MasterPieceApi.Controllers
 
             return Ok(services);
         }
+
+
+        //////////////
+        ///
+        [HttpGet("user/username/{username}/bookings")]
+        public async Task<ActionResult<IEnumerable<UsersBookings>>> GetBookingsByUsername(string username)
+        {
+            // Get the user bookings based on the username
+            var bookings = await _context.Bookings
+                .Where(b => b.User.Username == username) // Assuming Booking has a navigation property to User
+                .Select(b => new UsersBookings
+                {
+                    BookingId = b.BookingId,
+                    BookingDate = b.BookingDate.HasValue ? b.BookingDate.Value.ToDateTime(new TimeOnly(0, 0)) : DateTime.MinValue, // Convert DateOnly to DateTime
+                    NumberOfPeople = b.NumberOfPeople,
+                    TotalAmount = b.TotalAmount.HasValue ? b.TotalAmount.Value : 0m, // Convert decimal? to decimal with a default value
+                    Status = b.Status,
+                    Username = b.User.Username, // Assuming User has a Username property
+                    ServiceName = b.Service.ServiceName ,// Assuming Booking has a navigation property to Service
+
+                })
+                .ToListAsync();
+
+            if (bookings == null || bookings.Count == 0)
+            {
+                return NotFound($"No bookings found for user with username {username}");
+            }
+
+            return Ok(bookings);
+        }
+
+
+
+
     }
 }
 
