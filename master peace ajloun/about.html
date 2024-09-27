@@ -25,7 +25,7 @@
     <header class="header">
       <!-- Top Bar -->
 
-      <div class="top_bar">
+      <div class="top_bar" id="topBar">
         <div class="container">
           <div class="row">
             <div class="col d-flex flex-row">
@@ -68,21 +68,9 @@
                   </li>
                 </ul>
               </div>
-              <div class="user_box ml-auto">
-                <div class="user_box_login user_box_link">
-                  <a href="login.html">login</a>
-                </div>
-                <div class="user_box_register user_box_link">
-                  <a href="login.html">register</a>
-                </div>
+              <div class="user_box ml-auto" id="userBox">
+                <!-- logOut and logIn will Apeare here -->
               </div>
-      
-              <!-- <div>
-                          <a href="edit_profile.html" class="profileimga">
-                            <img src="image/2.png" alt="" class="profileimg">
-                            <i class="fa-solid fa-circle-user"></i>     
-                          </a>
-                        </div> -->
             </div>
           </div>
         </div>
@@ -179,24 +167,26 @@
 
     <!-- Intro -->
 
-  <div class="intro">
-    <div class="content">
-      <img src="image2/castle12.jpg" alt="Ajloun Sign">
-      <div class="text">
-        <h2>WE HAVE THE BEST TOURS</h2>
-        <p>
-          Explore the beauty and charm of Ajloun with our carefully curated tours. Whether you're seeking adventure,
-          history, or nature, we offer the best experiences that showcase the top attractions of this picturesque region.
-          From guided walks through ancient castles to thrilling cable car rides over lush forests, our tours are designed
-          to help you discover the hidden gems of Ajloun in the most memorable way.
-        </p>
-        <div class="button add_button">
-          <div class="button_bcg"></div>
-          <a href="#">explore now<span></span><span></span><span></span></a>
+    <div class="intro">
+      <div class="content">
+        <img src="image2/castle12.jpg" alt="Ajloun Sign">
+        <div class="text">
+          <h2>WE HAVE THE BEST TOURS</h2>
+          <p>
+            Explore the beauty and charm of Ajloun with our carefully curated tours. Whether you're seeking adventure,
+            history, or nature, we offer the best experiences that showcase the top attractions of this picturesque
+            region.
+            From guided walks through ancient castles to thrilling cable car rides over lush forests, our tours are
+            designed
+            to help you discover the hidden gems of Ajloun in the most memorable way.
+          </p>
+          <div class="button add_button">
+            <div class="button_bcg"></div>
+            <a href="#">explore now<span></span><span></span><span></span></a>
+          </div>
         </div>
       </div>
     </div>
-  </div>
     <!-- Stats -->
 
     <div class="stats">
@@ -209,7 +199,8 @@
         <div class="row">
           <div class="col-lg-10 offset-lg-1 text-center">
             <p class="stats_text">
-              Discover how Ajloun's tourism has grown over the years. Our yearly statistics provide insights into visitor
+              Discover how Ajloun's tourism has grown over the years. Our yearly statistics provide insights into
+              visitor
               trends
             </p>
           </div>
@@ -255,13 +246,13 @@
     </div>
 
     <!-- Milestones -->
-<div class="milestones">
-  <div class="container">
-    <div class="row" id="milestonesContainer">
-      <!-- Milestone items will be dynamically inserted here -->
+    <div class="milestones">
+      <div class="container">
+        <div class="row" id="milestonesContainer">
+          <!-- Milestone items will be dynamically inserted here -->
+        </div>
+      </div>
     </div>
-  </div>
-</div>
 
     <!-- Footer -->
     <footer class="footer">
@@ -478,6 +469,58 @@
   <script src="plugins/easing/easing.js"></script>
   <script src="plugins/parallax-js-master/parallax.min.js"></script>
   <script src="js/about_custom.js"></script>
+  <script>
+
+    // Check if JWT is in local storage
+    document.addEventListener("DOMContentLoaded", function () {
+      // Check if the element with ID 'userBox' exists
+      const userBox = document.getElementById('userBox');
+
+      if (userBox) {
+        // Check if JWT is in local storage
+        const token = localStorage.getItem('jwt');
+
+        if (token) {
+          // If user is logged in (JWT token found), show profile link
+          userBox.innerHTML = `
+            <a href="edit_profile.html" id ="profile_icon">Profile</a>         <small style="color: whitesmoke;">|</small>
+
+
+
+            <div class="user_box_link">
+            <a href="#" id="logoutButton">Logout</a>
+            </div>
+            `;
+
+          // Attach logout functionality to the "Logout" button
+          document.getElementById('logoutButton').addEventListener('click', function (event) {
+            event.preventDefault(); // Prevent default link behavior
+            logout();
+          });
+        } else {
+          // If user is not logged in, show login/register links
+          userBox.innerHTML = `
+                <div class="user_box_login user_box_link">
+                    <a href="login.html">Login</a>
+                </div>
+                <div class="user_box_register user_box_link">
+                    <a href="login.html">Register</a>
+                </div>
+            `;
+        }
+      } else {
+        console.error("Element with ID 'userBox' not found.");
+      }
+    });
+
+    // Function to handle logout, moved outside of the event listener
+    function logout() {
+      localStorage.removeItem('jwt'); // Remove JWT from local storage
+      alert("Logged out successfully!");
+      window.location.reload(); // Reload the page to refresh the navbar
+    }
+
+  </script>
 </body>
 
 </html>

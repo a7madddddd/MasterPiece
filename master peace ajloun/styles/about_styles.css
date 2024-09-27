@@ -343,7 +343,6 @@ section {
 /*********************************
 3.1 Top Bar
 *********************************/
-
 .top_bar {
 	width: 100%;
 	height: 36px;
@@ -364,8 +363,9 @@ section {
 .phone {
 	display: inline-block;
 	margin-right: 36px;
-	line-height: 36px;
-	font-size: 10px;
+	line-height: 50px;
+	letter-spacing: 2px;
+
 	font-weight: 600;
 	color: #FFFFFF;
 }
@@ -389,7 +389,7 @@ section {
 }
 
 .social_list_item:hover a i {
-	color: green;
+	color: whitesmoke;
 }
 
 .social_list_item a i {
@@ -449,6 +449,55 @@ section {
 
 .header.scrolled .main_nav_col {
 	height: 100px;
+}
+
+/*********************************
+3.2 Logo
+*********************************/
+
+.logo_container {
+	-webkit-transform: translateY(-6px);
+	-moz-transform: translateY(-6px);
+	-ms-transform: translateY(-6px);
+	-o-transform: translateY(-6px);
+	transform: translateY(-6px);
+}
+
+.header.scrolled .logo_container {
+	-webkit-transform: none;
+	-moz-transform: none;
+	-ms-transform: none;
+	-o-transform: none;
+	transform: none;
+}
+
+.logo a {
+	font-family: 'Open Sans', sans-serif;
+	font-size: 30px;
+	color: #f4f4f8;
+	font-weight: 800;
+	text-transform: uppercase;
+}
+
+.logo a img {
+	display: inline-block;
+	vertical-align: baseline;
+	margin-right: 9px;
+	-webkit-transform: translateY(2px);
+	-moz-transform: translateY(2px);
+	-ms-transform: translateY(2px);
+	-o-transform: translateY(2px);
+	transform: translateY(2px);
+	filter: drop-shadow(2px 4px 6px black);
+
+}
+
+.logo img {
+	width: 40%;
+}
+
+logo {
+	margin-right: 20%;
 }
 
 /*********************************
@@ -811,7 +860,7 @@ section {
 	width: 100%;
 	padding-top: 92px;
 	padding-bottom: 105px;
-	
+
 }
 
 .intro_image {
@@ -1684,4 +1733,25 @@ section {
 	color: green;
 	font-size: 40px;
 	margin: 0 50% !important;
+}
+
+
+#profile_icon {
+
+	display: inline-block;
+	font-size: 10px;
+	line-height: 36px;
+	font-weight: 600;
+	color: #FFFFFF;
+	text-transform: uppercase;
+}
+
+
+#profile_icon:hover {
+	color: green;
+	text-decoration: none;
+	/* -webkit-font-smoothing: antialiased; */
+	-webkit-text-shadow: rgba(0, 0, 0, .01) 0 0 1px;
+	text-shadow: rgba(0, 0, 0, .01) 0 0 1px;
+
 }

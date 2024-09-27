@@ -47,7 +47,7 @@
         <header class="header">
             <!-- Top Bar -->
 
-            <div class="top_bar">
+            <div class="top_bar" id="topBar">
                 <div class="container">
                     <div class="row">
                         <div class="col d-flex flex-row">
@@ -90,21 +90,9 @@
                                     </li>
                                 </ul>
                             </div>
-                            <div class="user_box ml-auto">
-                                <div class="user_box_login user_box_link">
-                                    <a href="login.html">login</a>
-                                </div>
-                                <div class="user_box_register user_box_link">
-                                    <a href="login.html">register</a>
-                                </div>
+                            <div class="user_box ml-auto" id="userBox">
+                                <!-- logOut and logIn will Apeare here -->
                             </div>
-            
-                            <!-- <div>
-                                <a href="edit_profile.html" class="profileimga">
-                                  <img src="image/2.png" alt="" class="profileimg">
-                                  <i class="fa-solid fa-circle-user"></i>     
-                                </a>
-                              </div> -->
                         </div>
                     </div>
                 </div>
@@ -282,33 +270,39 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="col-md-7 ps-md-4">
                     <div class="row">
                         <form class="col-12 bg-white px-3 mb-3 pb-3" id="userProfileForm">
                             <input type="text" id="username" class="form-control py-2" placeholder="Username" hidden>
                             <div class="d-flex align-items-center justify-content-between border-bottom">
                                 <p class="py-2">First Name</p>
-                                <input type="text" id="firstName" class="form-control py-2" name="FirstName" placeholder="First Name">
+                                <input type="text" id="firstName" class="form-control py-2" name="FirstName"
+                                    placeholder="First Name">
                             </div>
                             <div class="d-flex align-items-center justify-content-between border-bottom">
                                 <p class="py-2">Last Name</p>
-                                <input type="text" id="lastName" name="LastName" class="form-control py-2" placeholder="Last Name">
+                                <input type="text" id="lastName" name="LastName" class="form-control py-2"
+                                    placeholder="Last Name">
                             </div>
                             <div class="d-flex align-items-center justify-content-between border-bottom">
                                 <p class="py-2">Email</p>
-                                <input type="email" id="email" class="form-control py-2" name="Email" placeholder="Email" readonly>
+                                <input type="email" id="email" class="form-control py-2" name="Email"
+                                    placeholder="Email" readonly>
                             </div>
                             <div class="d-flex align-items-center justify-content-between border-bottom">
                                 <p class="py-2">Phone</p>
-                                <input type="tel" id="phone" class="form-control py-2" name="Phone" placeholder="Enter Phone Number">
+                                <input type="tel" id="phone" class="form-control py-2" name="Phone"
+                                    placeholder="Enter Phone Number">
                             </div>
                             <div class="d-flex align-items-center justify-content-between border-bottom">
                                 <p class="py-2">Password</p>
-                                <input type="password" id="password" class="form-control py-2" name="Password" placeholder="Enter New Password">
+                                <input type="password" id="password" class="form-control py-2" name="Password"
+                                    placeholder="Enter New Password">
                             </div>
                             <div class="d-flex ">
-                                <button type="submit" class="btn btn-primary follow me-2" id="saveChanges">Save Changes</button>
+                                <button type="submit" class="btn btn-primary follow me-2" id="saveChanges">Save
+                                    Changes</button>
                             </div>
                         </form>
                         <div class="col-12 bg-white px-3 pb-2">
@@ -580,9 +574,9 @@
     <script src="assets/js/custom.js"></script>
 
 
-    
-    
-    
+
+
+
     <script src="js/profile.js"></script>
     <script src="js/jquery-3.2.1.min.js"></script>
     <script src="styles/bootstrap4/popper.js"></script>
@@ -600,7 +594,58 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
 
+    <script>
 
+        // Check if JWT is in local storage
+        document.addEventListener("DOMContentLoaded", function () {
+            // Check if the element with ID 'userBox' exists
+            const userBox = document.getElementById('userBox');
+
+            if (userBox) {
+                // Check if JWT is in local storage
+                const token = localStorage.getItem('jwt');
+
+                if (token) {
+                    // If user is logged in (JWT token found), show profile link
+                    userBox.innerHTML = `
+            <a href="edit_profile.html" id ="profile_icon">Profile</a>         <small style="color: whitesmoke;">|</small>
+
+
+
+            <div class="user_box_link">
+            <a href="#" id="logoutButton">Logout</a>
+            </div>
+            `;
+
+                    // Attach logout functionality to the "Logout" button
+                    document.getElementById('logoutButton').addEventListener('click', function (event) {
+                        event.preventDefault(); // Prevent default link behavior
+                        logout();
+                    });
+                } else {
+                    // If user is not logged in, show login/register links
+                    userBox.innerHTML = `
+                <div class="user_box_login user_box_link">
+                    <a href="login.html">Login</a>
+                </div>
+                <div class="user_box_register user_box_link">
+                    <a href="login.html">Register</a>
+                </div>
+            `;
+                }
+            } else {
+                console.error("Element with ID 'userBox' not found.");
+            }
+        });
+
+        // Function to handle logout, moved outside of the event listener
+        function logout() {
+            localStorage.removeItem('jwt'); // Remove JWT from local storage
+            alert("Logged out successfully!");
+            window.location.reload(); // Reload the page to refresh the navbar
+        }
+
+    </script>
 
 </body>
 

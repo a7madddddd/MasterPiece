@@ -505,3 +505,25 @@ body {
     width: 12vw;
     height: 7vh;
 }
+
+
+
+#profile_icon {
+
+    display: inline-block;
+    font-size: 10px;
+    line-height: 36px;
+    font-weight: 600;
+    color: #FFFFFF;
+    text-transform: uppercase;
+}
+
+
+#profile_icon:hover {
+    color: green;
+    text-decoration: none;
+    /* -webkit-font-smoothing: antialiased; */
+    -webkit-text-shadow: rgba(0, 0, 0, .01) 0 0 1px;
+    text-shadow: rgba(0, 0, 0, .01) 0 0 1px;
+
+}

@@ -354,7 +354,7 @@ section {
 	margin-right: 36px;
 	line-height: 50px;
 	letter-spacing: 2px;
-	font-size: 150%;
+
 	font-weight: 600;
 	color: #FFFFFF;
 }
@@ -2834,6 +2834,31 @@ html {
 	color: green !important;
 }
 
-.about .display-5{
+.about .display-5 {
 	font-size: 2.2em;
+}
+
+
+
+
+
+
+#profile_icon {
+
+	display: inline-block;
+	font-size: 10px;
+	line-height: 36px;
+	font-weight: 600;
+	color: #FFFFFF;
+	text-transform: uppercase;
+}
+
+
+#profile_icon:hover {
+	color: green;
+	text-decoration: none;
+	/* -webkit-font-smoothing: antialiased; */
+	-webkit-text-shadow: rgba(0, 0, 0, .01) 0 0 1px;
+	text-shadow: rgba(0, 0, 0, .01) 0 0 1px;
+
 }

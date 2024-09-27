@@ -357,8 +357,9 @@ section {
 .phone {
 	display: inline-block;
 	margin-right: 36px;
-	line-height: 36px;
-	font-size: 10px;
+	line-height: 50px;
+	letter-spacing: 2px;
+
 	font-weight: 600;
 	color: #FFFFFF;
 }
@@ -2323,4 +2324,28 @@ sub, sup {
 	font-size: 0.75em;
 	line-height: 0;
 	vertical-align: baseline;
+}
+
+
+
+
+
+#profile_icon {
+
+	display: inline-block;
+	font-size: 10px;
+	line-height: 36px;
+	font-weight: 600;
+	color: #FFFFFF;
+	text-transform: uppercase;
+}
+
+
+#profile_icon:hover {
+	color: green;
+	text-decoration: none;
+	/* -webkit-font-smoothing: antialiased; */
+	-webkit-text-shadow: rgba(0, 0, 0, .01) 0 0 1px;
+	text-shadow: rgba(0, 0, 0, .01) 0 0 1px;
+
 }
