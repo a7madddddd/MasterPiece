@@ -213,7 +213,61 @@ namespace MasterPieceApi.Controllers
         }
 
 
+        [HttpGet("UserBookingsDashboard")]
+        public async Task<ActionResult<IEnumerable<UsersBookings>>> GetUserBookings()
+        {
+            var bookings = await _context.Bookings
+                .Include(b => b.User)
+                .Include(b => b.Service)
+                .Select(b => new UsersBookings
+                {
+                    BookingId = b.BookingId,
+                    // Just return BookingDate as DateTime instead of converting to DateOnly
+                    BookingDate = b.BookingDate.HasValue ? b.BookingDate.Value.ToDateTime(new TimeOnly(0, 0)) : DateTime.MinValue,
 
+                    NumberOfPeople = b.NumberOfPeople,
+                    TotalAmount = b.TotalAmount ?? 0, // Handle null values for TotalAmount
+                    Status = b.Status,
+                    Username = b.User.FirstName + " " + b.User.LastName, // Combining first and last name
+                    ServiceName = b.Service.ServiceName // Assuming ServiceName exists
+                }).ToListAsync();
+
+            return Ok(bookings);
+        }
+
+
+        [HttpPut("UpdateStatus/{id}")]
+        public async Task<IActionResult> UpdateStatus(int id, [FromBody] StatusUpdateModel model)
+        {
+            var booking = await _context.Bookings.FindAsync(id);
+            if (booking == null)
+                return NotFound();
+
+            booking.Status = model.Status;
+            await _context.SaveChangesAsync();
+
+            return Ok(booking);
+        }
+
+        public class StatusUpdateModel
+        {
+            public string Status { get; set; }
+        }
+
+
+
+        [HttpDelete("Delete/{id}")]
+        public async Task<IActionResult> DeleteBookingDashboard(int id)
+        {
+            var booking = await _context.Bookings.FindAsync(id);
+            if (booking == null)
+                return NotFound();
+
+            _context.Bookings.Remove(booking);
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "Booking deleted successfully" });
+        }
     }
 }
 

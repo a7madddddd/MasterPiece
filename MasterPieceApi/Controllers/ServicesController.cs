@@ -1,4 +1,5 @@
-﻿using MasterPieceApi.Models;
+﻿using MasterPieceApi.DTOs;
+using MasterPieceApi.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ namespace MasterPieceApi.Controllers
     public class ServicesController : ControllerBase
     {
         private readonly MyDbContext _context;
+        private readonly string _imagePath = @"C:\Users\Orange\Desktop\test_ajloun\master peace ajloun\services images";
 
         public ServicesController(MyDbContext context)
         {
@@ -109,7 +111,8 @@ namespace MasterPieceApi.Controllers
             var mostBookedServices = await _context.Services
                 .Where(s => s.Most == true)
                 .Select(s => new
-                {   s.ServiceId,
+                {
+                    s.ServiceId,
                     s.ServiceName,
                     s.Description,
                     s.Image,
@@ -122,7 +125,108 @@ namespace MasterPieceApi.Controllers
             return Ok(mostBookedServices);
         }
 
+
+
+        [HttpPost("Dahboard Add Service")]
+        public async Task<ActionResult<Service>> PostService([FromForm] ServiceCreateDto serviceDto)
+        {
+            var service = new Service
+            {
+                ServiceName = serviceDto.ServiceName,
+                Description = serviceDto.Description,
+                Price = serviceDto.Price,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow,
+                IsActive = serviceDto.IsActive,  // Set default value or modify as needed
+                Description2 = serviceDto.Description2,
+                Question = serviceDto.Question,
+                Dates = serviceDto.Dates,
+
+            };
+
+            if (serviceDto.ImageFile != null && serviceDto.ImageFile.Length > 0)
+            {
+                var fileName = $"{Guid.NewGuid()}_{Path.GetFileName(serviceDto.ImageFile.FileName)}";
+                var filePath = Path.Combine(_imagePath, fileName);
+
+                // Ensure the directory exists
+                Directory.CreateDirectory(_imagePath);
+
+                // Save the file
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await serviceDto.ImageFile.CopyToAsync(stream);
+                }
+
+                // Set the image path in the service model
+                service.Image = $"/services images/{fileName}"; // Adjust the path as needed
+            }
+
+            _context.Services.Add(service);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction("GetService", new { id = service.ServiceId }, service);
+        }
+
+
+
+
+        [HttpPut("UpdateServiceByName")]
+        public async Task<ActionResult<Service>> UpdateServiceByName([FromForm] ServiceCreateDto serviceDto)
+        {
+            // Find the existing service by name
+            var service = await _context.Services.FirstOrDefaultAsync(s => s.ServiceName == serviceDto.ServiceName);
+            if (service == null)
+            {
+                return NotFound();
+            }
+
+            // Update the service properties
+            service.Description = serviceDto.Description;
+            service.Price = serviceDto.Price;
+            service.Description2 = serviceDto.Description2;
+            service.Question = serviceDto.Question;
+            service.IsActive = serviceDto.IsActive;
+            service.Dates = serviceDto.Dates;
+            service.UpdatedAt = DateTime.UtcNow;
+
+            if (serviceDto.ImageFile != null && serviceDto.ImageFile.Length > 0)
+            {
+                // Generate a unique file name for the uploaded image
+                var fileName = $"{Guid.NewGuid()}_{Path.GetFileName(serviceDto.ImageFile.FileName)}";
+                var filePath = Path.Combine(@"C:\Users\Orange\Desktop\test_ajloun\master peace ajloun\services images", fileName);
+
+                // Save the new file
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await serviceDto.ImageFile.CopyToAsync(stream);
+                }
+
+                // Update the image path in the service model
+                service.Image = $"/services images/{fileName}"; // Adjust based on how you serve images
+            }
+
+            // Save changes to the database
+            await _context.SaveChangesAsync();
+
+            return Ok(service); // Return the updated service
+        }
+
+        [HttpDelete("DeleteService/{serviceName}")]
+        public async Task<IActionResult> DeleteService(string serviceName)
+        {
+            var service = await _context.Services.FirstOrDefaultAsync(s => s.ServiceName == serviceName);
+            if (service == null)
+            {
+                return NotFound(new { message = "Service not found." });
+            }
+
+            _context.Services.Remove(service);
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "Service deleted successfully." });
+        }
+
     }
 }
 
-    

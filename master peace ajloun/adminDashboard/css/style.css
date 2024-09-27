@@ -287,3 +287,16 @@
     background: var(--dark);
     border-color: var(--primary);
 }
+
+.toast {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #333;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    opacity: 0.9;
+    transition: opacity 0.5s;
+    z-index: 1000;
+}
