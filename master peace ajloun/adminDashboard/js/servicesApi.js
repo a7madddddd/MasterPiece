@@ -147,3 +147,40 @@ document.getElementById('deleteServiceBtn').addEventListener('click', async func
 
 
 
+
+
+///////////////////
+
+
+
+async function fetchServices() {
+    try {
+        const response = await fetch('https://localhost:44321/api/Services');
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        const services = data.$values;
+
+        const tableBody = document.getElementById('servicesTable').getElementsByTagName('tbody')[0];
+        tableBody.innerHTML = ''; // Clear existing data
+
+        services.forEach((service, index) => {
+            const row = tableBody.insertRow();
+            row.innerHTML = `
+                <th scope="row">${index + 1}</th>
+                <td>${service.serviceName}</td>
+                <td>${service.description}</td>
+                <td>${service.dates}</td>
+                <td>${service.price}</td>
+                <td>${service.isActive ? 'Yes' : 'No'}</td>
+               
+            `;
+        });
+    } catch (error) {
+        console.error('Error fetching services:', error);
+    }
+}
+
+// Call the fetchServices function on page load
+document.addEventListener('DOMContentLoaded', fetchServices);
