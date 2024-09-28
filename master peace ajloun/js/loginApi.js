@@ -90,9 +90,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-
-
-
 document.addEventListener('DOMContentLoaded', function () {
     // Login functionality
     document.querySelector('#loginForm').addEventListener('submit', async function (event) {
@@ -123,26 +120,59 @@ document.addEventListener('DOMContentLoaded', function () {
                 throw new Error(`Error: ${response.status} - ${errorText}`);
             }
 
-            const data = await response.json(); // Assuming the API responds with JSON
+            const data = await response.json(); // Get the token and userRole from the response
 
-            // Show success alert and handle successful login
+            // Show success alert for regular users or admins
             await Swal.fire({
                 icon: 'success',
                 title: 'Login successful!',
                 text: `Welcome back! ${email}`,
             });
 
-            localStorage.setItem('jwt', data.token); // Use data instead of result
+            // Store JWT token and user role in local storage
+            localStorage.setItem('jwt', data.token);
+            localStorage.setItem('userRole', data.userRole); // Store userRole as well
+
             console.log("Login successful:", data);
 
             // Reset the form
             this.reset();
 
-            // Redirect or perform additional actions here
-            // window.location.href = '/dashboard'; // Example redirection
+            // Check if the user is an admin
+            if (data.userRole === 'Admin') {
+                // If admin, show options to continue as Admin or User
+                const result = await Swal.fire({
+                    title: 'Continue as Admin or User?',
+                    text: 'Please select whether to continue as Admin or User',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'Admin',
+                    cancelButtonText: 'User',
+                });
+
+                // Redirect based on the choice
+                if (result.isConfirmed) {
+                    // Admin button clicked
+                    window.location.href = '../adminDashboard/index.html';
+                } else {
+                    // User button clicked or cancel button (continue as User)
+                    window.location.href = 'index.html';
+                }
+            } else if (data.userRole === 'User') {
+                // Redirect to user dashboard if it's a regular user
+                window.location.href = 'index.html';
+            } else {
+                // Handle other roles if needed or show an error
+                console.warn('Unknown role:', data.userRole);
+                await Swal.fire({
+                    icon: 'warning',
+                    title: 'Unknown role',
+                    text: `The role ${data.userRole} is not recognized.`,
+                });
+            }
 
         } catch (error) {
-            console.error("Login failed:");
+            console.error("Login failed:", error);
             // Show error alert
             await Swal.fire({
                 icon: 'error',
@@ -152,8 +182,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 });
-
-
 
 
 

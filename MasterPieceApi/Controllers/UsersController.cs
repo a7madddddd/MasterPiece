@@ -215,7 +215,8 @@ namespace MasterPieceApi.Controllers
             // Generate JWT token
             var token = GenerateJwtToken(user);
 
-            return Ok(new { token });
+            // Return the token and the user's role
+            return Ok(new { token, userRole = user.UserRole }); // Make sure UserRole is included in the response
         }
 
         // Method to generate the JWT token
@@ -231,14 +232,14 @@ namespace MasterPieceApi.Controllers
 
             // Create claims for the JWT payload (You can add more claims as needed)
             var claims = new[]
-                {
-                    new Claim(JwtRegisteredClaimNames.Sub, user.UserId.ToString()), // Use UserId as the subject
-                    new Claim(JwtRegisteredClaimNames.Name, user.Username), // Add username as a separate claim
-                    new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                    new Claim("userId", user.UserId.ToString()), // Keep this custom claim for consistency
-                };
-
+            {
+        new Claim(JwtRegisteredClaimNames.Sub, user.UserId.ToString()), // Use UserId as the subject
+        new Claim(JwtRegisteredClaimNames.Name, user.Username), // Add username as a separate claim
+        new Claim(JwtRegisteredClaimNames.Email, user.Email),
+        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+        new Claim("userId", user.UserId.ToString()), // Keep this custom claim for consistency
+        new Claim("UserRole", user.UserRole) // Add UserRole as a claim
+    };
 
             // Define token options
             var tokenOptions = new JwtSecurityToken(
@@ -252,8 +253,8 @@ namespace MasterPieceApi.Controllers
             // Create and return the JWT token
             var tokenString = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
             return tokenString;
-
         }
+
         /// <summary>
         /// ////////////////
         /// </summary>
@@ -405,7 +406,7 @@ namespace MasterPieceApi.Controllers
                     TotalAmount = b.TotalAmount.HasValue ? b.TotalAmount.Value : 0m, // Convert decimal? to decimal with a default value
                     Status = b.Status,
                     Username = b.User.Username, // Assuming User has a Username property
-                    ServiceName = b.Service.ServiceName ,// Assuming Booking has a navigation property to Service
+                    ServiceName = b.Service.ServiceName,// Assuming Booking has a navigation property to Service
 
                 })
                 .ToListAsync();
