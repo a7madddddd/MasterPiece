@@ -56,6 +56,8 @@ document.addEventListener("DOMContentLoaded", function () {
                     button.addEventListener("click", function () {
                         const bookingId = this.getAttribute("data-booking-id");
                         alert(`Processing payment for booking ID: ${bookingId}`);
+                            window.location.href = 'book.html'; // Adjust the URL as needed
+
                         // Add payment logic here
                     });
                 });
@@ -87,7 +89,8 @@ document.addEventListener('DOMContentLoaded', function () {
         if (isTokenExpired) {
             console.error("JWT token is expired");
             alert("Session expired, please log in again.");
-            return;
+            window.location.href = 'login.html'; // Adjust the URL as needed
+
         }
 
         console.log('User ID:', userId);
