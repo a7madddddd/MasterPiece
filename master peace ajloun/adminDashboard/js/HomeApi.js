@@ -64,7 +64,7 @@ function populateTable(data) {
             <td>${booking.serviceName || 'N/A'}</td>
             <td>${booking.username || 'N/A'}</td>
             <td>${booking.numberOfPeople || 'N/A'}</td>
-            <td>$${(booking.totalAmount || 0).toFixed(2)}</td>
+            <td>${(booking.totalAmount || 0).toFixed(2)} jd</td>
             <td>${booking.status || 'N/A'}</td>
             <td>
                 <button class="btn btn-sm btn-danger delete-btn" data-id="${booking.bookingId}">Delete</button>
