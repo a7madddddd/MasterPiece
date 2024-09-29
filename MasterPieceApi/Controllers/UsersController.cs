@@ -232,14 +232,14 @@ namespace MasterPieceApi.Controllers
 
             // Create claims for the JWT payload (You can add more claims as needed)
             var claims = new[]
-            {
-        new Claim(JwtRegisteredClaimNames.Sub, user.UserId.ToString()), // Use UserId as the subject
-        new Claim(JwtRegisteredClaimNames.Name, user.Username), // Add username as a separate claim
-        new Claim(JwtRegisteredClaimNames.Email, user.Email),
-        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-        new Claim("userId", user.UserId.ToString()), // Keep this custom claim for consistency
-        new Claim("UserRole", user.UserRole) // Add UserRole as a claim
-    };
+                    {
+                new Claim(JwtRegisteredClaimNames.Sub, user.UserId.ToString()), // Use UserId as the subject
+                new Claim(JwtRegisteredClaimNames.Name, user.Username), // Add username as a separate claim
+                new Claim(JwtRegisteredClaimNames.Email, user.Email),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim("userId", user.UserId.ToString()), // Keep this custom claim for consistency
+                new Claim("UserRole", user.UserRole) // Add UserRole as a claim
+            };
 
             // Define token options
             var tokenOptions = new JwtSecurityToken(
@@ -287,79 +287,80 @@ namespace MasterPieceApi.Controllers
         /// <param name="userDto"></param>
         /// <param name="usersImagesFile"></param>
         /// <returns></returns>
+        // Your UpdateUserProfile method remains as follows
         [HttpPut("UpdateUserProfile/{userId}")]
         public async Task<IActionResult> UpdateUser(int userId, [FromForm] UserResponseDTO userDto, IFormFile? usersImagesFile)
         {
+            // Check if the provided userId matches the DTO
             if (userId != userDto.UserId)
             {
                 return BadRequest(new { message = "User ID mismatch" });
             }
+
+            // Find the user in the database
             var user = await _context.Users.FindAsync(userId);
             if (user == null)
             {
                 return NotFound(new { message = "User not found" });
             }
 
-            // Update user properties
+            // Update user properties if provided
             user.Username = userDto.Username ?? user.Username;
             user.Email = userDto.Email ?? user.Email;
             user.FirstName = userDto.FirstName ?? user.FirstName;
             user.LastName = userDto.LastName ?? user.LastName;
             user.Phone = userDto.Phone ?? user.Phone;
 
-
-            // Handle file upload for profile image
+            // Handle file upload for profile image if provided
             if (usersImagesFile != null && usersImagesFile.Length > 0)
             {
-                // Change the folder path to the specified directory
-                var uploadsFolder = @"C:\Users\Orange\Desktop\test_ajloun\master peace ajloun";
-
-                // Create the directory if it does not exist
-                Directory.CreateDirectory(uploadsFolder);
+                // Directory for storing user images
+                var uploadsFolder = @"C:\Users\Orange\Desktop\test_ajloun\master peace ajloun/usersImages/";
+                Directory.CreateDirectory(uploadsFolder); // Ensure the directory exists
 
                 var fileName = Guid.NewGuid() + Path.GetExtension(usersImagesFile.FileName);
                 var filePath = Path.Combine(uploadsFolder, fileName);
 
+                // Save the image to the specified folder
                 using (var stream = new FileStream(filePath, FileMode.Create))
                 {
                     await usersImagesFile.CopyToAsync(stream);
                 }
 
-                // Update the profile image path (if needed)
-                user.ProfileImage = $"/master peace ajloun/{fileName}"; // Adjust this line as necessary
+                // Update the user's profile image path
+                user.ProfileImage = $"usersImages/{fileName}";
             }
 
-            // Hash the password if provided
+            // Hash the password if it's provided
             if (!string.IsNullOrEmpty(userDto.Password))
             {
-                user.PasswordHash = HashPassword(userDto.Password);
+                // Hash the new password using BCrypt
+                user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(userDto.Password);
             }
 
             // Save changes to the database
-            await _context.SaveChangesAsync();
-            return Ok(new { message = "User profile updated successfully" });
-        }
-        // Method to hash password
-        private string HashPassword(string password)
-        {
-            // Generate a salt
-            var salt = new byte[16];
-            using (var rng = RandomNumberGenerator.Create())
+            var updatedRows = await _context.SaveChangesAsync();
+
+            // Check if any rows were updated
+            if (updatedRows > 0)
             {
-                rng.GetBytes(salt);
+                return Ok(new { message = "User profile updated successfully" });
             }
-
-            // Hash the password
-            var hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
-                password: password,
-                salt: salt,
-                prf: KeyDerivationPrf.HMACSHA256,
-                iterationCount: 10000,
-                numBytesRequested: 32));
-
-            // Store the salt and hashed password together (you can adjust this based on your database schema)
-            return $"{Convert.ToBase64String(salt)}.{hashed}";
+            else
+            {
+                return BadRequest(new { message = "No changes were made to the user profile." });
+            }
         }
+
+        // You can delete the following custom method
+        // private string HashPassword(string password)
+        // {
+        //     // Custom hashing logic that is no longer needed
+        // }
+
+
+
+
         /// <summary>
         /// ////////////
         /// </summary>
@@ -418,10 +419,6 @@ namespace MasterPieceApi.Controllers
 
             return Ok(bookings);
         }
-
-
-
-
     }
 }
 

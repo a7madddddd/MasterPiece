@@ -218,7 +218,7 @@
         <div class="container" id="editProfile">
             <div class="row">
                 <div class="col-12 p-0">
-                    <nav aria-label="breadcrumb ">
+                    <nav aria-label="breadcrumb">
                         <ol class="breadcrumb py-3 px-3">
                             <li class="breadcrumb-item"><a href="index.html">Home</a></li>
                             <li class="breadcrumb-item"><a href="services.html">Services</a></li>
@@ -227,15 +227,15 @@
                     </nav>
                 </div>
                 <div class="col-md-5">
-                    <div class="row">
+                    <form id="userProfileForm" class="row">
                         <div class="col-12 bg-white p-0 px-3 py-3 mb-3">
                             <div class="d-flex flex-column align-items-center">
-                                <img id="userPhoto" class="photo" src="" alt="">
+                                <img src="" id="userPhoto" alt="">
                                 <p id="userName" class="fw-bold h4 mt-3"></p>
                                 <p id="userLocation" class="text-muted mb-3"></p>
                                 <div class="d-flex align-items-center justify-content-between border-bottom">
                                     <div class="file-input mb-3">
-                                        <input type="file" id="profile-picture" name="profileImage" accept="image2/*" />
+                                        <input type="file" id="profile-picture" name="profileImage" accept="image/*" />
                                         <label for="profile-picture">
                                             <i class="fas fa-camera" aria-hidden="true"></i>
                                             <span>Upload Photo</span>
@@ -245,66 +245,60 @@
                             </div>
                         </div>
                         <div class="col-12 bg-white p-0 px-2 pb-3 mb-3">
-                            <div class="col-12 bg-white p-0 px-2 pb-3 mb-3">
-                                <div class="d-flex justify-content-between border-bottom py-2 px-3">
-                                    <p><span class="fas fa-globe me-2"></span>Website</p>
-                                    <a href="#">https://bootdey.com</a>
-                                </div>
-                                <div class="d-flex justify-content-between border-bottom py-2 px-3">
-                                    <p><span class="fab fa-github-alt me-2"></span>Github</p>
-                                    <a href="">bootdey</a>
-                                </div>
-                                <div class="d-flex justify-content-between border-bottom py-2 px-3">
-                                    <p><span class="fab fa-twitter me-2"></span>Twitter</p>
-                                    <a href="">@bootdey</a>
-                                </div>
-                                <div class="d-flex justify-content-between border-bottom py-2 px-3">
-                                    <p><span class="fab fa-instagram me-2"></span>Instagram</p>
-                                    <a href="">bootdey</a>
-                                </div>
-                                <div class="d-flex justify-content-between py-2 px-3">
-                                    <p><span class="fab fa-facebook-f me-2"></span>facebook</p>
-                                    <a href="">bootdey</a>
-                                </div>
+                            <div class="d-flex justify-content-between border-bottom py-2 px-3">
+                                <p><span class="fas fa-globe me-2"></span>Website</p>
+                                <a href="#">https://bootdey.com</a>
+                            </div>
+                            <div class="d-flex justify-content-between border-bottom py-2 px-3">
+                                <p><span class="fab fa-github-alt me-2"></span>Github</p>
+                                <a href="">bootdey</a>
+                            </div>
+                            <div class="d-flex justify-content-between border-bottom py-2 px-3">
+                                <p><span class="fab fa-twitter me-2"></span>Twitter</p>
+                                <a href="">@bootdey</a>
+                            </div>
+                            <div class="d-flex justify-content-between border-bottom py-2 px-3">
+                                <p><span class="fab fa-instagram me-2"></span>Instagram</p>
+                                <a href="">bootdey</a>
+                            </div>
+                            <div class="d-flex justify-content-between py-2 px-3">
+                                <p><span class="fab fa-facebook-f me-2"></span>facebook</p>
+                                <a href="">bootdey</a>
                             </div>
                         </div>
-                    </div>
-                </div>
-
-                <div class="col-md-7 ps-md-4">
-                    <div class="row">
-                        <form class="col-12 bg-white px-3 mb-3 pb-3" id="userProfileForm">
+                        
+                         </div>
+        
+                     <div class="col-md-7 ps-md-4">
+                        <div class="row">
+                        <div class="col-12 bg-white px-3 mb-3 pb-3">
                             <input type="text" id="username" class="form-control py-2" placeholder="Username" hidden>
                             <div class="d-flex align-items-center justify-content-between border-bottom">
                                 <p class="py-2">First Name</p>
-                                <input type="text" id="firstName" class="form-control py-2" name="FirstName"
-                                    placeholder="First Name">
+                            <input type="text" id="firstName" class="form-control py-2" name="firstName" placeholder="First Name">                                    
                             </div>
                             <div class="d-flex align-items-center justify-content-between border-bottom">
                                 <p class="py-2">Last Name</p>
-                                <input type="text" id="lastName" name="LastName" class="form-control py-2"
-                                    placeholder="Last Name">
+                            <input type="text" id="lastName" name="lastName" class="form-control py-2" placeholder="Last Name">                                   
                             </div>
                             <div class="d-flex align-items-center justify-content-between border-bottom">
                                 <p class="py-2">Email</p>
-                                <input type="email" id="email" class="form-control py-2" name="Email"
-                                    placeholder="Email" readonly>
+                            <input type="email" id="email" class="form-control py-2" name="email" placeholder="Email" readonly>                                    
                             </div>
                             <div class="d-flex align-items-center justify-content-between border-bottom">
                                 <p class="py-2">Phone</p>
-                                <input type="tel" id="phone" class="form-control py-2" name="Phone"
+                                <input type="tel" id="phone" class="form-control py-2" name="phone"
                                     placeholder="Enter Phone Number">
                             </div>
                             <div class="d-flex align-items-center justify-content-between border-bottom">
                                 <p class="py-2">Password</p>
-                                <input type="password" id="password" class="form-control py-2" name="Password"
-                                    placeholder="Enter New Password">
+                            <input type="password" id="password" class="form-control py-2" name="password" placeholder="*******">                                    
                             </div>
-                            <div class="d-flex ">
-                                <button type="submit" class="btn btn-primary follow me-2" id="saveChanges">Save
-                                    Changes</button>
+                            <div class="d-flex">
+                                <button type="submit" class="btn btn-primary follow me-2" id="saveChanges">Save Changes</button>
                             </div>
-                        </form>
+                        </div>
+                    </form>
                         <div class="col-12 bg-white px-3 pb-2">
                             <h6 class="d-flex align-items-center mb-3 fw-bold py-3">
                                 <i class="fas fa-calendar-check text-info me-2"></i> Your Bookings
@@ -329,7 +323,6 @@
                     </div>
                 </div>
             </div>
-
         </div>
 
 
@@ -577,7 +570,7 @@
 
 
 
-    <script src="js/profile.js"></script>
+    <!-- <script src="js/profile.js"></script> -->
     <script src="js/jquery-3.2.1.min.js"></script>
     <script src="styles/bootstrap4/popper.js"></script>
     <script src="styles/bootstrap4/bootstrap.min.js"></script>
@@ -590,7 +583,6 @@
     <script src="plugins/easing/easing.js"></script>
     <script src="plugins/parallax-js-master/parallax.min.js"></script>
     <script src="js/about_custom.js"></script>
-    <script src="js/login.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
 
