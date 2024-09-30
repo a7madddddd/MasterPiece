@@ -145,7 +145,6 @@ public partial class MyDbContext : DbContext
             entity.Property(e => e.AccommodationType)
                 .HasMaxLength(50)
                 .IsUnicode(false);
-           
             entity.Property(e => e.CreatedAt)
                 .HasMaxLength(50)
                 .IsUnicode(false);
@@ -163,7 +162,11 @@ public partial class MyDbContext : DbContext
             entity.Property(e => e.StartDate)
                 .HasMaxLength(50)
                 .IsUnicode(false);
-           
+
+            entity.HasOne(d => d.Service).WithMany(p => p.Offers)
+                .HasForeignKey(d => d.ServiceId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Offers_Services");
         });
 
         modelBuilder.Entity<Payment>(entity =>
@@ -183,6 +186,10 @@ public partial class MyDbContext : DbContext
                 .IsUnicode(false)
                 .HasDefaultValue("pending");
             entity.Property(e => e.UserId).HasColumnName("UserID");
+
+            entity.HasOne(d => d.Service).WithMany(p => p.Payments)
+                .HasForeignKey(d => d.ServiceId)
+                .HasConstraintName("FK_Payments_Services");
 
             entity.HasOne(d => d.User).WithMany(p => p.Payments)
                 .HasForeignKey(d => d.UserId)

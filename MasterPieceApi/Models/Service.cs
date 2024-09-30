@@ -35,6 +35,8 @@ public partial class Service
 
     public virtual ICollection<Offer> Offers { get; set; } = new List<Offer>();
 
+    public virtual ICollection<Payment> Payments { get; set; } = new List<Payment>();
+
     public virtual ICollection<Review> Reviews { get; set; } = new List<Review>();
 
     public virtual ICollection<ServiceDetail> ServiceDetails { get; set; } = new List<ServiceDetail>();

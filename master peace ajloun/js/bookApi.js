@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
-    // Fetch and display order items
+    // Other code here...
     const jwt = localStorage.getItem('jwt');
     console.log('JWT:', jwt);  // Debug JWT retrieval
     if (!jwt) {
@@ -42,62 +42,35 @@ document.addEventListener('DOMContentLoaded', function () {
             return response.json();
         })
         .then(data => {
-            console.log('Fetched Data:', data);  // Debug fetched data
+            console.log('Fetched Data:', data);  // Log the response data
+            const services = Array.isArray(data) ? data : data.$values || []; // Ensure services is defined
             const orderItemsContainer = document.getElementById('order-items');
             const totalPriceElement = document.getElementById('total-price');
             let totalPrice = 0;
 
             orderItemsContainer.innerHTML = '';
 
-            if (Array.isArray(data)) {
-                data.forEach(service => {
-                    const orderItemDiv = document.createElement('div');
-                    orderItemDiv.classList.add('order-item');
+            services.forEach(service => {
+                const orderItemDiv = document.createElement('div');
+                orderItemDiv.classList.add('order-item');
 
-                    const serviceNameElement = document.createElement('span');
-                    serviceNameElement.textContent = service.serviceName;
+                const serviceNameElement = document.createElement('span');
+                serviceNameElement.textContent = service.serviceName;
 
-                    const priceElement = document.createElement('span');
-                    priceElement.textContent = `$${service.price.toFixed(2)}`;
+                const priceElement = document.createElement('span');
+                priceElement.textContent = `$${service.price.toFixed(2)}`;
 
-                    orderItemDiv.appendChild(serviceNameElement);
-                    orderItemDiv.appendChild(priceElement);
-                    orderItemsContainer.appendChild(orderItemDiv);
+                orderItemDiv.appendChild(serviceNameElement);
+                orderItemDiv.appendChild(priceElement);
+                orderItemsContainer.appendChild(orderItemDiv);
 
-                    totalPrice += service.price;
-                });
+                totalPrice += service.price;
+            });
 
-                totalPriceElement.textContent = `$${totalPrice.toFixed(2)}`;
-            } else if (data.$values) {
-                data.$values.forEach(service => {
-                    const orderItemDiv = document.createElement('div');
-                    orderItemDiv.classList.add('order-item');
-
-                    const serviceNameElement = document.createElement('span');
-                    serviceNameElement.textContent = service.serviceName;
-
-                    const priceElement = document.createElement('span');
-                    priceElement.textContent = `${service.price.toFixed(2)} jd`;
-
-                    orderItemDiv.appendChild(serviceNameElement);
-                    orderItemDiv.appendChild(priceElement);
-                    orderItemsContainer.appendChild(orderItemDiv);
-
-                    totalPrice += service.price;
-                });
-
-                totalPriceElement.textContent = `${totalPrice.toFixed(2)} jd`;
-            } else {
-                console.error('Unexpected response format:', data);
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Data Error',
-                    text: 'Unable to load booking details. Please try again later.',
-                });
-            }
+            totalPriceElement.textContent = `$${totalPrice.toFixed(2)}`;
 
             // Initialize PayPal button after loading booking details
-            initPayPalButton(totalPrice);
+            initPayPalButton(totalPrice, userId, services); // Pass the correct services array
         })
         .catch(error => {
             console.error('Error fetching booking details:', error);
@@ -107,9 +80,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 text: 'Unable to load booking details. Please try again later.',
             });
         });
-
-    // PayPal button initialization
-    function initPayPalButton(totalAmount) {
+    debugger
+    function initPayPalButton(totalAmount, userId, services) {
         let processingPayment = false;  // Flag to prevent multiple payments
         paypal.Buttons({
             style: {
@@ -124,7 +96,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
             },
             onApprove: function (data, actions) {
-                // Disable button during processing
                 if (processingPayment) {
                     return; // Exit if a payment is already being processed
                 }
@@ -142,16 +113,58 @@ document.addEventListener('DOMContentLoaded', function () {
                     console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
                     processingPayment = false;
 
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Payment Successful',
-                        text: 'Thank you for your payment!',
-                        showConfirmButton: false,
-                        timer: 2000
-                    }).then(() => {
-                        // Redirect or update UI as needed
-                        // Example: window.location.href = 'thank_you.html';
+                    const serviceId = services && services.length > 0 ? services[0].id : null; // Get serviceId
+                    if (!services || services.length === 0) {
+                        console.error('No services available for payment.');
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Service Error',
+                            text: 'No services available for payment. Please try again.',
+                        });
+                        return;
+                    }
+
+                    // **Here is where paymentDetails is defined**
+                    const paymentDetails = {
+                        userId: userId,  // Use the user ID from the JWT
+                        amount: totalAmount,  // The total amount from the order
+                        paymentStatus: orderData.status,  // Payment status from PayPal
+                        paymentMethod: 'PayPal',  // Payment method
+                        serviceId: serviceId // Actual service ID
+                    };
+
+                    return fetch(`https://localhost:44321/api/Payments/paymentByUserId/${userId}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${jwt}`
+                        },
+                        body: JSON.stringify(paymentDetails)
+                    }).then(response => {
+                        if (!response.ok) {
+                            const errorText =  response.text(); // Get response text for debugging
+                            console.error('Payment API Error:', response, errorText);
+                            throw new Error('Payment API response was not ok');
+                        }
+                        return response.json();
+                    }).then(apiResponse => {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Payment Successful',
+                            text: 'Thank you for your payment!',
+                            showConfirmButton: false,
+                            timer: 2000
+                        });
+                    }).catch(error => {
+                        console.error('Error sending payment data:', error);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Payment API Error',
+                            text: 'There was an error sending your payment details. Please try again.',
+                        });
                     });
+
+
                 }).catch(error => {
                     processingPayment = false;
                     console.error('Payment Capture Error:', error);
@@ -173,6 +186,22 @@ document.addEventListener('DOMContentLoaded', function () {
         }).render('#paypal-button-container');
     }
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
