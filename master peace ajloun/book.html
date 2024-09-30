@@ -21,228 +21,80 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css">
     <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"> -->
     <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"> -->
+     
     <script src="js/bookApi.js"></script>
     <style>
-        :root {
-            --primary-color: #34495e;
-            --secondary-color: green;
-            --accent-color: #e74c3c;
-            --background-color: #ecf0f1;
-            --card-color: #fff;
-            --text-color: #333;
-            --border-radius: 8px;
-        }
-
-        * {
-            box-sizing: border-box;
+      body {
+            font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--background-color);
-            color: var(--text-color);
-            line-height: 1.2;
-        }
-
-        .paymentContainer {
-            max-width: 1200px;
-            margin: 2rem auto;
-            padding: 2rem;
-            background-color: var(--card-color);
-            border-radius: var(--border-radius);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-            height: min-content;
-        }
-
-        .payment-header {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        .payment-header h1 {
-            color: var(--primary-color);
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .payment-header p {
-            color: var(--text-color);
-            font-size: 1.1rem;
-        }
-
-        .payment-content {
             display: flex;
-            justify-content: space-between;
-            gap: 2rem;
         }
 
-        .payment-form {
-            flex: 1;
+        .sidebar {
+            width: 300px;
+            background-color: #f8f9fa;
+            padding: 20px;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            overflow-y: auto;
         }
 
-        .order-summary {
-            flex: 0 0 300px;
-            background-color: var(--primary-color);
-            color: var(--card-color);
-            padding: 2rem;
-            border-radius: var(--border-radius);
-            align-self: flex-start;
-            position: sticky;
-            top: 2rem;
+        .content {
+            margin-left: 320px;
+            padding: 20px;
+            flex-grow: 1;
         }
 
-        h2 {
-            color: var(--primary-color);
-            margin-bottom: 1.5rem;
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-            position: relative;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: bold;
-            color: var(--primary-color);
-        }
-
-        input,
-        select {
-            width: 100%;
-            padding: 0.75rem;
-            border: 2px solid #ddd;
-            border-radius: var(--border-radius);
-            font-size: 1rem;
-            transition: border-color 0.3s, box-shadow 0.3s;
-        }
-
-        input:focus,
-        select:focus {
-            outline: none;
-            border-color: var(--secondary-color);
-            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
-        }
-
-        .input-icon {
-            position: absolute;
-            top: 50%;
-            right: 10px;
-            transform: translateY(-50%);
-            color: var(--primary-color);
-        }
-
-        .card-details {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .card-details>div {
-            flex: 1;
-        }
-
-        .btn {
-            background-color: var(--secondary-color);
-            color: #fff;
-            padding: 1rem 2rem;
-            border: none;
-            border-radius: var(--border-radius);
-            cursor: pointer;
-            font-size: 1rem;
-            transition: background-color 0.3s, transform 0.1s;
-            width: 100%;
-            font-weight: bold;
-        }
-
-        .btn:hover {
-            background-color: darkgreen;
-        }
-
-        .btn:active {
-            transform: scale(0.98);
-        }
-
-        .secure-badge {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--secondary-color);
-            font-weight: bold;
-            margin-top: 1rem;
-            padding: 0.5rem;
-            background-color: rgba(52, 152, 219, 0.1);
-            border-radius: var(--border-radius);
-        }
-
-        .secure-badge i {
-            margin-right: 0.5rem;
-        }
-
-        .order-summary h2 {
-            color: var(--card-color);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-            padding-bottom: 1rem;
+        .sidebar h1 {
+            font-size: 1.5em;
+            margin-bottom: 20px;
         }
 
         .order-item {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 1rem;
+            padding: 10px 0;
+            border-bottom: 1px solid #ddd;
         }
 
-        .total {
-            font-size: 1.2rem;
+        .order-item span {
+            font-size: 1em;
+        }
+
+        #total-price {
             font-weight: bold;
-            margin-top: 1rem;
-            padding-top: 1rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            font-size: 1.2em;
+            margin-top: 20px;
+            display: block;
         }
 
-        .payment-methods {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 1.5rem;
-        }
-
-        .payment-method {
-            flex: 1;
-            text-align: center;
-            padding: 1rem;
-            border: 2px solid #ddd;
-            border-radius: var(--border-radius);
-            cursor: pointer;
-            transition: border-color 0.3s, background-color 0.3s;
-        }
-
-        .payment-method:hover,
-        .payment-method.active {
-            border-color: var(--secondary-color);
-            background-color: rgba(52, 152, 219, 0.1);
-        }
-
-        .payment-method img {
-            max-width: 80px;
-            height: auto;
-        }
-
-        @media (max-width: 768px) {
-            .payment-content {
-                flex-direction: column;
-            }
-
-            .order-summary {
-                width: 100%;
-                position: static;
-            }
-        }
-
+        /* PayPal Button container style */
         #paypal-button-container {
-            display: none;
-            /* Initially hidden */
+            margin-top: 20px;
         }
+
+        /* Style for the product container (main content) */
+        .product-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-container h2 {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+        }
+
+        
+           /* Adjust PayPal button size */
+    
     </style>
 </head>
 
@@ -411,94 +263,18 @@
             </div>
         </div>
 
-        <div class="paymentContainer">
-            <div class="payment-header">
-                <h1>Secure Checkout</h1>
-                <p>Complete your booking with our safe and secure payment system</p>
-            </div>
-            <div class="payment-content">
-                <div class="payment-form">
-                    <h2>Payment Details</h2>
-                    <form id="payment-form">
-                        <div class="payment-methods">
-                            <div class="payment-method active" data-method="card">
-                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQfKI3h7qkMUuliQA1ui6n_eDkwCTbNS3WvLA&s"
-                                    alt="Credit Card" />
-                                <p>Credit Card</p>
-                            </div>
-                            <div class="payment-method" data-method="paypal">
-                                <img src="data:image/png;base64,... (PayPal Logo)" alt="PayPal" />
-                                <p>PayPal</p>
-                            </div>
-                            <div class="payment-method" data-method="orange-money">
-                                <img src="data:image/png;base64,... (Orange Money Logo)" alt="Orange Money" />
-                                <p>Orange Money</p>
-                            </div>
-                        </div>
+        
 
-                        <!-- Credit Card Fields -->
-                        <div id="card-payment-fields">
-                            <div class="form-group">
-                                <label for="name">Full Name</label>
-                                <input type="text" id="name" name="name" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="email">Email Address</label>
-                                <input type="email" id="email" name="email" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="card-number">Card Number</label>
-                                <input type="text" id="card-number" name="card-number" placeholder="1234 5678 9012 3456"
-                                    required>
-                            </div>
-                            <div class="form-group card-details">
-                                <div>
-                                    <label for="expiry">Expiry Date</label>
-                                    <input type="text" id="expiry" name="expiry" placeholder="MM/YY" required>
-                                </div>
-                                <div>
-                                    <label for="cvv">CVV</label>
-                                    <input type="number" id="cvv" name="cvv" placeholder="123" required>
-                                </div>
-                            </div>
-                        </div>
 
-                        <!-- PayPal Fields -->
-                        <div id="paypal-fields" style="display: none;">
-                            <div class="form-group">
-                                <label for="paypal-email">PayPal Email</label>
-                                <input type="email" id="paypal-email" name="paypal-email" required>
-                            </div>
-                            <div id="paypal-button-container"></div>
-                        </div>
+<div class="product-container">
+    <h1>Your Services</h1>
+    <div id="order-items"></div>
+    <p>Total: <span id="total-price"></span></p>
+    <div id="paypal-button-container" class="paypal-button-container"></div>
 
-                        <!-- Orange Money Fields -->
-                        <div id="orange-money-fields" style="display: none;">
-                            <div class="form-group">
-                                <label for="phone-number">Phone Number</label>
-                                <input type="tel" id="phone-number" name="phone-number" required>
-                            </div>
-                        </div>
-
-                        <button type="submit" class="btn">Pay Now</button>
-                    </form>
-                    <div class="secure-badge">
-                        <i class="fas fa-lock"></i> Your payment is secure and encrypted
-                    </div>
-                </div>
-                <div class="order-summary">
-                    <h2>Order Summary</h2>
-                    <!-- Container to append fetched bookings dynamically -->
-                    <div id="order-items"></div>
-                    <!-- Total price display -->
-                    <div class="total">
-                        <span>Total : </span>
-                        <span id="total-price">$5.00</span> <!-- Example total price -->
-                    </div>
-                </div>
-            </div>
-        </div>
-
+    <!-- PayPal Button -->
+    <!-- <div id="paypal-button-container"></div> -->
+</div>
 
 
 
@@ -712,6 +488,11 @@
             </div>
         </div>
     </div>
+            <script
+                src="https://www.paypal.com/sdk/js?client-id=AcgdFbOoo7IcBvf1cniK4LbHPhZbOTwuaxe-hL55tKttEggJlKqQJSbTQmqoU9QXmmRWyW-VExN3DHBA&enable-funding=venmo&currency=USD"
+                data-sdk-integration-source="button-factory"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script src="js/jquery-3.2.1.min.js"></script>
     <script src="styles/bootstrap4/popper.js"></script>
