@@ -325,12 +325,12 @@ section {
 .header {
 	position: fixed;
 	width: 100%;
-	background: rgba(0, 100, 0, 0.599);
-	z-index: 12;
+	background: rgba(0, 100, 0, 0.6);
+	z-index: 999;
 }
 
 .header.scrolled {
-	background: rgba(0, 100, 0, 0.85);
+	background: rgba(0, 100, 0);
 }
 
 /*********************************
@@ -347,6 +347,7 @@ section {
 	-o-transition: all 400ms ease;
 	transition: all 400ms ease;
 }
+
 
 .header.scrolled .top_bar {
 	visibility: hidden;

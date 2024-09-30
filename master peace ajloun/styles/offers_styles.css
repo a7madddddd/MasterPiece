@@ -325,12 +325,12 @@ section {
 .header {
 	position: fixed;
 	width: 100%;
-	background: rgba(0, 128, 0, 0.6);
-	z-index: 12;
+	background: rgba(0, 100, 0, 0.6);
+	z-index: 999;
 }
 
 .header.scrolled {
-	background: rgba(0, 100, 0, 0.6);
+	background: rgba(0, 100, 0);
 }
 
 /*********************************

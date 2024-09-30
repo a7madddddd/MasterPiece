@@ -315,16 +315,15 @@ section {
 /*********************************
 3. Header
 *********************************/
-
 .header {
 	position: fixed;
 	width: 100%;
 	background: rgba(0, 100, 0, 0.6);
-	z-index: 12;
+	z-index: 999;
 }
 
 .header.scrolled {
-	background: rgba(0, 100, 0, 0.6);
+	background: rgba(0, 100, 0);
 }
 
 /*********************************
@@ -341,6 +340,7 @@ section {
 	-o-transition: all 400ms ease;
 	transition: all 400ms ease;
 }
+
 
 .header.scrolled .top_bar {
 	visibility: hidden;

@@ -333,16 +333,17 @@ section {
 	position: fixed;
 	width: 100%;
 	background: rgba(0, 100, 0, 0.6);
-	z-index: 12;
+	z-index: 999;
 }
 
 .header.scrolled {
-	background: rgba(0, 100, 0, 0.85)
+	background: rgba(0, 100, 0);
 }
 
 /*********************************
 3.1 Top Bar
 *********************************/
+
 .top_bar {
 	width: 100%;
 	height: 36px;
