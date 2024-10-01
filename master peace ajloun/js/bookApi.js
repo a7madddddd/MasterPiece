@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
     const jwt = localStorage.getItem('jwt');
-    console.log('JWT:', jwt);  // Debug JWT retrieval
 
     if (!jwt) {
         Swal.fire({
@@ -12,10 +11,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     const decodedToken = parseJwt(jwt);
-    console.log('Decoded Token:', decodedToken);  // Debug token decoding
     const userId = decodedToken.userId || decodedToken.sub;
     const apiUrl = `https://localhost:44321/api/Users/user/${userId}/services`;
-    console.log('API URL:', apiUrl);  // Debug the API URL
 
     function parseJwt(token) {
         const base64Url = token.split('.')[1];
@@ -42,9 +39,18 @@ document.addEventListener('DOMContentLoaded', function () {
             return response.json();
         })
         .then(data => {
-            console.log('Fetched Data:', data);  // Log the response data
+            // Check the data returned by API
+            console.log('Fetched Data:', data);
+
             const services = Array.isArray(data) ? data : data.$values || []; // Ensure services is defined
-            console.log('Services Array:', services);  // Log the entire services array
+            console.log('Services:', services);
+
+            const orderItemsContainer = document.getElementById('order-items');
+            const totalPriceElement = document.getElementById('total-price');
+            let totalPrice = 0;
+
+            // Ensure the container is empty before populating it
+            orderItemsContainer.innerHTML = '';
 
             if (services.length === 0) {
                 console.error('No services found for the user.');
@@ -56,16 +62,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 return;
             }
 
-            const orderItemsContainer = document.getElementById('order-items');
-            const totalPriceElement = document.getElementById('total-price');
-            let totalPrice = 0;
-
-            orderItemsContainer.innerHTML = '';
-
-            services.forEach((service, index) => {
-                console.log(`Service #${index + 1}:`, service);  // Log each service
-                console.log('Service ID:', service.id);  // Log the 'id' field
-
+            services.forEach(service => {
+                // Create service row
                 const orderItemDiv = document.createElement('div');
                 orderItemDiv.classList.add('order-item');
 
@@ -85,7 +83,7 @@ document.addEventListener('DOMContentLoaded', function () {
             totalPriceElement.textContent = `$${totalPrice.toFixed(2)}`;
 
             // Initialize PayPal button after loading booking details
-            initPayPalButton(totalPrice, userId, services); // Pass the correct services array
+            initPayPalButton(totalPrice, userId, services);
         })
         .catch(error => {
             console.error('Error fetching booking details:', error);
@@ -97,7 +95,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
     function initPayPalButton(totalAmount, userId, services) {
-        let processingPayment = false;  // Flag to prevent multiple payments
+        let processingPayment = false;
         paypal.Buttons({
             style: {
                 shape: 'rect',
@@ -112,9 +110,10 @@ document.addEventListener('DOMContentLoaded', function () {
             },
             onApprove: function (data, actions) {
                 if (processingPayment) {
-                    return; // Exit if a payment is already being processed
+                    return;
                 }
                 processingPayment = true;
+
                 Swal.fire({
                     title: 'Processing Payment',
                     html: 'Please wait while we process your payment...',
@@ -125,27 +124,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
 
                 return actions.order.capture().then(function (orderData) {
-                    console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
                     processingPayment = false;
-
-                    const serviceId = services.length > 0 ? services[0].id || services[0].serviceId : null; // Check for 'id' or 'serviceId'
-                    console.log('Service ID:', serviceId);  // Log serviceId for debugging
-
-                    if (!serviceId) {
-                        console.error('No valid service ID available.');
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Service Error',
-                            text: 'No valid service ID found. Please try again.',
-                        });
-                        return;
-                    }
 
                     const paymentDetails = {
                         amount: totalAmount,
                         paymentStatus: orderData.status,
                         paymentMethod: 'PayPal',
-                        serviceId: serviceId
+                        serviceId: services.length > 0 ? services[0].id || services[0].serviceId : null
                     };
 
                     return fetch(`https://localhost:44321/api/Payments/paymentByUserId/${userId}`, {
@@ -155,31 +140,28 @@ document.addEventListener('DOMContentLoaded', function () {
                             'Authorization': `Bearer ${jwt}`
                         },
                         body: JSON.stringify(paymentDetails)
-                    }).then(response => {
-                        if (!response.ok) {
-                            return response.text().then(errorText => {
-                                console.error('Payment API Error:', errorText);
-                                throw new Error('Payment API response was not ok');
+                    })
+                        .then(response => {
+                            if (!response.ok) {
+                                return response.text().then(errorText => {
+                                    console.error('Payment API Error:', errorText);
+                                    throw new Error('Payment API response was not ok');
+                                });
+                            }
+                            return response.json();
+                        })
+                        .then(apiResponse => {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Payment Successful',
+                                text: 'Thank you for your payment!',
+                                showConfirmButton: false,
+                                timer: 2000
                             });
-                        }
-                        return response.json();
-                    }).then(apiResponse => {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Payment Successful',
-                            text: 'Thank you for your payment!',
-                            showConfirmButton: false,
-                            timer: 2000
-                        });
-                    }).catch(error => {
-                        console.error('Error sending payment data:', error);
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Payment API Error',
-                            text: 'There was an error sending your payment details. Please try again.',
-                        });
-                    });
 
+                            // You can update the UI after payment success
+                            updateUIAfterPayment(services);
+                        });
                 }).catch(error => {
                     processingPayment = false;
                     console.error('Payment Capture Error:', error);
@@ -200,85 +182,14 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }).render('#paypal-button-container');
     }
-});
 
-document.addEventListener('DOMContentLoaded', function () {
-    const jwt = localStorage.getItem('jwt');
-    const userId = userId; // Replace with dynamic user ID if needed
-    const apiUrl = `https://localhost:44321/api/Payments/userPayment/${userId}`;
+    function updateUIAfterPayment(services) {
+        // Update the UI after payment (e.g., clearing the services list)
+        const orderItemsContainer = document.getElementById('order-items');
+        orderItemsContainer.innerHTML = '';  // Clear the list
 
-    if (!jwt) {
-        Swal.fire({
-            icon: 'error',
-            title: 'Authentication Error',
-            text: 'You are not authenticated. Please log in and try again.',
-        });
-        return;
-    }
-
-    fetch(apiUrl, {
-        headers: {
-            'Authorization': `Bearer ${jwt}`
-        }
-    })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log('Fetched Payments:', data);  // Log the payment data
-            displayPayments(data); // Function to display payments on the page
-
-            // Check if any payment status is not completed
-            const incompletePayments = data.filter(payment => payment.paymentStatus !== 'COMPLETED');
-
-            if (incompletePayments.length > 0) {
-                // Handle payments that are not completed
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Incomplete Payments',
-                    text: 'Some of your payments are still pending or not completed.',
-                });
-            } else {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'All Payments Completed',
-                    text: 'All your payments are successfully completed.',
-                });
-            }
-        })
-        .catch(error => {
-            console.error('Error fetching payments:', error);
-            Swal.fire({
-                icon: 'error',
-                title: 'Loading Error',
-                text: 'Unable to load payment details. Please try again later.',
-            });
-        });
-
-    function displayPayments(payments) {
-        const paymentsContainer = document.getElementById('payments-container');
-        paymentsContainer.innerHTML = ''; // Clear previous content
-
-        if (payments.length === 0) {
-            paymentsContainer.innerHTML = '<p>No payments found.</p>';
-            return;
-        }
-
-        payments.forEach(payment => {
-            const paymentDiv = document.createElement('div');
-            paymentDiv.classList.add('payment-item');
-            paymentDiv.innerHTML = `
-                <p>Service ID: ${payment.serviceId}</p>
-                <p>Amount: ${payment.amount} JD</p>
-                <p>Status: ${payment.paymentStatus}</p>
-                <p>Payment Method: ${payment.paymentMethod}</p>
-                <p>Date: ${new Date(payment.date).toLocaleString()}</p> <!-- Assuming there's a date field -->
-            `;
-            paymentsContainer.appendChild(paymentDiv);
-        });
+        const totalPriceElement = document.getElementById('total-price');
+        totalPriceElement.textContent = '$0.00';  // Reset total price
     }
 });
 
@@ -365,3 +276,15 @@ function logout() {
     alert("Logged out successfully!");
     window.location.reload(); // Reload the page to refresh the navbar
 }
+
+
+
+
+
+
+
+
+
+
+
+
