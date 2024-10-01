@@ -202,6 +202,85 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 
+document.addEventListener('DOMContentLoaded', function () {
+    const jwt = localStorage.getItem('jwt');
+    const userId = userId; // Replace with dynamic user ID if needed
+    const apiUrl = `https://localhost:44321/api/Payments/userPayment/${userId}`;
+
+    if (!jwt) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Authentication Error',
+            text: 'You are not authenticated. Please log in and try again.',
+        });
+        return;
+    }
+
+    fetch(apiUrl, {
+        headers: {
+            'Authorization': `Bearer ${jwt}`
+        }
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Fetched Payments:', data);  // Log the payment data
+            displayPayments(data); // Function to display payments on the page
+
+            // Check if any payment status is not completed
+            const incompletePayments = data.filter(payment => payment.paymentStatus !== 'COMPLETED');
+
+            if (incompletePayments.length > 0) {
+                // Handle payments that are not completed
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Incomplete Payments',
+                    text: 'Some of your payments are still pending or not completed.',
+                });
+            } else {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'All Payments Completed',
+                    text: 'All your payments are successfully completed.',
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching payments:', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Loading Error',
+                text: 'Unable to load payment details. Please try again later.',
+            });
+        });
+
+    function displayPayments(payments) {
+        const paymentsContainer = document.getElementById('payments-container');
+        paymentsContainer.innerHTML = ''; // Clear previous content
+
+        if (payments.length === 0) {
+            paymentsContainer.innerHTML = '<p>No payments found.</p>';
+            return;
+        }
+
+        payments.forEach(payment => {
+            const paymentDiv = document.createElement('div');
+            paymentDiv.classList.add('payment-item');
+            paymentDiv.innerHTML = `
+                <p>Service ID: ${payment.serviceId}</p>
+                <p>Amount: ${payment.amount} JD</p>
+                <p>Status: ${payment.paymentStatus}</p>
+                <p>Payment Method: ${payment.paymentMethod}</p>
+                <p>Date: ${new Date(payment.date).toLocaleString()}</p> <!-- Assuming there's a date field -->
+            `;
+            paymentsContainer.appendChild(paymentDiv);
+        });
+    }
+});
 
 
 

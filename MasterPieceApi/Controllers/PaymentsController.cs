@@ -139,6 +139,22 @@ namespace MasterPieceApi.Controllers
             return CreatedAtAction(nameof(CreatePayment), new { id = payment.PaymentId }, payment);
         }
 
+        [HttpGet("userPayment/{id}")]
+        public IActionResult getUserPayment(int id)
+        {
+            // Fetch payments from the database using the provided user ID
+            var payments = _context.Payments
+                .Where(p => p.UserId == id)
+                .ToList();
+
+            if (payments == null || payments.Count == 0)
+            {
+                return NotFound(new { message = "No payments found for this user." });
+            }
+
+            return Ok(payments);
+        }
+
     }
 }
 
