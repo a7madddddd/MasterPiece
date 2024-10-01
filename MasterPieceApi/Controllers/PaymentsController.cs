@@ -115,31 +115,30 @@ namespace MasterPieceApi.Controllers
 
 
         // POST: api/payments/paymentByUserId
-        [HttpPost("paymentByUserId")]
-        public async Task<IActionResult> CreatePayment([FromBody] PaymentDto paymentDto)
+        [HttpPost("paymentByUserId/{userId}")]
+        public async Task<IActionResult> CreatePayment(int userId, [FromBody] PaymentDto paymentDto)
         {
-            if (paymentDto == null || paymentDto.UserId <= 0)
+            if (paymentDto == null || userId <= 0)
             {
                 return BadRequest("Invalid payment data.");
             }
 
-            // Create a new payment instance
             var payment = new Payment
             {
-                UserId = paymentDto.UserId,
+                UserId = userId,
                 Amount = paymentDto.Amount,
-                PaymentDate = DateTime.Now, // Set current date
+                PaymentDate = DateTime.Now,
                 PaymentStatus = paymentDto.PaymentStatus,
                 PaymentMethod = paymentDto.PaymentMethod,
-                ServiceId = paymentDto.ServiceId // Set service ID
+                ServiceId = paymentDto.ServiceId
             };
 
-            // Add the payment to the context
             await _context.Payments.AddAsync(payment);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction(nameof(CreatePayment), new { id = payment.PaymentId }, payment);
         }
+
     }
 }
 

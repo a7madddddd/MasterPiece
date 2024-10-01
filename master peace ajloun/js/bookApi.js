@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function () {
-    // Other code here...
     const jwt = localStorage.getItem('jwt');
     console.log('JWT:', jwt);  // Debug JWT retrieval
+
     if (!jwt) {
         Swal.fire({
             icon: 'error',
@@ -44,13 +44,28 @@ document.addEventListener('DOMContentLoaded', function () {
         .then(data => {
             console.log('Fetched Data:', data);  // Log the response data
             const services = Array.isArray(data) ? data : data.$values || []; // Ensure services is defined
+            console.log('Services Array:', services);  // Log the entire services array
+
+            if (services.length === 0) {
+                console.error('No services found for the user.');
+                Swal.fire({
+                    icon: 'error',
+                    title: 'No Services Found',
+                    text: 'There are no services associated with your account.',
+                });
+                return;
+            }
+
             const orderItemsContainer = document.getElementById('order-items');
             const totalPriceElement = document.getElementById('total-price');
             let totalPrice = 0;
 
             orderItemsContainer.innerHTML = '';
 
-            services.forEach(service => {
+            services.forEach((service, index) => {
+                console.log(`Service #${index + 1}:`, service);  // Log each service
+                console.log('Service ID:', service.id);  // Log the 'id' field
+
                 const orderItemDiv = document.createElement('div');
                 orderItemDiv.classList.add('order-item');
 
@@ -80,7 +95,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 text: 'Unable to load booking details. Please try again later.',
             });
         });
-    debugger
+
     function initPayPalButton(totalAmount, userId, services) {
         let processingPayment = false;  // Flag to prevent multiple payments
         paypal.Buttons({
@@ -113,24 +128,24 @@ document.addEventListener('DOMContentLoaded', function () {
                     console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
                     processingPayment = false;
 
-                    const serviceId = services && services.length > 0 ? services[0].id : null; // Get serviceId
-                    if (!services || services.length === 0) {
-                        console.error('No services available for payment.');
+                    const serviceId = services.length > 0 ? services[0].id || services[0].serviceId : null; // Check for 'id' or 'serviceId'
+                    console.log('Service ID:', serviceId);  // Log serviceId for debugging
+
+                    if (!serviceId) {
+                        console.error('No valid service ID available.');
                         Swal.fire({
                             icon: 'error',
                             title: 'Service Error',
-                            text: 'No services available for payment. Please try again.',
+                            text: 'No valid service ID found. Please try again.',
                         });
                         return;
                     }
 
-                    // **Here is where paymentDetails is defined**
                     const paymentDetails = {
-                        userId: userId,  // Use the user ID from the JWT
-                        amount: totalAmount,  // The total amount from the order
-                        paymentStatus: orderData.status,  // Payment status from PayPal
-                        paymentMethod: 'PayPal',  // Payment method
-                        serviceId: serviceId // Actual service ID
+                        amount: totalAmount,
+                        paymentStatus: orderData.status,
+                        paymentMethod: 'PayPal',
+                        serviceId: serviceId
                     };
 
                     return fetch(`https://localhost:44321/api/Payments/paymentByUserId/${userId}`, {
@@ -142,9 +157,10 @@ document.addEventListener('DOMContentLoaded', function () {
                         body: JSON.stringify(paymentDetails)
                     }).then(response => {
                         if (!response.ok) {
-                            const errorText =  response.text(); // Get response text for debugging
-                            console.error('Payment API Error:', response, errorText);
-                            throw new Error('Payment API response was not ok');
+                            return response.text().then(errorText => {
+                                console.error('Payment API Error:', errorText);
+                                throw new Error('Payment API response was not ok');
+                            });
                         }
                         return response.json();
                     }).then(apiResponse => {
@@ -163,7 +179,6 @@ document.addEventListener('DOMContentLoaded', function () {
                             text: 'There was an error sending your payment details. Please try again.',
                         });
                     });
-
 
                 }).catch(error => {
                     processingPayment = false;
