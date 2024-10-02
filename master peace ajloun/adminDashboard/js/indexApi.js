@@ -83,3 +83,73 @@ window.onload = function () {
     fetchMessages();          // Fetch messages for the main container
     fetchDropdownMessages();  // Fetch messages for the dropdown
 };
+
+
+
+
+
+
+
+    async function fetchPayments() {
+    try {
+        const response = await fetch('https://localhost:44321/api/Payments');
+    if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+    const data = await response.json();
+    console.log('Fetched Payments:', data); // Log the fetched data
+    return data.$values || []; // Ensure we access $values correctly
+    } catch (error) {
+        console.error('Error fetching payments:', error);
+    return [];
+    }
+}
+
+    function calculateSalesAndRevenue(payments) {
+    const today = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
+    let todaySaleCount = 0;
+    let totalSaleCount = 0;
+    let todayRevenue = 0;
+    let totalRevenue = 0;
+
+    payments.forEach(payment => {
+        const paymentDate = new Date(payment.paymentDate);
+    const amount = payment.amount;
+
+    // Update today's sale and revenue
+    if (paymentDate.toISOString().split('T')[0] === today) {
+        todaySaleCount++;
+    todayRevenue += amount;
+        }
+
+    // Update total sale and revenue
+    totalSaleCount++;
+    totalRevenue += amount;
+    });
+
+    return {
+        todaySale: todaySaleCount,
+    totalSale: totalSaleCount,
+    todayRevenue: todayRevenue,
+    totalRevenue: totalRevenue,
+    };
+}
+
+    async function updatePaymentStatistics() {
+    const payments = await fetchPayments();
+    const stats = calculateSalesAndRevenue(payments);
+
+    // Log the stats to verify calculations
+    console.log('Payment Statistics:', stats);
+
+    // Update the DOM with the fetched statistics
+    document.getElementById('todaySale').textContent = `${stats.todaySale} jd`;
+    document.getElementById('totalSale').textContent = `${stats.totalSale} jd`;
+    document.getElementById('todayRevenue').textContent = `${stats.todayRevenue.toFixed(2)} jd`;
+    document.getElementById('totalRevenue').textContent = `${stats.totalRevenue.toFixed(2)} jd`;
+}
+
+// Call the function to update payment statistics when the document is ready
+document.addEventListener('DOMContentLoaded', () => {
+        updatePaymentStatistics();
+});

@@ -147,3 +147,79 @@ async function deleteUser() {
         showToast("Error deleting user: " + error.message, 'error');
     }
 }
+
+
+/////////// update user role
+
+    document.getElementById('searchUserButton').addEventListener('click', async function () {
+        const searchTerm = document.getElementById('usernameSearch').value.trim(); // Use trim to remove whitespace
+
+        if (!searchTerm) {
+            Swal.fire({
+                title: 'Error',
+                text: 'Please enter a username or email to search.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+            return; // Exit the function if the input is empty
+        }
+
+        try {
+            const response = await fetch(`https://localhost:44321/api/Users/GetUserByUsernameOrEmail/${searchTerm}`);
+
+            if (!response.ok) {
+                throw new Error('User not found.');
+            }
+
+            const user = await response.json();
+
+            // Display user details
+            document.getElementById('displayUsername').innerText = user.username;
+            document.getElementById('displayEmail').innerText = user.email;
+            document.getElementById('userRole').value = user.userRole; // Assuming userRole is available in the user object
+            document.getElementById('userDetails').style.display = 'block';
+
+        } catch (error) {
+            Swal.fire({
+                title: 'Error',
+                text: error.message,
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+        }
+    });
+
+    document.getElementById('updateUserButton').addEventListener('click', async function () {
+        const username = document.getElementById('displayUsername').innerText;
+        const newRole = document.getElementById('userRole').value;
+
+        try {
+            // Fetch the user ID from the previous response
+            const userResponse = await fetch(`https://localhost:44321/api/Users/GetUserByUsernameOrEmail/${username}`);
+            const user = await userResponse.json();
+            const userId = user.userId; // Get the UserId
+
+            const updateResponse = await fetch(`https://localhost:44321/api/Users/UpdateUserProfile/${userId}`, {
+                method: 'PUT', // Use PUT for updating
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': '*/*'
+                },
+                body: JSON.stringify({ userRole: newRole }) // Only send the userRole for updating
+            });
+
+            if (!updateResponse.ok) {
+                throw new Error('Failed to update user role.');
+            }
+
+            document.getElementById('updateResponse').innerText = 'User role updated successfully!';
+
+        } catch (error) {
+            Swal.fire({
+                title: 'Error',
+                text: error.message,
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+        }
+    });

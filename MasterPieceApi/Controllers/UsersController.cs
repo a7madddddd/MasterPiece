@@ -53,6 +53,32 @@ namespace MasterPieceApi.Controllers
             return user;
         }
 
+
+        /// <summary>
+        /// ///
+        /// </summary>
+        /// <param name="searchTerm"></param>
+        /// <returns></returns>
+                                        
+        [HttpGet("GetUserByUsernameOrEmail/{searchTerm}")]
+        public async Task<ActionResult<User>> GetUserByUsernameOrEmail(string searchTerm)
+        {
+            // Search for user by username or email
+            var user = await _context.Users
+                .FirstOrDefaultAsync(u => u.Username == searchTerm || u.Email == searchTerm);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return user;
+        }
+
+
+
+
+
         // PUT: api/Users/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]

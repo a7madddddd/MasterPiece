@@ -117,3 +117,15 @@ async function initTable() {
 }
 
 document.addEventListener('DOMContentLoaded', initTable);
+
+
+
+
+
+
+
+
+////////// fetching reviews in home page head
+
+
+

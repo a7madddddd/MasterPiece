@@ -10,8 +10,7 @@
         }, 1);
     };
     spinner();
-    
-    
+
     // Back to top button
     $(window).scroll(function () {
         if ($(this).scrollTop() > 300) {
@@ -21,10 +20,9 @@
         }
     });
     $('.back-to-top').click(function () {
-        $('html, body').animate({scrollTop: 0}, 1500, 'easeInOutExpo');
+        $('html, body').animate({ scrollTop: 0 }, 1500, 'easeInOutExpo');
         return false;
     });
-
 
     // Sidebar Toggler
     $('.sidebar-toggler').click(function () {
@@ -32,14 +30,12 @@
         return false;
     });
 
-
     // Progress Bar
     $('.pg-bar').waypoint(function () {
         $('.progress .progress-bar').each(function () {
             $(this).css("width", $(this).attr("aria-valuenow") + '%');
         });
-    }, {offset: '80%'});
-
+    }, { offset: '80%' });
 
     // Calender
     $('#calender').datetimepicker({
@@ -55,158 +51,101 @@
         items: 1,
         dots: true,
         loop: true,
-        nav : false
+        nav: false
     });
-
 
     // Chart Global Color
     Chart.defaults.color = "#6C7293";
     Chart.defaults.borderColor = "#000000";
 
+    // Function to fetch payment data
+    async function fetchPayments() {
+        const response = await fetch('https://localhost:44321/api/Payments');
+        if (!response.ok) {
+            console.error('Error fetching payments:', response.statusText);
+            return [];
+        }
+        const data = await response.json();
+        return data.$values || [];
+    }
 
-    // Worldwide Sales Chart
-    var ctx1 = $("#worldwide-sales").get(0).getContext("2d");
-    var myChart1 = new Chart(ctx1, {
-        type: "bar",
-        data: {
-            labels: ["2016", "2017", "2018", "2019", "2020", "2021", "2022"],
-            datasets: [{
-                label: "USA",
-                data: [15, 30, 55, 65, 60, 80, 95],
-                backgroundColor: "rgba(0, 100, 0, .7)" // Dark Green
+    // Prepare data for Worldwide Sales Chart
+    function prepareWorldwideSalesData(payments) {
+        const salesData = Array(12).fill(0); // 12 months
+        const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+        payments.forEach(payment => {
+            const paymentDate = new Date(payment.paymentDate);
+            const monthIndex = paymentDate.getMonth();
+            salesData[monthIndex] += payment.amount;
+        });
+
+        return { months, salesData };
+    }
+
+    // Prepare data for Sales & Revenue Chart
+    function prepareSalesAndRevenueData(payments) {
+        const salesData = Array(12).fill(0);
+        const revenueData = Array(12).fill(0);
+        const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+        payments.forEach(payment => {
+            const paymentDate = new Date(payment.paymentDate);
+            const monthIndex = paymentDate.getMonth();
+            salesData[monthIndex]++;
+            revenueData[monthIndex] += payment.amount;
+        });
+
+        return { months, salesData, revenueData };
+    }
+
+    // Function to update charts with fetched data
+    async function updateCharts() {
+        const payments = await fetchPayments();
+
+        // Worldwide Sales Chart
+        const { months, salesData } = prepareWorldwideSalesData(payments);
+        var ctx1 = $("#worldwide-sales").get(0).getContext("2d");
+        new Chart(ctx1, {
+            type: "bar",
+            data: {
+                labels: months,
+                datasets: [{
+                    label: "Sales",
+                    data: salesData,
+                    backgroundColor: "rgba(0, 100, 0, .7)"
+                }]
             },
-            {
-                label: "UK",
-                data: [8, 35, 40, 60, 70, 55, 75],
-                backgroundColor: "rgba(0, 100, 0, .5)" // Lighter Dark Green
+            options: { responsive: true }
+        });
+
+        // Sales & Revenue Chart
+        const { salesData: sales, revenueData } = prepareSalesAndRevenueData(payments);
+        var ctx2 = $("#salse-revenue").get(0).getContext("2d");
+        new Chart(ctx2, {
+            type: "line",
+            data: {
+                labels: months,
+                datasets: [{
+                    label: "Sales",
+                    data: sales,
+                    backgroundColor: "rgba(0, 100, 0, .7)",
+                    fill: true
+                },
+                {
+                    label: "Revenue",
+                    data: revenueData,
+                    backgroundColor: "rgba(0, 100, 0, .5)",
+                    fill: true
+                }]
             },
-            {
-                label: "AU",
-                data: [12, 25, 45, 55, 65, 70, 60],
-                backgroundColor: "rgba(0, 100, 0, .3)" // Even Lighter Dark Green
-            }
-            ]
-        },
-        options: {
-            responsive: true
-        }
+            options: { responsive: true }
+        });
+    }
+
+    // Call updateCharts on document ready
+    $(document).ready(() => {
+        updateCharts();
     });
 
-    // Sales & Revenue Chart
-    var ctx2 = $("#salse-revenue").get(0).getContext("2d");
-    var myChart2 = new Chart(ctx2, {
-        type: "line",
-        data: {
-            labels: ["2016", "2017", "2018", "2019", "2020", "2021", "2022"],
-            datasets: [{
-                label: "Salse",
-                data: [15, 30, 55, 45, 70, 65, 85],
-                backgroundColor: "rgba(0, 100, 0, .7)", // Dark Green
-                fill: true
-            },
-            {
-                label: "Revenue",
-                data: [99, 135, 170, 130, 190, 180, 270],
-                backgroundColor: "rgba(0, 100, 0, .5)", // Lighter Dark Green
-                fill: true
-            }
-            ]
-        },
-        options: {
-            responsive: true
-        }
-    });
-
-    
-
-
-    // Single Line Chart
-    var ctx3 = $("#line-chart").get(0).getContext("2d");
-    var myChart3 = new Chart(ctx3, {
-        type: "line",
-        data: {
-            labels: [50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150],
-            datasets: [{
-                label: "Salse",
-                fill: false,
-                backgroundColor: "rgba(235, 22, 22, .7)",
-                data: [7, 8, 8, 9, 9, 9, 10, 11, 14, 14, 15]
-            }]
-        },
-        options: {
-            responsive: true
-        }
-    });
-
-
-    // Single Bar Chart
-    var ctx4 = $("#bar-chart").get(0).getContext("2d");
-    var myChart4 = new Chart(ctx4, {
-        type: "bar",
-        data: {
-            labels: ["Italy", "France", "Spain", "USA", "Argentina"],
-            datasets: [{
-                backgroundColor: [
-                    "rgba(235, 22, 22, .7)",
-                    "rgba(235, 22, 22, .6)",
-                    "rgba(235, 22, 22, .5)",
-                    "rgba(235, 22, 22, .4)",
-                    "rgba(235, 22, 22, .3)"
-                ],
-                data: [55, 49, 44, 24, 15]
-            }]
-        },
-        options: {
-            responsive: true
-        }
-    });
-
-
-    // Pie Chart
-    var ctx5 = $("#pie-chart").get(0).getContext("2d");
-    var myChart5 = new Chart(ctx5, {
-        type: "pie",
-        data: {
-            labels: ["Italy", "France", "Spain", "USA", "Argentina"],
-            datasets: [{
-                backgroundColor: [
-                    "rgba(235, 22, 22, .7)",
-                    "rgba(235, 22, 22, .6)",
-                    "rgba(235, 22, 22, .5)",
-                    "rgba(235, 22, 22, .4)",
-                    "rgba(235, 22, 22, .3)"
-                ],
-                data: [55, 49, 44, 24, 15]
-            }]
-        },
-        options: {
-            responsive: true
-        }
-    });
-
-
-    // Doughnut Chart
-    var ctx6 = $("#doughnut-chart").get(0).getContext("2d");
-    var myChart6 = new Chart(ctx6, {
-        type: "doughnut",
-        data: {
-            labels: ["Italy", "France", "Spain", "USA", "Argentina"],
-            datasets: [{
-                backgroundColor: [
-                    "rgba(235, 22, 22, .7)",
-                    "rgba(235, 22, 22, .6)",
-                    "rgba(235, 22, 22, .5)",
-                    "rgba(235, 22, 22, .4)",
-                    "rgba(235, 22, 22, .3)"
-                ],
-                data: [55, 49, 44, 24, 15]
-            }]
-        },
-        options: {
-            responsive: true
-        }
-    });
-
-    
 })(jQuery);
-

@@ -153,7 +153,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 // Redirect based on the choice
                 if (result.isConfirmed) {
                     // Admin button clicked
-                    window.location.href = '../adminDashboard/index.html';
+                    window.location.href = '../adminDashboard/signin.html';
                 } else {
                     // User button clicked or cancel button (continue as User)
                     window.location.href = 'index.html';
