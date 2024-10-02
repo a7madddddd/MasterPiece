@@ -12,7 +12,21 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const decodedToken = parseJwt(jwt);
     const userId = decodedToken.userId || decodedToken.sub;
-    const apiUrl = `https://localhost:44321/api/Users/user/${userId}/services`;
+
+    // Get bookingId from URL parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const bookingId = urlParams.get('bookingId');
+
+    if (!bookingId) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Booking Error',
+            text: 'No booking ID provided. Please try again.',
+        });
+        return;
+    }
+
+    const apiUrl = `https://localhost:44321/api/Bookings/${bookingId}`;
 
     function parseJwt(token) {
         const base64Url = token.split('.')[1];
@@ -38,52 +52,33 @@ document.addEventListener('DOMContentLoaded', function () {
             }
             return response.json();
         })
-        .then(data => {
-            // Check the data returned by API
-            console.log('Fetched Data:', data);
-
-            const services = Array.isArray(data) ? data : data.$values || []; // Ensure services is defined
-            console.log('Services:', services);
+        .then(booking => {
+            console.log('Fetched Booking:', booking);
 
             const orderItemsContainer = document.getElementById('order-items');
             const totalPriceElement = document.getElementById('total-price');
-            let totalPrice = 0;
 
             // Ensure the container is empty before populating it
             orderItemsContainer.innerHTML = '';
 
-            if (services.length === 0) {
-                console.error('No services found for the user.');
-                Swal.fire({
-                    icon: 'error',
-                    title: 'No Services Found',
-                    text: 'There are no services associated with your account.',
-                });
-                return;
-            }
+            // Create booking row
+            const orderItemDiv = document.createElement('div');
+            orderItemDiv.classList.add('order-item');
 
-            services.forEach(service => {
-                // Create service row
-                const orderItemDiv = document.createElement('div');
-                orderItemDiv.classList.add('order-item');
+            const serviceNameElement = document.createElement('span');
+            serviceNameElement.textContent = booking.serviceName;
 
-                const serviceNameElement = document.createElement('span');
-                serviceNameElement.textContent = service.serviceName;
+            const priceElement = document.createElement('span');
+            priceElement.textContent = `$${booking.totalAmount.toFixed(2)}`;
 
-                const priceElement = document.createElement('span');
-                priceElement.textContent = `$${service.price.toFixed(2)}`;
+            orderItemDiv.appendChild(serviceNameElement);
+            orderItemDiv.appendChild(priceElement);
+            orderItemsContainer.appendChild(orderItemDiv);
 
-                orderItemDiv.appendChild(serviceNameElement);
-                orderItemDiv.appendChild(priceElement);
-                orderItemsContainer.appendChild(orderItemDiv);
-
-                totalPrice += service.price;
-            });
-
-            totalPriceElement.textContent = `$${totalPrice.toFixed(2)}`;
+            totalPriceElement.textContent = `$${booking.totalAmount.toFixed(2)}`;
 
             // Initialize PayPal button after loading booking details
-            initPayPalButton(totalPrice, userId, services);
+            initPayPalButton(booking.totalAmount, userId, booking);
         })
         .catch(error => {
             console.error('Error fetching booking details:', error);
@@ -94,7 +89,7 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
 
-    function initPayPalButton(totalAmount, userId, services) {
+    function initPayPalButton(totalAmount, userId, booking) {
         let processingPayment = false;
         paypal.Buttons({
             style: {
@@ -130,7 +125,9 @@ document.addEventListener('DOMContentLoaded', function () {
                         amount: totalAmount,
                         paymentStatus: orderData.status,
                         paymentMethod: 'PayPal',
-                        serviceId: services.length > 0 ? services[0].id || services[0].serviceId : null
+                        serviceId: booking.serviceId,
+                        bookingId: booking.bookingId,
+                        serviceName: orderData.serviceName  // Added service name here
                     };
 
                     return fetch(`https://localhost:44321/api/Payments/paymentByUserId/${userId}`, {
@@ -157,10 +154,10 @@ document.addEventListener('DOMContentLoaded', function () {
                                 text: 'Thank you for your payment!',
                                 showConfirmButton: false,
                                 timer: 2000
+                            }).then(() => {
+                                // Redirect to bookings page after successful payment
+                                window.location.href = 'edit_profile.html';
                             });
-
-                            // You can update the UI after payment success
-                            updateUIAfterPayment(services);
                         });
                 }).catch(error => {
                     processingPayment = false;
@@ -182,18 +179,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }).render('#paypal-button-container');
     }
-
-    function updateUIAfterPayment(services) {
-        // Update the UI after payment (e.g., clearing the services list)
-        const orderItemsContainer = document.getElementById('order-items');
-        orderItemsContainer.innerHTML = '';  // Clear the list
-
-        const totalPriceElement = document.getElementById('total-price');
-        totalPriceElement.textContent = '$0.00';  // Reset total price
-    }
 });
-
-
 
 
 

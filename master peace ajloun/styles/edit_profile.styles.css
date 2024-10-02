@@ -358,10 +358,11 @@ body {
 }
 
 #editProfile img {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
+    width: 70px;
+    height: 70px;
+    border-radius: 50px;
     object-fit: cover;
+    
 }
 
 #editProfile .fab.fa-twitter {
@@ -417,6 +418,8 @@ body {
     padding: 1rem;
     text-align: center;
     width: 15%;
+    text-align: center;
+    text-justify: auto;
 }
 
 .table-custom tbody td:first-child {
@@ -429,7 +432,6 @@ body {
 
 .table-custom tbody td img {
     width: 100%;
-    height: auto;
 }
 
 

@@ -228,3 +228,11 @@ CREATE TABLE Offers (
     ImageURL VARCHAR(MAX),
     Amenities VARCHAR(MAX)
 );
+
+
+ALTER TABLE Payments
+ADD ServiceId INT;
+
+ALTER TABLE Payments
+ADD CONSTRAINT FK_Payments_Services
+FOREIGN KEY (ServiceId) REFERENCES Services(ServiceID);

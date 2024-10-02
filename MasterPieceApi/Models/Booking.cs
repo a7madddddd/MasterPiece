@@ -21,6 +21,12 @@ public partial class Booking
 
     public DateTime? CreatedAt { get; set; }
 
+    public int? PaymentId { get; set; }
+
+    public virtual Payment? Payment { get; set; }
+
+    public virtual ICollection<Payment> Payments { get; set; } = new List<Payment>();
+
     public virtual Service? Service { get; set; }
 
     public virtual User? User { get; set; }

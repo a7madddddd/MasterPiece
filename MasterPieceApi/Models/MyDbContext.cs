@@ -77,6 +77,10 @@ public partial class MyDbContext : DbContext
             entity.Property(e => e.TotalAmount).HasColumnType("decimal(10, 2)");
             entity.Property(e => e.UserId).HasColumnName("UserID");
 
+            entity.HasOne(d => d.Payment).WithMany(p => p.Bookings)
+                .HasForeignKey(d => d.PaymentId)
+                .HasConstraintName("FK_Bookings_Payments");
+
             entity.HasOne(d => d.Service).WithMany(p => p.Bookings)
                 .HasForeignKey(d => d.ServiceId)
                 .HasConstraintName("FK__Bookings__Servic__59FA5E80");
@@ -159,6 +163,7 @@ public partial class MyDbContext : DbContext
             entity.Property(e => e.IsActive).HasDefaultValue(true);
             entity.Property(e => e.PricePerNight).HasColumnType("decimal(10, 2)");
             entity.Property(e => e.Rating).HasColumnType("decimal(3, 1)");
+            entity.Property(e => e.ServiceId).HasColumnName("ServiceID");
             entity.Property(e => e.StartDate)
                 .HasMaxLength(50)
                 .IsUnicode(false);
@@ -175,6 +180,7 @@ public partial class MyDbContext : DbContext
 
             entity.Property(e => e.PaymentId).HasColumnName("PaymentID");
             entity.Property(e => e.Amount).HasColumnType("decimal(10, 2)");
+            entity.Property(e => e.BookingId).HasColumnName("BookingID");
             entity.Property(e => e.PaymentDate)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
@@ -186,6 +192,10 @@ public partial class MyDbContext : DbContext
                 .IsUnicode(false)
                 .HasDefaultValue("pending");
             entity.Property(e => e.UserId).HasColumnName("UserID");
+
+            entity.HasOne(d => d.Booking).WithMany(p => p.Payments)
+                .HasForeignKey(d => d.BookingId)
+                .HasConstraintName("FK_Payments_Bookings");
 
             entity.HasOne(d => d.Service).WithMany(p => p.Payments)
                 .HasForeignKey(d => d.ServiceId)

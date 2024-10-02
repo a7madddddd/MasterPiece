@@ -174,7 +174,7 @@ namespace MasterPieceApi.Controllers
                 return NotFound(new { message = "User not found" });
             }
 
-            // Retrieve bookings for the given user ID with service details
+            // Retrieve bookings for the given user ID with service details and payment status
             var bookings = await _context.Bookings
                 .Where(b => b.UserId == userId)
                 .Select(b => new BookingDto
@@ -182,7 +182,6 @@ namespace MasterPieceApi.Controllers
                     BookingId = b.BookingId,
                     UserId = b.UserId,
                     ServiceId = b.ServiceId ?? 0,
-
                     BookingDate = b.BookingDate.HasValue
                         ? b.BookingDate.Value.ToDateTime(new TimeOnly(0, 0))
                         : DateTime.MinValue,
@@ -191,16 +190,21 @@ namespace MasterPieceApi.Controllers
                     Status = b.Status ?? string.Empty,
                     CreatedAt = b.CreatedAt ?? DateTime.MinValue,
 
-                    // Join with Service to get Service Name and Image
+                    // Get the service details
                     ServiceName = _context.Services
                         .Where(s => s.ServiceId == b.ServiceId)
                         .Select(s => s.ServiceName)
                         .FirstOrDefault(),
-
                     Image = _context.Services
                         .Where(s => s.ServiceId == b.ServiceId)
                         .Select(s => s.Image)
-                        .FirstOrDefault()
+                        .FirstOrDefault(),
+
+                    // Check if payment is completed for this booking
+                    PaymentStatus = _context.Payments
+                        .Where(p => p.BookingId == b.BookingId && p.UserId == userId)
+                        .Select(p => p.PaymentStatus)
+                        .FirstOrDefault() == "Completed" ? "Completed" : "Pending"
                 })
                 .ToListAsync();
 
@@ -211,6 +215,7 @@ namespace MasterPieceApi.Controllers
 
             return Ok(bookings);
         }
+
 
 
         [HttpGet("UserBookingsDashboard")]

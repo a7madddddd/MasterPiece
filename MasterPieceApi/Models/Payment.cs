@@ -11,13 +11,19 @@ public partial class Payment
 
     public decimal Amount { get; set; }
 
-    public DateTime PaymentDate { get; set; }
+    public DateTime? PaymentDate { get; set; }
 
     public string? PaymentStatus { get; set; }
 
     public string? PaymentMethod { get; set; }
 
     public int? ServiceId { get; set; }
+
+    public int? BookingId { get; set; }
+
+    public virtual Booking? Booking { get; set; }
+
+    public virtual ICollection<Booking> Bookings { get; set; } = new List<Booking>();
 
     public virtual Service? Service { get; set; }
 

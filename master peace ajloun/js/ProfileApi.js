@@ -1,18 +1,24 @@
-
-///// function to fetch booking table
 document.addEventListener("DOMContentLoaded", function () {
-    const token = localStorage.getItem('jwt'); // Assuming JWT is stored in localStorage
+    const token = localStorage.getItem('jwt');
 
+    if (!token) {
+        console.error('No JWT token found');
+        return;
+    }
 
-    // Decode JWT to get userId
     const decodedToken = jwt_decode(token);
-    const userId = decodedToken.userId; // Change 'userId' to the actual key in your JWT payload
+    const userId = decodedToken.userId;
 
-    const apiUrl = `https://localhost:44321/api/Bookings/user/${userId}`;
+    const bookingApiUrl = `https://localhost:44321/api/Bookings/user/${userId}`;
+    const paymentApiUrl = `https://localhost:44321/api/Payments/userPayment/${userId}`;
     const tableBody = document.getElementById("booking-table-body");
 
-    // Function to fetch and display bookings
-    fetch(apiUrl)
+    // Fetch and display bookings
+    fetch(bookingApiUrl, {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    })
         .then(response => {
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
@@ -20,9 +26,9 @@ document.addEventListener("DOMContentLoaded", function () {
             return response.json();
         })
         .then(data => {
-            console.log('API Response:', data); // Check the structure of the data
+            console.log('API Response:', data);
 
-            const bookings = data.$values; // Access the bookings array from the response
+            const bookings = data.$values;
 
             if (Array.isArray(bookings)) {
                 if (bookings.length === 0) {
@@ -31,34 +37,28 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
 
                 bookings.forEach(booking => {
-                    // Create a new row for each booking
-                    const row = document.createElement("tr");
+                    if (booking.status === "Completed") {
+                        return;
+                    }
 
-                    // Fill the row with booking data
+                    const row = document.createElement("tr");
                     row.innerHTML = `
-                        
                         <td>${booking.serviceName}</td>
-                        <td><img src="${booking.image}" alt="${booking.serviceName}" style="width: 50px; height: auto;"></td>
+                        <td><img src="${booking.image}" alt="${booking.serviceName}"></td>
                         <td>${new Date(booking.bookingDate).toLocaleDateString()}</td>
                         <td>${booking.numberOfPeople}</td>
                         <td>${booking.totalAmount}</td>
                         <td>${booking.status}</td>
                         <td><button class="btn btn-primary btn-sm payment-btn" data-booking-id="${booking.bookingId}">Pay Now</button></td>
                     `;
-
-                    // Append the row to the table
                     tableBody.appendChild(row);
                 });
-
 
                 // Add event listeners for payment buttons
                 document.querySelectorAll(".payment-btn").forEach(button => {
                     button.addEventListener("click", function () {
                         const bookingId = this.getAttribute("data-booking-id");
-                        alert(`Processing payment for booking ID: ${bookingId}`);
-                            window.location.href = 'book.html'; // Adjust the URL as needed
-
-                        // Add payment logic here
+                        window.location.href = `book.html?bookingId=${bookingId}`;
                     });
                 });
             }
@@ -66,8 +66,55 @@ document.addEventListener("DOMContentLoaded", function () {
         .catch(error => {
             console.error("There was an error fetching the bookings:", error);
         });
-});
 
+    // Fetch and display payment status
+    fetch(paymentApiUrl, {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Payment API Response:', data);
+
+            const tableBody = document.getElementById("payment-table-body2");
+            const payments = data.$values;
+
+            tableBody.innerHTML = '';
+
+            payments.forEach(payment => {
+                const row = document.createElement("tr");
+
+                const serviceIdCell = document.createElement("td");
+                serviceIdCell.textContent = payment.serviceName || 'N/A';
+
+                const amountCell = document.createElement("td");
+                amountCell.textContent = `${payment.amount.toFixed(2)} jd`;
+
+                const dateCell = document.createElement("td");
+                dateCell.textContent = new Date(payment.paymentDate).toLocaleDateString();
+
+                const statusCell = document.createElement("td");
+                statusCell.textContent = payment.paymentStatus === "COMPLETED" ? "Completed" : "Pending";
+                statusCell.classList.add(payment.paymentStatus === "COMPLETED" ? "text-success" : "text-danger");
+
+                row.appendChild(serviceIdCell);
+                row.appendChild(amountCell);
+                row.appendChild(dateCell);
+                row.appendChild(statusCell);
+
+                tableBody.appendChild(row);
+            });
+        })
+        .catch(error => {
+            console.error("There was an error fetching the payment status:", error);
+        });
+});
 ///////////////////////
 
 
@@ -131,7 +178,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    
+
                 });
         }
 
@@ -159,7 +206,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (profilePicture.files.length > 0) {
                     formData.append('usersImagesFile', profilePicture.files[0]);
                 }
-                
+
 
                 fetch(`https://localhost:44321/api/Users/UpdateUserProfile/${userId}`, {
                     method: 'PUT',
