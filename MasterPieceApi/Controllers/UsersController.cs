@@ -445,6 +445,28 @@ namespace MasterPieceApi.Controllers
 
             return Ok(bookings);
         }
+
+
+
+        [HttpPut("UpdateUserRole/{userId}")]
+        public async Task<IActionResult> UpdateUserRole(int userId, [FromBody] UpdateUserRoleDto updateUserRoleDto)
+        {
+            if (updateUserRoleDto == null || string.IsNullOrEmpty(updateUserRoleDto.UserRole))
+            {
+                return BadRequest("Invalid user role data.");
+            }
+
+            var user = await _context.Users.FindAsync(userId);
+            if (user == null)
+            {
+                return NotFound("User not found."); // User ID does not exist
+            }
+
+            user.UserRole = updateUserRoleDto.UserRole;
+            await _context.SaveChangesAsync(); // Save changes to the database
+
+            return NoContent(); // Successfully updated
+        }
     }
 }
 
