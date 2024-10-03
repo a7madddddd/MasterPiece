@@ -16,15 +16,18 @@ document.addEventListener('DOMContentLoaded', function () {
     // Get bookingId from URL parameters
     const urlParams = new URLSearchParams(window.location.search);
     const bookingId = urlParams.get('bookingId');
-
     if (!bookingId) {
         Swal.fire({
-            icon: 'error',
-            title: 'Booking Error',
-            text: 'No booking ID provided. Please try again.',
+            icon: 'info',
+            title: 'No Booking ',
+            text: 'No booking Untill Now.',
+        }).then(() => {
+            // This code runs after the user closes the alert
+            window.location.href = 'services.html'; // Redirect after closing the alert
         });
         return;
     }
+
 
     const apiUrl = `https://localhost:44321/api/Bookings/${bookingId}`;
 

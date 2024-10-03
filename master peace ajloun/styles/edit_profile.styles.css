@@ -362,7 +362,7 @@ body {
     height: 70px;
     border-radius: 50px;
     object-fit: cover;
-    
+
 }
 
 #editProfile .fab.fa-twitter {
@@ -547,4 +547,21 @@ body {
     -webkit-text-shadow: rgba(0, 0, 0, .01) 0 0 1px;
     text-shadow: rgba(0, 0, 0, .01) 0 0 1px;
 
+}
+
+
+.titlepages {
+    display: grid;
+    place-items: center;
+    width: 20vw !important;
+    height: 7vh;
+}
+
+.strong {
+    z-index: 2;
+    font-family: 'Poppins'sans-serif;
+    font-size: 25px !important;
+    letter-spacing: 3px;
+    color: #FFFFFF;
+    text-shadow: 0 0 4px rgb(0, 0, 0);
 }
