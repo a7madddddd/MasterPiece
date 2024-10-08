@@ -71,24 +71,25 @@
                             class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1">
                         </div>
                     </div>
-        
-        
+
+
                     <div class="ms-3" id="userInfo">
                         <h6 class="mb-0" id="userName">Loading...</h6>
                         <span id="userRole">Loading...</span>
                     </div>
-        
-        
-        
+
+
+
                 </div>
                 <div class="navbar-nav w-100">
-                    <a href="index.html" class="nav-item nav-link "><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
+                    <a href="index.html" class="nav-item nav-link "><i
+                            class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
                     <a href="element.html" class="nav-item nav-link"><i class="fa fa-laptop me-2"></i>Profile</a>
-        
-        
+
+
                     <a href="form.html" class="nav-item nav-link active"><i class="fa fa-keyboard me-2"></i>Services</a>
                     <a href="table.html" class="nav-item nav-link"><i class="fa fa-table me-2"></i>Users</a>
-        
+
                 </div>
             </nav>
         </div>
@@ -143,8 +144,8 @@
                             <a href="#" class="dropdown-item text-center">See all notifications</a>
                         </div>
                     </div>
-            
-            
+
+
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
                             <img class="rounded-circle me-lg-2" id="userImage" src="img/user.jpg" alt=""
@@ -153,10 +154,10 @@
                         </a>
                         <div class="dropdown-menu dropdown-menu-end bg-secondary border-0 rounded-0 rounded-bottom m-0">
                             <a href="element.html" class="dropdown-item">My Profile</a>
-            
+
                         </div>
                     </div>
-            
+
                 </div>
             </nav>
             <!-- Navbar End -->
@@ -170,36 +171,36 @@
                             <h6 class="mb-4">Add Service</h6>
                             <form id="serviceForm">
                                 <label for="ServiceName">Service Name</label>
-                                <div class="form-floating mb-3">
+                                <div class="mb-3">
                                     <input type="text" class="form-control" id="ServiceName" placeholder="Service Name"
                                         required>
                                 </div>
                                 <label for="Description">Description</label>
-                                <div class="form-floating mb-3">
-                                    <textarea class="form-control" id="Description" placeholder="Description"
-                                        required></textarea>
+                                <div class="mb-3">
+                                    <input class="form-control" id="Description" placeholder="Description"
+                                        required></input>
                                 </div>
 
                                 <label for="Price">Price</label>
-                                <div class="form-floating mb-3">
+                                <div class="mb-3">
                                     <input type="number" class="form-control" id="Price" placeholder="Price" required>
                                 </div>
                                 <label for="Dates">Date</label>
-                                <div class="form-floating mb-3">
+                                <div class="mb-3">
                                     <input type="date" class="form-control" id="Dates" placeholder="Date" required>
                                 </div>
                                 <label for="Description2">Additional Description</label>
-                                <div class="form-floating mb-3">
+                                <div class="mb-3">
                                     <input type="text" class="form-control" id="Description2"
                                         placeholder="Additional Description" required>
                                 </div>
                                 <label for="Question">Question</label>
-                                <div class="form-floating mb-3">
+                                <div class="mb-3">
                                     <input type="text" class="form-control" id="Question" placeholder="Question"
                                         required>
                                 </div>
                                 <label for="ImageFile">Upload Image</label>
-                                <div class="form-floating mb-3">
+                                <div class="mb-3">
                                     <input type="file" class="form-control" id="ImageFile">
                                 </div>
                                 <br>
@@ -222,8 +223,12 @@
                             <form id="updateServiceForm">
                                 <div class="mb-3">
                                     <label for="serviceName" class="form-label">Service Name</label>
-                                    <input type="text" class="form-control" id="serviceName" required>
+                                    <select class="form-control" id="serviceName" required>
+                                        <option value="">Select a Service</option>
+                                        <!-- Dynamically populated options will go here -->
+                                    </select>
                                 </div>
+
                                 <div class="mb-3">
                                     <label for="description" class="form-label">Description</label>
                                     <input type="text" class="form-control" id="description">
@@ -252,7 +257,7 @@
                                     <label for="imageFile" class="form-label">Upload Image</label>
                                     <input type="file" class="form-control" id="imageFile">
                                 </div>
-                                <br><br>
+                                
                                 <button type="submit" class="btn btn-primary">Update Service</button>
                                 <button type="button" class="btn btn-danger" id="deleteServiceBtn">Delete
                                     Service</button>
@@ -268,11 +273,12 @@
                                     <tr>
                                         <th scope="col">#</th>
                                         <th scope="col">Service Name</th>
-                                        <th scope="col" style="width: 40em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Description</th>
+                                        <th scope="col"
+                                            style="width: 40em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                            Description</th>
                                         <th scope="col">End Date</th>
                                         <th scope="col">Price</th>
                                         <th scope="col">Active</th>
-                                        
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -282,7 +288,7 @@
                         </div>
                     </div>
 
-                     <!-- <div class="col-sm-12 col-xl-6">
+                    <!-- <div class="col-sm-12 col-xl-6">
                         <div class="bg-secondary rounded h-100 p-4">
                             <div class="row mb-3">
                                 <legend class="col-form-label col-sm-2 pt-0">Checkbox</legend>
@@ -414,24 +420,21 @@
                             </div>
                         </div>
                     </div> -->
-                    
-                    <div class="col-sm-12 col-xl-6">
+
+                    <!-- <div class="col-sm-12 col-xl-6">
                         <div class="bg-secondary rounded h-100 p-4">
                             <h6 class="mb-4">Add Offer</h6>
                     
-                            <!-- Service Search Section -->
                             <div class="mb-3">
                                 <input id="serviceNameSearch" class="form-control form-control-lg" type="text"
                                     placeholder="Enter Service Name to Search" aria-label="Service Name Search">
                             </div>
                             <button id="searchServiceButton" class="btn btn-primary mb-3">Search Service</button>
                     
-                            <!-- Service Details Display -->
                             <div id="serviceDetails" style="display:none;" class="mb-3">
                                 <h6>Selected Service:</h6>
                                 <p id="selectedServiceInfo"></p>
                             </div>
-                                <!-- Offer Details Form -->
                             <form id="offerForm" style="display:none;">
                                 <input id="Description" class="form-control mb-3" type="text" placeholder="Offer Description" required>
                                 <input id="imageUrl" class="form-control mb-3" type="text" placeholder="Image URL" >
@@ -450,7 +453,7 @@
                                 <button type="submit" class="btn btn-success">Add Offer</button>
                             </form>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
             <!-- Form End -->
@@ -466,7 +469,7 @@
                         <div class="col-12 col-sm-6 text-center text-sm-end">
                             <!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
                             Designed By <a href="">Ajloun Tour Owner</a>
-            
+
                         </div>
                     </div>
                 </div>
@@ -504,23 +507,23 @@
     <script>
 
         function showToast(message, type) {
-                const toast = document.getElementById('toast');
-                toast.innerText = message;
-                toast.style.backgroundColor = type === 'success' ? 'green' : 'red';
-                toast.style.display = 'block';
+            const toast = document.getElementById('toast');
+            toast.innerText = message;
+            toast.style.backgroundColor = type === 'success' ? 'green' : 'red';
+            toast.style.display = 'block';
 
-                // Hide toast after 3 seconds
-                setTimeout(() => {
-                    toast.style.display = 'none';
-                }, 3000);
-            }
+            // Hide toast after 3 seconds
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 3000);
+        }
 
         // Example usage
         // Call this function when needed
 
 
 
-        
+
 
 
 
