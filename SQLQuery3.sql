@@ -236,3 +236,32 @@ ADD ServiceId INT;
 ALTER TABLE Payments
 ADD CONSTRAINT FK_Payments_Services
 FOREIGN KEY (ServiceId) REFERENCES Services(ServiceID);
+
+
+
+
+
+
+
+
+-- Alter Bookings table to add PaymentID column and establish a foreign key
+ALTER TABLE Bookings
+ADD PaymentID INT;  -- Add the PaymentID to link to Payments table
+
+-- Add the foreign key constraint to link the Bookings table to Payments table
+ALTER TABLE Bookings
+ADD CONSTRAINT FK_Bookings_Payments
+FOREIGN KEY (PaymentID) REFERENCES Payments(PaymentID);
+
+
+
+
+
+-- Alter Payments table to add BookingID column and establish a foreign key
+ALTER TABLE Payments
+ADD BookingID INT;  -- Add the BookingID to link to Bookings table
+
+-- Add the foreign key constraint to link the Payments table to Bookings table
+ALTER TABLE Payments
+ADD CONSTRAINT FK_Payments_Bookings
+FOREIGN KEY (BookingID) REFERENCES Bookings(BookingID);
