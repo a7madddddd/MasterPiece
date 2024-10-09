@@ -313,9 +313,6 @@ window.addEventListener('load', initializePage);
 
 
 
-
-
-
 let currentUserId = null; // Hold the current user ID
 let currentUserRole = null; // Hold the current user role
 
@@ -327,7 +324,6 @@ function showToast(message, type) {
 document.addEventListener('DOMContentLoaded', () => {
     console.log("DOM fully loaded and parsed");
 
-    // Ensure buttons are present
     const searchUserButton = document.getElementById('searchUserButton');
     const updateUserButton = document.getElementById('updateUserButton');
 
@@ -362,7 +358,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             currentUserId = user.userId;
-            currentUserRole = user.userRole || 'User'; // Default to 'User' if role is undefined
+            currentUserRole = user.userRole || 'User';
             console.log(`Fetched Current Role: "${currentUserRole}"`);
 
             document.getElementById('displayUsername').innerText = user.username;
@@ -391,43 +387,81 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // Compare roles for case-insensitive match
+        // Check if the selected role is the same as the current role
         if (selectedRole.trim().toLowerCase() === currentUserRole.trim().toLowerCase()) {
-            showToast('The selected role is the same as the current role. No changes made.', 'info');
+            Swal.fire({
+                title: "Same Role Selected",
+                text: "You cannot change the role to the same current role.",
+                icon: "warning",
+                confirmButtonText: "OK"
+            });
             return;
         }
 
-        const requestBody = JSON.stringify({ userRole: selectedRole });
-        console.log('Request Body:', requestBody);
+        // SweetAlert confirmation
+        Swal.fire({
+            title: "Are you sure?",
+            text: "Once changed, The User Role will be Changed to a new role!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes, change it!",
+            cancelButtonText: "No, cancel!",
+            reverseButtons: true
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                const requestBody = JSON.stringify({ userRole: selectedRole });
+                console.log('Request Body:', requestBody);
 
-        try {
-            const response = await fetch(`https://localhost:44321/api/Users/UpdateUserRole/${currentUserId}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': '*/*'
-                },
-                body: requestBody
-            });
+                try {
+                    const response = await fetch(`https://localhost:44321/api/Users/UpdateUserRole/${currentUserId}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': '*/*'
+                        },
+                        body: requestBody
+                    });
 
-            console.log('Update Response Status:', response.status);
+                    console.log('Update Response Status:', response.status);
 
-            const responseData = await response.json();
-            console.log('Response Data for Update:', responseData);
+                    const responseData = await response.json();
+                    console.log('Response Data for Update:', responseData);
 
-            if (!response.ok) {
-                throw new Error(responseData.message || 'Failed to update role.');
-            }
+                    if (!response.ok) {
+                        throw new Error(responseData.message || 'Failed to update role.');
+                    }
 
-            if (responseData.success) {
-                showToast(responseData.message, 'success');
-                currentUserRole = selectedRole; // Update the current role after successful change
+                    if (responseData.success) {
+                        showToast(responseData.message, 'success');
+                        currentUserRole = selectedRole; // Update the current role after successful change
+                        await refreshUserDetails(currentUserId); // Refresh user details after update
+                    } else {
+                        throw new Error(responseData.message || 'Failed to update role.');
+                    }
+                } catch (error) {
+                    console.error('Error during role update:', error);
+                    showToast(`Error: ${error.message}`, 'error');
+                }
             } else {
-                throw new Error(responseData.message || 'Failed to update role.');
+                showToast('Role change cancelled.', 'info');
             }
-        } catch (error) {
-            console.error('Error during role update:', error);
-            showToast(`Error: ${error.message}`, 'error');
-        }
+        });
     });
+
+    async function refreshUserDetails(userId) {
+        try {
+            const response = await fetch(`https://localhost:44321/api/Users/GetUserById/${userId}`);
+            if (!response.ok) {
+                throw new Error('Failed to refresh user details.');
+            }
+            const user = await response.json();
+            currentUserRole = user.userRole || 'User'; // Update current role
+            document.getElementById('displayUsername').innerText = user.username;
+            document.getElementById('displayEmail').innerText = user.email;
+            document.getElementById('userRole').value = currentUserRole; // Update dropdown to new role
+            console.log('User details refreshed');
+        } catch (error) {
+            showToast('Error refreshing user details: ' + error.message, 'error');
+        }
+    }
 });
