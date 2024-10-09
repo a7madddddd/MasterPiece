@@ -153,3 +153,46 @@ window.onload = function () {
 document.addEventListener('DOMContentLoaded', () => {
         updatePaymentStatistics();
 });
+
+
+
+
+
+
+
+async function fetchNotifications() {
+    try {
+        const response = await fetch('https://localhost:44321/api/JoinRequests');
+        const data = await response.json();
+        const lastThreeRequests = data.$values.slice(-3).reverse();
+
+        const dropdownContent = document.getElementById('notificationDropdown');
+        dropdownContent.innerHTML = ''; // Clear existing content
+
+        lastThreeRequests.forEach(request => {
+            const notificationItem = document.createElement('a');
+            notificationItem.href = '#';
+            notificationItem.className = 'dropdown-item';
+            notificationItem.innerHTML = `
+                        <h6 class="fw-normal mb-0">${request.name}</h6>
+                        <small>${request.message}</small>
+                    `;
+            dropdownContent.appendChild(notificationItem);
+
+            const divider = document.createElement('hr');
+            divider.className = 'dropdown-divider';
+            dropdownContent.appendChild(divider);
+        });
+
+        const seeAllLink = document.createElement('a');
+        seeAllLink.href = '#';
+        seeAllLink.className = 'dropdown-item text-center';
+        seeAllLink.textContent = 'See all notifications';
+        dropdownContent.appendChild(seeAllLink);
+    } catch (error) {
+        console.error('Error fetching notifications:', error);
+    }
+}
+
+// Fetch notifications when the page loads
+document.addEventListener('DOMContentLoaded', fetchNotifications);
