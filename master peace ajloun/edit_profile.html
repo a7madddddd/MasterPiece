@@ -37,54 +37,66 @@
     <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
 
     <script src="js/ProfileApi.js"></script>
-   <style>
-    .thead-light {
-    background-color: #f8f9fa; /* Light background */
-    border-radius: 8px; /* Rounded corners */
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-}
+    <style>
+        .thead-light {
+            background-color: #f8f9fa;
+            /* Light background */
+            border-radius: 8px;
+            /* Rounded corners */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            /* Subtle shadow */
+        }
 
-.thead-light .table {
-    margin-bottom: 0; /* No margin at the bottom */
-}
+        .thead-light .table {
+            margin-bottom: 0;
+            /* No margin at the bottom */
+        }
 
-.thead-light .table-striped tbody tr:nth-of-type(odd) {
-    background-color: #e9ecef; /* Light gray for odd rows */
-}
+        .thead-light .table-striped tbody tr:nth-of-type(odd) {
+            background-color: #e9ecef;
+            /* Light gray for odd rows */
+        }
 
-.thead-light .table th {
-    background-color: #007bff; /* Primary color for header */
-    color: white; /* White text for header */
-}
+        .thead-light .table th {
+            background-color: #007bff;
+            /* Primary color for header */
+            color: white;
+            /* White text for header */
+        }
 
-.thead-light .text-success {
-    color: #28a745 !important; /* Green for completed */
-}
+        .thead-light .text-success {
+            color: #28a745 !important;
+            /* Green for completed */
+        }
 
-.thead-light .text-danger {
-    color: #dc3545 !important; /* Red for pending */
-}
+        .thead-light .text-danger {
+            color: #dc3545 !important;
+            /* Red for pending */
+        }
 
-.thead-light .font-weight-bold {
-    font-weight: 600; /* Bold text */
-}
+        .thead-light .font-weight-bold {
+            font-weight: 600;
+            /* Bold text */
+        }
 
-.thead-light .table td {
-    vertical-align: middle; /* Centered text */
-}
-
-
-.table-custom th, .table-custom td {
-    vertical-align: middle;
-    text-align: center; /* Center align the content */
-}
-
-.table-custom img {
-    border-radius: 8px; /* Optional: Add rounded corners to images */
-}
+        .thead-light .table td {
+            vertical-align: middle;
+            /* Centered text */
+        }
 
 
-   </style>
+        .table-custom th,
+        .table-custom td {
+            vertical-align: middle;
+            text-align: center;
+            /* Center align the content */
+        }
+
+        .table-custom img {
+            border-radius: 8px;
+            /* Optional: Add rounded corners to images */
+        }
+    </style>
 </head>
 
 <body>
@@ -320,54 +332,57 @@
                             </div>
                         </div> -->
 
-                    <div class="col-12 bg-white p-4 rounded shadow-lg payment-container">
-                                <i class="fas fa-calendar-check text-info me-2"></i> Your latest Orders
-                        <table class="table table-hover table-bordered">
-                            <thead class="thead-light">
-                                <tr>
-                                    <th>Tour</th>
-                                    <th>Amount</th>
-                                    <th>Date</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody id="payment-table-body2">
-                                <tr>
-                                    <td>City Tour</td>
-                                    <td>$200.00</td>
-                                    <td>2024-10-01</td>
-                                    <td class="text-success font-weight-bold"></td>
-                                </tr>
-                                <tr>
-                                    <td>Mountain Adventure</td>
-                                    <td>$150.00</td>
-                                    <td>2024-10-02</td>
-                                    <td class="text-warning font-weight-bold"></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                        <div class="col-12 bg-white p-4 rounded shadow-lg payment-container">
+                            <i class="fas fa-calendar-check text-info me-2"></i> Your latest Orders
+                            <table class="table table-hover table-bordered">
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th>Tour</th>
+                                        <th>Amount</th>
+                                        <th>Date</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="payment-table-body2">
+                                    <tr>
+                                        <td>City Tour</td>
+                                        <td>$200.00</td>
+                                        <td>2024-10-01</td>
+                                        <td class="text-success font-weight-bold"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Mountain Adventure</td>
+                                        <td>$150.00</td>
+                                        <td>2024-10-02</td>
+                                        <td class="text-warning font-weight-bold"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
 
 
 
-                        
-                         </div>
-        
-                     <div class="col-md-7 ps-md-4">
-                        <div class="row">
+
+                </div>
+
+                <div class="col-md-7 ps-md-4">
+                    <div class="row">
                         <div class="col-12 bg-white px-3 mb-3 pb-3">
                             <input type="text" id="username" class="form-control py-2" placeholder="Username" hidden>
                             <div class="d-flex align-items-center justify-content-between border-bottom">
                                 <p class="py-2">First Name</p>
-                            <input type="text" id="firstName" class="form-control py-2" name="firstName" placeholder="First Name">                                    
+                                <input type="text" id="firstName" class="form-control py-2" name="firstName"
+                                    placeholder="First Name">
                             </div>
                             <div class="d-flex align-items-center justify-content-between border-bottom">
                                 <p class="py-2">Last Name</p>
-                            <input type="text" id="lastName" name="lastName" class="form-control py-2" placeholder="Last Name">                                   
+                                <input type="text" id="lastName" name="lastName" class="form-control py-2"
+                                    placeholder="Last Name">
                             </div>
                             <div class="d-flex align-items-center justify-content-between border-bottom">
                                 <p class="py-2">Email</p>
-                            <input type="email" id="email" class="form-control py-2" name="email" placeholder="Email" readonly>                                    
+                                <input type="email" id="email" class="form-control materialize-textarea" name="email"
+                                    placeholder="Email" disabled style="opacity: 0.7;">
                             </div>
                             <div class="d-flex align-items-center justify-content-between border-bottom">
                                 <p class="py-2">Phone</p>
@@ -376,13 +391,15 @@
                             </div>
                             <div class="d-flex align-items-center justify-content-between border-bottom">
                                 <p class="py-2">Password</p>
-                            <input type="password" id="password" class="form-control py-2" name="password" placeholder="*******">                                    
+                                <input type="password" id="password" class="form-control py-2" name="password"
+                                    placeholder="*******">
                             </div>
                             <div class="d-flex">
-                                <button type="submit" class="btn btn-primary follow me-2" id="saveChanges">Save Changes</button>
+                                <button type="submit" class="btn btn-primary follow me-2" id="saveChanges">Save
+                                    Changes</button>
                             </div>
                         </div>
-                    </form>
+                        </form>
                         <!-- Booking Table -->
                         <div class="col-12 bg-white px-3 pb-2 shadow-sm rounded">
                             <h6 class="d-flex align-items-center mb-3 fw-bold py-3">
@@ -404,8 +421,8 @@
                                     <tbody id="booking-table-body">
                                         <!-- Rows will be inserted here dynamically -->
                                         <tr>
-                                            
-                                           
+
+
                                         </tr>
                                         <!-- Add more rows as needed -->
                                     </tbody>
@@ -652,7 +669,7 @@
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
 
-        <script src="assets/js/owl-carousel.js"></script>
+    <script src="assets/js/owl-carousel.js"></script>
     <script src="assets/js/tabs.js"></script>
 
     <script src="assets/js/popup.js"></script>

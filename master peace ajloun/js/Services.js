@@ -308,7 +308,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 document.querySelector('.service-image').src = service.image;
                 document.querySelector('.title').textContent = service.serviceName;
                 document.querySelector('.description').textContent = service.description2;
-                document.querySelector('.price').textContent = service.price;
+                document.querySelector('.price').textContent = service.price + " jd per ticket";
                 document.querySelector('.question').textContent = service.question;
                 document.querySelector('#tour_name').textContent = service.serviceName;
                 document.querySelector('#tour_price').textContent = service.price;
@@ -395,7 +395,7 @@ function fetchServiceData(serviceId) {
             // Dynamically update the service name and price if data is valid
             if (service) {
                 document.getElementById('bar_service_name').textContent = `Explore ${service.serviceName} today!`;
-                document.getElementById('bar_button').textContent = `Book Now for $${service.price}`;
+                document.getElementById('bar_button').textContent = `Book Now for ${service.price} jd`;
             } else {
                 document.getElementById('bar_service_name').textContent = "Service not found";
             }

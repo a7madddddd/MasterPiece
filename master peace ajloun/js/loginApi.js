@@ -156,11 +156,11 @@ document.addEventListener('DOMContentLoaded', function () {
                     window.location.href = '../adminDashboard/signin.html';
                 } else {
                     // User button clicked or cancel button (continue as User)
-                    window.location.href = 'index.html';
+                    window.location.href = 'services.html';
                 }
             } else if (data.userRole === 'User') {
                 // Redirect to user dashboard if it's a regular user
-                window.location.href = 'index.html';
+                window.location.href = 'services.html';
             } else {
                 // Handle other roles if needed or show an error
                 console.warn('Unknown role:', data.userRole);

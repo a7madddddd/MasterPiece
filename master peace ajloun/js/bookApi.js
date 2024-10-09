@@ -72,13 +72,13 @@ document.addEventListener('DOMContentLoaded', function () {
             serviceNameElement.textContent = booking.serviceName;
 
             const priceElement = document.createElement('span');
-            priceElement.textContent = `$${booking.totalAmount.toFixed(2)}`;
+            priceElement.textContent = `${booking.totalAmount.toFixed(2)} jd`;
 
             orderItemDiv.appendChild(serviceNameElement);
             orderItemDiv.appendChild(priceElement);
             orderItemsContainer.appendChild(orderItemDiv);
 
-            totalPriceElement.textContent = `$${booking.totalAmount.toFixed(2)}`;
+            totalPriceElement.textContent = `${booking.totalAmount.toFixed(2)} jd`;
 
             // Initialize PayPal button after loading booking details
             initPayPalButton(booking.totalAmount, userId, booking);

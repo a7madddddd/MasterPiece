@@ -280,7 +280,7 @@ namespace MasterPieceApi.Controllers
                         line-height: 1.6;
                     }}
                     .container {{
-                        max-width: 600px;
+                        max-width: 90%;
                         margin: 20px auto;
                         background: #ffffff;
                         border-radius: 8px;
@@ -295,7 +295,7 @@ namespace MasterPieceApi.Controllers
                     }}
                     .header h1 {{
                         margin: 0;
-                        font-size: 28px;
+                        font-size: 2.4em;
                         font-weight: 700;
                     }}
                     .content {{
@@ -303,7 +303,7 @@ namespace MasterPieceApi.Controllers
                     }}
                     h2 {{
                         color: #2c3e50;
-                        font-size: 22px;
+                        font-size: 2.2em;
                         margin-top: 0;
                     }}
                     p {{
@@ -318,13 +318,14 @@ namespace MasterPieceApi.Controllers
                     .service-details h3, .payment-details h3 {{
                         margin-top: 0;
                         color: #2c3e50;
-                        font-size: 18px;
+                        font-size: 1.7em;
                     }}
                     ul {{
                         list-style-type: none;
                         padding: 0;
                     }}
                     li {{
+                        font-size: 1.2em;
                         margin-bottom: 10px;
                     }}
                     .service-image {{
@@ -342,7 +343,7 @@ namespace MasterPieceApi.Controllers
                         color: #ffffff;
                         text-align: center;
                         padding: 20px;
-                        font-size: 14px;
+                        font-size: 1.5em;
                     }}
                     .footer p {{
                         margin: 5px 0;
@@ -365,7 +366,7 @@ namespace MasterPieceApi.Controllers
                         <h1>Payment Confirmation</h1>
                     </div>
                     <div class=""content"">
-                        <h2>Thank you for your payment, {user.Username}!</h2>
+                        <h2>Thank you for your payment, {user.Username} !</h2>
                         <p>We're excited to confirm that we've received your payment of <span class=""highlight"">JD {payment.Amount:F2}</span> for the following service:</p>
 
                         <div class=""service-details"">
@@ -381,7 +382,6 @@ namespace MasterPieceApi.Controllers
                         <div class=""payment-details"">
                             <h3>Payment Information</h3>
                             <ul>
-                                <li><strong>Payment ID:</strong> {payment.PaymentId}</li>
                                 <li><strong>Date:</strong> {(payment.PaymentDate?.ToString("f") ?? "N/A")}</li>
                                 <li><strong>Status:</strong> {payment.PaymentStatus}</li>
                                 <li><strong>Method:</strong> {payment.PaymentMethod}</li>
@@ -390,11 +390,11 @@ namespace MasterPieceApi.Controllers
 
                         <p>If you have any questions or need further assistance, please don't hesitate to contact our support team. We're here to help!</p>
 
-                        <a href=""https://ajlountour360.com/contact"" class=""button"">Contact Support</a>
+                        <a href=""http://127.0.0.1:5501/contact.html"" class=""button"">Contact Support</a>
                     </div>
                     <div class=""footer"">
                         <p>Thank you for choosing Ajloun Tour 360</p>
-                        <p>&copy; 2024 Ajloun Tour 360. All rights reserved For Ahmad Onizat.</p>
+                        <p>&copy; 2024 Ajloun Tour 360. All rights reserved For Ajloun Tour 360.</p>
                     </div>
                 </div>
             </body>

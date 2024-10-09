@@ -47,7 +47,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         <td><img src="${booking.image}" alt="${booking.serviceName}"></td>
                         <td>${new Date(booking.bookingDate).toLocaleDateString()}</td>
                         <td>${booking.numberOfPeople}</td>
-                        <td>${booking.totalAmount}</td>
+                        <td>${booking.totalAmount}  jd</td>
                         <td>${booking.status}</td>
                         <td><button class="btn btn-primary btn-sm payment-btn" data-booking-id="${booking.bookingId}">Pay Now</button></td>
                     `;
