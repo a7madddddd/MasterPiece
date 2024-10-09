@@ -59,7 +59,7 @@ namespace MasterPieceApi.Controllers
         /// </summary>
         /// <param name="searchTerm"></param>
         /// <returns></returns>
-                                        
+
         [HttpGet("GetUserByUsernameOrEmail/{searchTerm}")]
         public async Task<ActionResult<User>> GetUserByUsernameOrEmail(string searchTerm)
         {
@@ -453,20 +453,51 @@ namespace MasterPieceApi.Controllers
         {
             if (updateUserRoleDto == null || string.IsNullOrEmpty(updateUserRoleDto.UserRole))
             {
-                return BadRequest("Invalid user role data.");
+                return BadRequest(new { success = false, message = "Invalid user role data." });
             }
 
             var user = await _context.Users.FindAsync(userId);
             if (user == null)
             {
-                return NotFound("User not found."); // User ID does not exist
+                return NotFound(new { success = false, message = "User not found." });
+            }
+
+            // Log current and new role
+            Console.WriteLine($"Current Role: {user.UserRole}, New Role: {updateUserRoleDto.UserRole}");
+
+            // Check if the role is different before updating
+            if (user.UserRole == updateUserRoleDto.UserRole)
+            {
+                return Ok(new { success = false, message = "No changes to update." });
             }
 
             user.UserRole = updateUserRoleDto.UserRole;
-            await _context.SaveChangesAsync(); // Save changes to the database
 
-            return NoContent(); // Successfully updated
+            try
+            {
+                // Mark the entity as modified
+                _context.Entry(user).State = EntityState.Modified;
+
+                var changes = await _context.SaveChangesAsync();
+
+                if (changes > 0)
+                {
+                    return Ok(new { success = true, message = "User role updated successfully." });
+                }
+                else
+                {
+                    return StatusCode(500, new { success = false, message = "No changes were saved to the database." });
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log the exception for debugging purposes
+                return StatusCode(500, new { success = false, message = "An error occurred while updating the user role." });
+            }
         }
+
     }
+
 }
+
 

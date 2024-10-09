@@ -150,95 +150,51 @@ async function deleteUser() {
 
 
 /////////// update user role
-document.getElementById('updateUserButton').addEventListener('click', async function () {
-    const username = document.getElementById('displayUsername').innerText;
-    const userRole = document.getElementById('userRole').value;
+// Function to get the user ID by username or email
+// Function to get the user ID by username or email
+// Function to get the user ID by username or email
+// async function getUserIdByUsername(username) {
+//     const response = await fetch(`https://localhost:44321/api/Users/GetUserByUsernameOrEmail/${username}`);
+//     if (!response.ok) {
+//         throw new Error('User not found.');
+//     }
+//     const user = await response.json();
+//     console.log(user); // Log user object for debugging
+//     return user.id; // Ensure 'id' exists in the user object
+// }
 
-    // Assuming you have a way to get the user ID after searching
-    const userId = await getUserIdByUsername(username); // Implement this function to get the ID
+// Event listener for the update user role button
+// Event listener for the update user role button
+// document.getElementById('searchUserButton').addEventListener('click', function () {
+//     const username = document.getElementById('usernameSearch2').value;
 
-    if (!userId) {
-        Swal.fire({
-            title: 'Error',
-            text: 'User ID not found.',
-            icon: 'error',
-            confirmButtonText: 'OK'
-        });
-        return;
-    }
-
-    try {
-        const response = await fetch(`https://localhost:44321/api/Users/UpdateUserRole/${userId}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': '*/*'
-            },
-            body: JSON.stringify({ userRole: userRole })
-        });
-
-        if (!response.ok) {
-            throw new Error('Failed to update user role.');
-        }
-
-        document.getElementById('updateResponse').innerText = 'User role updated successfully!';
-
-    } catch (error) {
-        Swal.fire({
-            title: 'Error',
-            text: error.message,
-            icon: 'error',
-            confirmButtonText: 'OK'
-        });
-    }
-});
+//     // Fetch user details using the username or email
+//     fetch(`https://localhost:44321/api/Users/GetUserByUsernameOrEmail/${username}`)
+//         .then(response => response.json())
+//         .then(data => {
+//             if (data) {
+//                 document.getElementById('displayUsername').innerText = data.username;
+//                 document.getElementById('displayEmail').innerText = data.email;
+//                 document.getElementById('userDetails').style.display = 'block';
+//             } else {
+//                 alert('User not found');
+//             }
+//         })
+//         .catch(error => console.error('Error:', error));
+// });
 
 
 
 
-let currentUserId = null; // Global variable to hold the current user ID
 
-document.getElementById('searchUserButton').addEventListener('click', async function () {
-    const searchTerm = document.getElementById('usernameSearch2').value.trim();
 
-    if (!searchTerm) {
-        Swal.fire({
-            title: 'Error',
-            text: 'Please enter a username or email to search.',
-            icon: 'error',
-            confirmButtonText: 'OK'
-        });
-        return;
-    }
 
-    try {
-        const response = await fetch(`https://localhost:44321/api/Users/GetUserByUsernameOrEmail/${searchTerm}`);
 
-        if (!response.ok) {
-            throw new Error('User not found.');
-        }
 
-        const user = await response.json();
-        currentUserId = user.userId; // Store user ID
-        document.getElementById('displayUsername').innerText = user.username;
-        document.getElementById('displayEmail').innerText = user.email;
-        document.getElementById('userRole').value = user.userRole;
-        document.getElementById('userDetails').style.display = 'block';
 
-    } catch (error) {
-        Swal.fire({
-            title: 'Error',
-            text: error.message,
-            icon: 'error',
-            confirmButtonText: 'OK'
-        });
-    }
-});
 
-// Function to get user ID
-async function getUserIdByUsername(username) {
-    return currentUserId; // Return the stored user ID
-}
+
+
 
 
 
@@ -298,7 +254,7 @@ function updateUI(userData) {
         return;
     }
     document.getElementById('userName').textContent = userData.username || 'N/A';
-    document.getElementById('userRole').textContent = userData.userRole || 'N/A';
+    document.getElementById('userRole1').textContent = userData.userRole || 'N/A';
     document.getElementById('userFullName').textContent = `${userData.firstName} ${userData.lastName}` || 'N/A';
 
     if (userData.profileImage) {
@@ -312,7 +268,7 @@ function updateUI(userData) {
 // Function to display error message in UI
 function displayError(message) {
     document.getElementById('userName').textContent = 'Error';
-    document.getElementById('userRole').textContent = 'Error';
+    document.getElementById('userRole1').textContent = 'Error';
     document.getElementById('userFullName').textContent = 'Error';
     console.error(message);
 }
@@ -345,3 +301,133 @@ async function initializePage() {
 
 // Call the initialization function when the page loads
 window.addEventListener('load', initializePage);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+let currentUserId = null; // Hold the current user ID
+let currentUserRole = null; // Hold the current user role
+
+function showToast(message, type) {
+    console.log(`${type}: ${message}`);
+}
+
+// Wait for the DOM to be fully loaded
+document.addEventListener('DOMContentLoaded', () => {
+    console.log("DOM fully loaded and parsed");
+
+    // Ensure buttons are present
+    const searchUserButton = document.getElementById('searchUserButton');
+    const updateUserButton = document.getElementById('updateUserButton');
+
+    if (!searchUserButton || !updateUserButton) {
+        console.error("Buttons not found. Check your HTML.");
+        return;
+    }
+
+    // Search user by username or email
+    searchUserButton.addEventListener('click', async function () {
+        const searchTerm = document.getElementById('usernameSearch2').value.trim();
+        console.log('Search Term:', searchTerm);
+
+        if (!searchTerm) {
+            showToast('Please enter a username or email to search.', 'error');
+            return;
+        }
+
+        try {
+            const response = await fetch(`https://localhost:44321/api/Users/GetUserByUsernameOrEmail/${searchTerm}`);
+            console.log('Response Status for User Search:', response.status);
+
+            if (!response.ok) {
+                throw new Error('User not found.');
+            }
+
+            const user = await response.json();
+            console.log('Fetched User:', user);
+
+            if (!user || !user.userId) {
+                throw new Error('User data is incomplete.');
+            }
+
+            currentUserId = user.userId;
+            currentUserRole = user.userRole || 'User'; // Default to 'User' if role is undefined
+            console.log(`Fetched Current Role: "${currentUserRole}"`);
+
+            document.getElementById('displayUsername').innerText = user.username;
+            document.getElementById('displayEmail').innerText = user.email;
+            document.getElementById('userRole').value = currentUserRole;
+            document.getElementById('userDetails').style.display = 'block';
+
+        } catch (error) {
+            showToast(error.message, 'error');
+        }
+    });
+
+    // Update user role
+    updateUserButton.addEventListener('click', async function () {
+        const selectedRole = document.getElementById('userRole').value;
+
+        console.log(`Current Role: "${currentUserRole}", Selected Role: "${selectedRole}"`);
+
+        if (!currentUserId) {
+            showToast('User ID is missing. Please search for a user first.', 'error');
+            return;
+        }
+
+        if (!selectedRole) {
+            showToast('Please select a valid role.', 'error');
+            return;
+        }
+
+        // Compare roles for case-insensitive match
+        if (selectedRole.trim().toLowerCase() === currentUserRole.trim().toLowerCase()) {
+            showToast('The selected role is the same as the current role. No changes made.', 'info');
+            return;
+        }
+
+        const requestBody = JSON.stringify({ userRole: selectedRole });
+        console.log('Request Body:', requestBody);
+
+        try {
+            const response = await fetch(`https://localhost:44321/api/Users/UpdateUserRole/${currentUserId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': '*/*'
+                },
+                body: requestBody
+            });
+
+            console.log('Update Response Status:', response.status);
+
+            const responseData = await response.json();
+            console.log('Response Data for Update:', responseData);
+
+            if (!response.ok) {
+                throw new Error(responseData.message || 'Failed to update role.');
+            }
+
+            if (responseData.success) {
+                showToast(responseData.message, 'success');
+                currentUserRole = selectedRole; // Update the current role after successful change
+            } else {
+                throw new Error(responseData.message || 'Failed to update role.');
+            }
+        } catch (error) {
+            console.error('Error during role update:', error);
+            showToast(`Error: ${error.message}`, 'error');
+        }
+    });
+});
