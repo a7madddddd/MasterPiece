@@ -43,6 +43,25 @@
             transition: opacity 0.5s;
             z-index: 1000;
         }
+        .toast {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 10px 20px;
+    border-radius: 5px;
+    color: white;
+    opacity: 0.9;
+    transition: opacity 0.5s ease;
+}
+
+.toast.success {
+    background-color: green;
+}
+
+.toast.error {
+    background-color: red;
+}
+
     </style>
 </head>
 
@@ -223,12 +242,12 @@
                             <form id="updateServiceForm">
                                 <div class="mb-3">
                                     <label for="serviceName" class="form-label">Service Name</label>
-                                    <select class="form-control" id="serviceName" required>
-                                        <option value="">Select a Service</option>
+                                    <select class="form-control bg-dark" id="serviceName" required>
+                                        <option value="" class="bg-secondary">Select a Service</option>
                                         <!-- Dynamically populated options will go here -->
                                     </select>
                                 </div>
-
+                    
                                 <div class="mb-3">
                                     <label for="description" class="form-label">Description</label>
                                     <input type="text" class="form-control" id="description">
@@ -257,10 +276,13 @@
                                     <label for="imageFile" class="form-label">Upload Image</label>
                                     <input type="file" class="form-control" id="imageFile">
                                 </div>
-                                
+                                <div class="mb-3">
+                                    <label for="imagePreview" class="form-label">Image Preview</label>
+                                    <img id="imagePreview" class="img-thumbnail" style="max-width: 150px; height: 100px; display: none;">
+                                </div>
+                    
                                 <button type="submit" class="btn btn-primary">Update Service</button>
-                                <button type="button" class="btn btn-danger" id="deleteServiceBtn">Delete
-                                    Service</button>
+                                <button type="button" class="btn btn-danger" id="deleteServiceBtn">Delete Service</button>
                             </form>
                         </div>
                     </div>
@@ -489,7 +511,7 @@
 
     </div>
 
-    <!-- JavaScript Libraries -->
+        <div id="toastContainer"></div>    <!-- JavaScript Libraries -->
     <script src="js/servicesApi.js"></script>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>

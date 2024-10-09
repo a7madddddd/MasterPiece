@@ -114,7 +114,10 @@ namespace MasterPieceApi.Controllers
 
         ////////////////////////////////////
 
-
+        /// <summary>
+        /// //////////
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("most")]
         public async Task<ActionResult<IEnumerable<Service>>> GetMostBookedServices()
         {
@@ -135,7 +138,11 @@ namespace MasterPieceApi.Controllers
             return Ok(mostBookedServices);
         }
 
-
+        /// <summary>
+        /// ////////
+        /// </summary>
+        /// <param name="serviceDto"></param>
+        /// <returns></returns>
 
         [HttpPost("Dahboard Add Service")]
         public async Task<ActionResult<Service>> PostService([FromForm] ServiceCreateDto serviceDto)
@@ -179,7 +186,11 @@ namespace MasterPieceApi.Controllers
         }
 
 
-
+        /// <summary>
+        /// ////////
+        /// </summary>
+        /// <param name="serviceDto"></param>
+        /// <returns></returns>
 
         [HttpPut("UpdateServiceByName")]
         public async Task<ActionResult<Service>> UpdateServiceByName([FromForm] ServiceCreateDto serviceDto)
@@ -192,24 +203,24 @@ namespace MasterPieceApi.Controllers
             }
 
             // Update the service properties
-            service.Description = serviceDto.Description;
-            service.Price = serviceDto.Price;
-            service.Description2 = serviceDto.Description2;
-            service.Question = serviceDto.Question;
-            service.IsActive = serviceDto.IsActive;
-            service.Dates = serviceDto.Dates;
+            service.Description = serviceDto?.Description;
+            service.Price = serviceDto?.Price;
+            service.Description2 = serviceDto?.Description2;
+            service.Question = serviceDto?.Question;
+            service.IsActive = serviceDto?.IsActive;
+            service.Dates = serviceDto?.Dates;
             service.UpdatedAt = DateTime.UtcNow;
 
             if (serviceDto.ImageFile != null && serviceDto.ImageFile.Length > 0)
             {
                 // Generate a unique file name for the uploaded image
-                var fileName = $"{Guid.NewGuid()}_{Path.GetFileName(serviceDto.ImageFile.FileName)}";
+                var fileName = $"{Guid.NewGuid()}_{Path.GetFileName(serviceDto?.ImageFile.FileName)}";
                 var filePath = Path.Combine(@"C:\Users\Orange\Desktop\test_ajloun\master peace ajloun\services images", fileName);
 
                 // Save the new file
                 using (var stream = new FileStream(filePath, FileMode.Create))
                 {
-                    await serviceDto.ImageFile.CopyToAsync(stream);
+                    await serviceDto?.ImageFile.CopyToAsync(stream);
                 }
 
                 // Update the image path in the service model
@@ -222,6 +233,20 @@ namespace MasterPieceApi.Controllers
             return Ok(service); // Return the updated service
         }
 
+
+
+
+
+
+
+
+
+
+        /// <summary>
+        /// /////
+        /// </summary>
+        /// <param name="serviceName"></param>
+        /// <returns></returns>
         [HttpDelete("DeleteService/{serviceName}")]
         public async Task<IActionResult> DeleteService(string serviceName)
         {

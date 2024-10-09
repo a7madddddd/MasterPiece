@@ -1,3 +1,17 @@
+function showToast(message, type) {
+    const toast = document.getElementById('toast');
+    toast.innerText = message;
+    toast.style.backgroundColor = type === 'success' ? 'green' : 'red';
+    toast.style.display = 'block';
+
+    // Hide toast after 3 seconds
+    setTimeout(() => {
+        toast.style.display = 'none';
+    }, 3000);
+}
+
+
+
 // Ensure the function is globally accessible
 // Service form submission
 document.getElementById('serviceForm').addEventListener('submit', async function (event) {
@@ -63,31 +77,127 @@ document.getElementById('serviceForm').addEventListener('submit', async function
 
 
 
+function showToast(message, type) {
+    const toastContainer = document.getElementById('toastContainer');
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`; // Add a class for styling
+    toast.innerText = message;
 
+    toastContainer.appendChild(toast);
+    setTimeout(() => {
+        toast.remove();
+    }, 3000); // Toast disappears after 3 seconds
+}
 
+async function loadServices() {
+    try {
+        const response = await fetch('https://localhost:44321/api/Services');
+        if (!response.ok) {
+            throw new Error('Failed to fetch services');
+        }
 
+        const responseData = await response.json();
+        const services = responseData.$values;
+        const serviceDropdown = document.getElementById('serviceName');
 
+        serviceDropdown.innerHTML = '<option value="">Select a Service</option>';
 
-////// update 
+        services.forEach(service => {
+            const option = document.createElement('option');
+            option.value = service.serviceName; // Set the value to the service name
+            option.text = service.serviceName;
+            option.dataset.service = JSON.stringify(service);
+            serviceDropdown.appendChild(option);
+        });
+
+        serviceDropdown.addEventListener('change', function () {
+            const selectedOption = serviceDropdown.options[serviceDropdown.selectedIndex];
+            if (selectedOption.value) {
+                const selectedService = JSON.parse(selectedOption.dataset.service);
+                fillFormFields(selectedService);
+            }
+        });
+
+    } catch (error) {
+        console.error('Error loading services:', error);
+        showToast('Error loading services: ' + error.message, 'error');
+    }
+}
+
+function fillFormFields(service) {
+    document.getElementById('description').value = service.description || '';
+    document.getElementById('price').value = service.price || '';
+    document.getElementById('description2').value = service.description2 || '';
+    document.getElementById('question').value = service.question || '';
+    document.getElementById('isActive').checked = service.isActive || false;
+
+    if (service.dates) {
+        const date = new Date(service.dates);
+        document.getElementById('dates').value = date.toISOString().split('T')[0];
+    }
+
+    // Update image source path
+    if (service.image) {
+        document.getElementById('imagePreview').src = `../${service.image}`; // Adjusted path
+        document.getElementById('imagePreview').style.display = 'block';
+    } else {
+        document.getElementById('imagePreview').style.display = 'none';
+    }
+}
+
+document.getElementById('imageFile').addEventListener('change', function (event) {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            const img = document.getElementById('imagePreview');
+            img.src = e.target.result;
+            img.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+    }
+});
+
 document.getElementById('updateServiceForm').addEventListener('submit', async function (event) {
-    event.preventDefault(); // Prevent the default form submission
+    event.preventDefault();
 
     const formData = new FormData();
-    formData.append('ServiceName', document.getElementById('serviceName').value);
+    const serviceName = document.getElementById('serviceName').value;
+
+    if (!serviceName) {
+        showToast('Please select a service to update.', 'error');
+        return;
+    }
+
+    formData.append('ServiceName', serviceName);
     formData.append('Description', document.getElementById('description').value);
-    formData.append('Price', document.getElementById('price').value);
+
+    const priceValue = parseFloat(document.getElementById('price').value);
+    if (isNaN(priceValue) || priceValue <= 0) {
+        showToast('Please enter a valid price.', 'error');
+        return;
+    }
+    formData.append('Price', priceValue);
     formData.append('Description2', document.getElementById('description2').value);
     formData.append('Question', document.getElementById('question').value);
     formData.append('IsActive', document.getElementById('isActive').checked);
 
     const dateInput = document.getElementById('dates').value;
     if (dateInput) {
-        const formattedDate = new Date(dateInput).toISOString().split('T')[0];
-        formData.append('Dates', formattedDate);
+        const dateObj = new Date(dateInput);
+        formData.append('Dates[year]', dateObj.getFullYear());
+        formData.append('Dates[month]', dateObj.getMonth() + 1);
+        formData.append('Dates[day]', dateObj.getDate());
+        formData.append('Dates[dayOfWeek]', dateObj.getDay());
     }
 
     const imageFile = document.getElementById('imageFile').files[0];
     if (imageFile) {
+        const validImageTypes = ['image/jpeg', 'image/png', 'image/gif'];
+        if (!validImageTypes.includes(imageFile.type)) {
+            showToast('Please upload a valid image file (JPEG, PNG, or GIF).', 'error');
+            return;
+        }
         formData.append('ImageFile', imageFile);
     }
 
@@ -105,11 +215,31 @@ document.getElementById('updateServiceForm').addEventListener('submit', async fu
         const result = await response.json();
         console.log('Service updated:', result);
         showToast('Service updated successfully!', 'success');
+
+        document.getElementById('updateServiceForm').reset();
+        document.getElementById('imagePreview').style.display = 'none';
+        loadServices(); // Reload services to reflect updates
+
     } catch (error) {
-        console.error('Error:', error);
+        console.error('Error:', error.message);
         showToast('Failed to update service. Please try again.', 'error');
     }
 });
+
+// Load services when the page is loaded
+document.addEventListener('DOMContentLoaded', loadServices);
+
+
+
+
+
+
+
+
+
+
+
+
 
 // Add event listener for delete button
 document.getElementById('deleteServiceBtn').addEventListener('click', async function () {
