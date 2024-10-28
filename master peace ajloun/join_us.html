@@ -20,6 +20,7 @@
 
     <!-- SweetAlert JS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css" />
 
     <style>
         .titlepages {
@@ -284,10 +285,8 @@
                                     </div>
                                 </div>
                                 <p class="footer_about_text">
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                                    Vivamus quis vu lputate eros, iaculis consequat nisl. Nunc
-                                    et suscipit urna. Integer eleme ntum orci eu vehicula
-                                    pretium.
+                                    Discover the beauty of Ajloun, Jordan. From historic sites to scenic landscapes, explore what makes Ajloun a unique
+                                    destination. Contact us for more information or plan your visit today!
                                 </p>
                                 <ul class="footer_social_list">
                                     <li class="footer_social_item">
@@ -358,23 +357,42 @@
                     </div>
 
                     <!-- Footer Column -->
-                    <div class="col-lg-3 footer_column">
-                        <div class="footer_col">
-                            <div class="footer_title">tags</div>
-                            <div class="footer_content footer_tags">
-                                <ul class="tags_list clearfix">
-                                    <li class="tag_item"><a href="telefrik.html">Telefrik</a></li>
-                                    <li class="tag_item"><a href="castle.html">Castle</a></li>
-                                    <li class="tag_item"><a href="cabins.html">cabins</a></li>
-                                    <li class="tag_item"><a href="forest_reserve.html">Forest Reserve</a></li>
-                                    <li class="tag_item"><a href="zipline.html">Hiking Zipline</a></li>
-                                    <li class="tag_item"><a href="rajeb_waterfalls.html">Rajib</a></li>
-                                    <li class="tag_item"><a href="natural_trails.html">trails</a></li>
-                                    <li class="tag_item"><a href="mar_elias.html">Mar Elias</a></li>
-                                </ul>
-                            </div>
+                <div class="col-lg-3 footer_column">
+                    <div class="footer_col">
+                        <div class="footer_title">tags</div>
+                        <div class="footer_content footer_tags">
+                            <ul class="tags_list clearfix">
+                                <li class="tag_item">
+                                    <a href="">Telefrik</a>
+                                </li>
+                                <li class="tag_item">
+                                    <a href="">Castle</a>
+                                </li>
+                                <li class="tag_item">
+                                    <a href="">cabins</a>
+                                </li>
+                                <li class="tag_item">
+                                    <a href="">
+                                        Forest Reserve </a>
+                                </li>
+                                <li class="tag_item">
+                                    <a href=""> Hiking
+                                        Zipline </a>
+                                </li>
+                                <li class="tag_item">
+                                    <a href="">Rajib</a>
+                                </li>
+                                <li class="tag_item">
+                                    <a href="">trails</a>
+                                </li>
+                                <li class="tag_item">
+                                    <a href=""> Mar Elias
+                                    </a>
+                                </li>
+                            </ul>
                         </div>
                     </div>
+                </div>
 
                     <!-- Footer Column -->
                     <div class="col-lg-3 footer_column">
@@ -487,10 +505,11 @@
     <script src="/path/to/cdn/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
 
     <script>
 
-        // Check if JWT is in local storage
+       // Check if JWT is in local storage
         document.addEventListener("DOMContentLoaded", function () {
             // Check if the element with ID 'userBox' exists
             const userBox = document.getElementById('userBox');
@@ -502,14 +521,12 @@
                 if (token) {
                     // If user is logged in (JWT token found), show profile link
                     userBox.innerHTML = `
-            <a href="edit_profile.html" id ="profile_icon">Profile</a>         <small style="color: whitesmoke;">|</small>
-
-
-
-            <div class="user_box_link">
-            <a href="#" id="logoutButton">Logout</a>
-            </div>
-            `;
+                            <a href="edit_profile.html" id ="profile_icon">Profile</a>         
+                            <small style="color: whitesmoke;">|</small>
+                            <div class="user_box_link">
+                                <a href="#" id="logoutButton">Logout</a>
+                            </div>
+                        `;
 
                     // Attach logout functionality to the "Logout" button
                     document.getElementById('logoutButton').addEventListener('click', function (event) {
@@ -519,13 +536,13 @@
                 } else {
                     // If user is not logged in, show login/register links
                     userBox.innerHTML = `
-                <div class="user_box_login user_box_link">
-                    <a href="login.html">Login</a>
-                </div>
-                <div class="user_box_register user_box_link">
-                    <a href="login.html">Register</a>
-                </div>
-            `;
+                            <div class="user_box_login user_box_link">
+                                <a href="login.html">Login</a>
+                            </div>
+                            <div class="user_box_register user_box_link">
+                                <a href="login.html">Register</a>
+                            </div>
+                        `;
                 }
             } else {
                 console.error("Element with ID 'userBox' not found.");
@@ -535,9 +552,16 @@
         // Function to handle logout, moved outside of the event listener
         function logout() {
             localStorage.removeItem('jwt'); // Remove JWT from local storage
-            alert("Logged out successfully!");
-            window.location.reload(); // Reload the page to refresh the navbar
+
+            // استخدام AlertifyJS لإظهار رسالة نجاح عند تسجيل الخروج
+            alertify.success("Logged out successfully!");
+
+            // إعادة تحميل الصفحة لتحديث الشريط العلوي
+            setTimeout(() => {
+                window.location.reload();
+            }, 1000); // تأخير قليل قبل إعادة التحميل حتى يمكن رؤية الرسالة
         }
+
     </script>
 </body>
 

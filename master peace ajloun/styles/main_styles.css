@@ -1890,19 +1890,6 @@ strong {
 	background: black;
 }
 
-.img-container {
-	display: flex;
-	justify-content: space-between;
-	width: 100%;
-	margin: -8% 0 10% 0;
-	padding: 0;
-}
-
-.img-container img {
-	width: 100%;
-	height: 20vh;
-}
-
 .footer_title {
 	font-size: 15px;
 	font-weight: 700;
@@ -1911,7 +1898,7 @@ strong {
 }
 
 /*********************************
-13.1 Footer - About
+8.1 Footer - About
 *********************************/
 
 .footer_about {
@@ -1934,7 +1921,7 @@ strong {
 	display: inline-block;
 	width: 31px;
 	height: 31px;
-	border: solid 1px white;
+	border: solid 1px green;
 	border-radius: 50%;
 	text-align: center;
 	-webkit-transition: all 200ms ease;
@@ -1979,11 +1966,11 @@ strong {
 }
 
 .footer_social_item:hover a i {
-	color: green;
+	color: black;
 }
 
 /*********************************
-13.2 Footer - Blog
+8.2 Footer - Blog
 *********************************/
 
 .footer_blog {
@@ -2035,7 +2022,7 @@ strong {
 }
 
 /*********************************
-13.3 Footer - Tags
+8.3 Footer - Tags
 *********************************/
 
 .footer_tags {
@@ -2047,7 +2034,7 @@ strong {
 	float: left;
 	margin-right: 9px;
 	margin-bottom: 9px;
-	border: solid 1px darkgreen;
+	border: solid 1px green;
 	-webkit-transition: all 200ms ease;
 	-moz-transition: all 200ms ease;
 	-ms-transition: all 200ms ease;
@@ -2056,7 +2043,7 @@ strong {
 }
 
 .tag_item:hover {
-	background: green;
+	background: darkgreen;
 }
 
 .tag_item a {
@@ -2070,7 +2057,7 @@ strong {
 }
 
 /*********************************
-13.4 Footer - Contact Info
+8.4 Footer - Contact Info
 *********************************/
 
 .contact_info_list {
@@ -2105,7 +2092,7 @@ strong {
 }
 
 /*********************************
-14. Copyright
+9. Copyright
 *********************************/
 
 .copyright {
@@ -2140,7 +2127,7 @@ strong {
 .footer_nav_item a {
 	font-size: 12px;
 	font-weight: 600;
-	color: darkgreen;
+	color: white;
 	text-transform: uppercase;
 	line-height: 2;
 	-webkit-transition: all 200ms ease;

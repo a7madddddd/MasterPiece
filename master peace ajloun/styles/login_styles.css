@@ -1068,8 +1068,6 @@ section {
     background: black;
 }
 
-
-
 .footer_title {
     font-size: 15px;
     font-weight: 700;
@@ -1121,13 +1119,12 @@ section {
     position: relative;
     width: 100%;
     height: 100%;
-    color: white !important;
 }
 
 .footer_social_item a i {
     display: block;
     position: relative;
-    color: white !important;
+    color: #FFFFFF;
     top: 50%;
     -webkit-transform: translateY(-50%);
     -moz-transform: translateY(-50%);
@@ -1147,7 +1144,7 @@ section {
 }
 
 .footer_social_item:hover a i {
-    color: white !important;
+    color: black;
 }
 
 /*********************************
@@ -1321,7 +1318,6 @@ section {
 .footer_nav_item a:hover {
     color: #FFFFFF;
 }
-
 
 
 

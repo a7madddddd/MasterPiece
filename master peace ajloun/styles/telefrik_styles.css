@@ -1169,7 +1169,7 @@ section {
 }
 
 /*********************************
-6.1 Footer - About
+8.1 Footer - About
 *********************************/
 
 .footer_about {
@@ -1192,7 +1192,7 @@ section {
 	display: inline-block;
 	width: 31px;
 	height: 31px;
-	border: solid 1px darkgreen;
+	border: solid 1px green;
 	border-radius: 50%;
 	text-align: center;
 	-webkit-transition: all 200ms ease;
@@ -1237,11 +1237,11 @@ section {
 }
 
 .footer_social_item:hover a i {
-	color: white;
+	color: black;
 }
 
 /*********************************
-6.2 Footer - Blog
+8.2 Footer - Blog
 *********************************/
 
 .footer_blog {
@@ -1283,18 +1283,17 @@ section {
 
 .footer_blog_title a:hover {
 	color: green;
-	text-decoration: none;
 }
 
 .footer_blog_date {
 	font-size: 12px;
 	font-weight: 400;
-	color: green;
+	color: darkgreen;
 	margin-top: 7px;
 }
 
 /*********************************
-6.3 Footer - Tags
+8.3 Footer - Tags
 *********************************/
 
 .footer_tags {
@@ -1315,7 +1314,7 @@ section {
 }
 
 .tag_item:hover {
-	background: green;
+	background: darkgreen;
 }
 
 .tag_item a {
@@ -1328,13 +1327,8 @@ section {
 	padding-right: 25px;
 }
 
-.tag_item a:hover {
-	color: white;
-	text-decoration: none;
-}
-
 /*********************************
-6.4 Footer - Contact Info
+8.4 Footer - Contact Info
 *********************************/
 
 .contact_info_list {
@@ -1369,7 +1363,7 @@ section {
 }
 
 /*********************************
-7. Copyright
+9. Copyright
 *********************************/
 
 .copyright {
@@ -1383,7 +1377,7 @@ section {
 .copyright_content div {
 	font-size: 12px;
 	font-weight: 600;
-	color: white;
+	color: green;
 }
 
 .footer_nav_container {
@@ -1416,7 +1410,6 @@ section {
 
 .footer_nav_item a:hover {
 	color: #FFFFFF;
-	text-decoration: none;
 }
 
 /*  */

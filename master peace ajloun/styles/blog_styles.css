@@ -1149,7 +1149,7 @@ section {
 	width: 100%;
 	padding-top: 113px;
 	padding-bottom: 104px;
-	background: #31124b;
+	background: black;
 }
 
 .footer_title {
@@ -1183,7 +1183,7 @@ section {
 	display: inline-block;
 	width: 31px;
 	height: 31px;
-	border: solid 1px #fa9e1b;
+	border: solid 1px green;
 	border-radius: 50%;
 	text-align: center;
 	-webkit-transition: all 200ms ease;
@@ -1224,11 +1224,11 @@ section {
 }
 
 .footer_social_item:hover {
-	background: #fa9e1b;
+	background: green;
 }
 
 .footer_social_item:hover a i {
-	color: #31124b;
+	color: black;
 }
 
 /*********************************
@@ -1273,13 +1273,13 @@ section {
 }
 
 .footer_blog_title a:hover {
-	color: #fa9e1b;
+	color: green;
 }
 
 .footer_blog_date {
 	font-size: 12px;
 	font-weight: 400;
-	color: #fa9e1b;
+	color: darkgreen;
 	margin-top: 7px;
 }
 
@@ -1296,7 +1296,7 @@ section {
 	float: left;
 	margin-right: 9px;
 	margin-bottom: 9px;
-	border: solid 1px #fa9e1b;
+	border: solid 1px green;
 	-webkit-transition: all 200ms ease;
 	-moz-transition: all 200ms ease;
 	-ms-transition: all 200ms ease;
@@ -1305,7 +1305,7 @@ section {
 }
 
 .tag_item:hover {
-	background: #fa9e1b;
+	background: darkgreen;
 }
 
 .tag_item a {
@@ -1350,7 +1350,7 @@ section {
 
 .contact_info_item:hover .contact_info_text,
 .contact_info_item:hover .contact_info_text a {
-	color: #fa9e1b;
+	color: green;
 }
 
 /*********************************
@@ -1358,7 +1358,7 @@ section {
 *********************************/
 
 .copyright {
-	background: #1f0733;
+	background: black;
 }
 
 .copyright_content {
@@ -1368,7 +1368,7 @@ section {
 .copyright_content div {
 	font-size: 12px;
 	font-weight: 600;
-	color: #685677;
+	color: green;
 }
 
 .footer_nav_container {
@@ -1389,7 +1389,7 @@ section {
 .footer_nav_item a {
 	font-size: 12px;
 	font-weight: 600;
-	color: #685677;
+	color: white;
 	text-transform: uppercase;
 	line-height: 2;
 	-webkit-transition: all 200ms ease;
