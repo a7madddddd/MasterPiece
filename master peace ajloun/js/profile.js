@@ -91,7 +91,13 @@ document.getElementById('open-popup').addEventListener('click', function () {
             title: 'Access Denied',
             text: 'You must be logged in to book a tour.',
             confirmButtonText: 'OK'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                
+                window.location.href = 'login.html';
+            }
         });
+    
     }
 });
 

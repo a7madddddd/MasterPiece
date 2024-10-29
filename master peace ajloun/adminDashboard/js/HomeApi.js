@@ -59,9 +59,9 @@ function populateTable(data) {
         const row = document.createElement('tr');
         row.innerHTML = `
             <td><input class="form-check-input" type="checkbox"></td>
-            <td>${booking.bookingId || 'N/A'}</td>
-            <td>${booking.bookingDate ? new Date(booking.bookingDate).toLocaleDateString() : 'N/A'}</td>
+            
             <td>${booking.serviceName || 'N/A'}</td>
+            <td>${booking.bookingDate ? new Date(booking.bookingDate).toLocaleDateString() : 'N/A'}</td>
             <td>${booking.username || 'N/A'}</td>
             <td>${booking.numberOfPeople || 'N/A'}</td>
             <td>${(booking.totalAmount || 0).toFixed(2)} jd</td>
