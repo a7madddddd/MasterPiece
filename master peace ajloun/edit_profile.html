@@ -35,7 +35,7 @@
         rel="stylesheet">
     <link href="plugins/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
     <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css" />
 
     <script src="js/ProfileApi.js"></script>
     <style>
@@ -175,10 +175,10 @@
                                     <li class="main_nav_item">
                                         <a href="services.html">services</a>
                                     </li>
+                                    <li class="main_nav_item"><a href="#">about us</a></li>
                                     <li class="main_nav_item">
                                         <a href="contact.html">contact</a>
                                     </li>
-                                    <li class="main_nav_item"><a href="#">about us</a></li>
                                     <li class="main_nav_item"><a href="book.html">booking</a></li>
                                 </ul>
                             </div>
@@ -373,27 +373,39 @@
                             <div class="d-flex align-items-center justify-content-between border-bottom">
                                 <p class="py-2">First Name</p>
                                 <input type="text" id="firstName" class="form-control py-2" name="firstName"
-                                    placeholder="First Name">
+                                    placeholder="First Name" oninput="validateFirstName()">
                             </div>
+                            <span id="firstNameError" class="text-danger"></span>
                             <div class="d-flex align-items-center justify-content-between border-bottom">
                                 <p class="py-2">Last Name</p>
                                 <input type="text" id="lastName" name="lastName" class="form-control py-2"
-                                    placeholder="Last Name">
+                                    placeholder="Last Name" oninput="validateLastName()">
                             </div>
+                            <span id="lastNameError" class="text-danger"></span>
+
                             <div class="d-flex align-items-center justify-content-between border-bottom">
                                 <p class="py-2">Email</p>
                                 <input type="email" id="email" class="form-control materialize-textarea" name="email"
-                                    placeholder="Email" disabled style="opacity: 0.7;">
+                                    placeholder="Email" disabled style="opacity: 0.3; cursor: not-allowed;">
                             </div>
                             <div class="d-flex align-items-center justify-content-between border-bottom">
                                 <p class="py-2">Phone</p>
                                 <input type="tel" id="phone" class="form-control py-2" name="phone"
-                                    placeholder="Enter Phone Number">
+                                    placeholder="Enter Phone Number" oninput="validatePhone()">
                             </div>
+                            <span id="phoneError" class="text-danger"></span>
                             <div class="d-flex align-items-center justify-content-between border-bottom">
                                 <p class="py-2">Password</p>
                                 <input type="password" id="password" class="form-control py-2" name="password"
-                                    placeholder="*******">
+                                    placeholder="*******" oninput="validatePassword()">
+                            </div>
+                            <div class="d-flex align-items-center justify-content-between border-bottom">
+                                <p class="py-2">New Password</p>
+                                <input type="password" id="password" class="form-control py-2" name="password" placeholder="*******">
+                            </div>
+                            <div class="d-flex align-items-center justify-content-between border-bottom">
+                                <p class="py-2">Confirm New password</p>
+                                <input type="password" id="password" class="form-control py-2" name="password" placeholder="*******">
                             </div>
                             <div class="d-flex">
                                 <button type="submit" class="btn btn-primary follow me-2" id="saveChanges">Save
@@ -459,226 +471,227 @@
 
         <!-- ///////////// -->
         <!-- Footer -->
-<!-- Footer -->
-<footer class="footer">
+        <!-- Footer -->
+        <footer class="footer">
 
-    <div class="container">
-        <div class="row">
-            <!-- Footer Column -->
-            <div class="col-lg-3 footer_column">
-                <div class="footer_col">
-                    <div class="footer_content footer_about">
-                        <div class="logo_container footer_logo">
-                            <div class="logo">
-                                <a href="#"><img src="image/alogo.png" alt="" /></a>
-                            </div>
-                        </div>
-                        <p class="footer_about_text">
-                            Discover the beauty of Ajloun, Jordan. From historic sites to scenic landscapes, explore
-                            what makes Ajloun a unique
-                            destination. Contact us for more information or plan your visit today!
-                        </p>
-                        <ul class="footer_social_list">
-                            <li class="footer_social_item">
-                                <a href="#"><i class="fa fa-pinterest"></i></a>
-                            </li>
-                            <li class="footer_social_item">
-                                <a href="#"><i class="fa fa-facebook-f"></i></a>
-                            </li>
-                            <li class="footer_social_item">
-                                <a href="#"><i class="fa fa-twitter"></i></a>
-                            </li>
-                            <li class="footer_social_item">
-                                <a href="#"><i class="fa fa-dribbble"></i></a>
-                            </li>
-                            <li class="footer_social_item">
-                                <a href="#"><i class="fa fa-behance"></i></a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Footer Column -->
-            <div class="col-lg-3 footer_column">
-                <div class="footer_col">
-                    <div class="footer_title">services</div>
-                    <div class="footer_content footer_blog">
-                        <!-- Footer blog item -->
-                        <div class="footer_blog_item clearfix">
-                            <div class="footer_blog_image">
-                                <img src="image/images (91).jpg" alt="" />
-                            </div>
-                            <div class="footer_blog_content">
-                                <div class="footer_blog_title">
-                                    <a href="blog.html">Travel with us this year</a>
+            <div class="container">
+                <div class="row">
+                    <!-- Footer Column -->
+                    <div class="col-lg-3 footer_column">
+                        <div class="footer_col">
+                            <div class="footer_content footer_about">
+                                <div class="logo_container footer_logo">
+                                    <div class="logo">
+                                        <a href="#"><img src="image/alogo.png" alt="" /></a>
+                                    </div>
                                 </div>
-                                <div class="footer_blog_date">Nov 29, 2024</div>
-                            </div>
-                        </div>
-
-                        <!-- Footer blog item -->
-                        <div class="footer_blog_item clearfix">
-                            <div class="footer_blog_image">
-                                <img src="image/images (88).jpg" alt="" />
-                            </div>
-                            <div class="footer_blog_content">
-                                <div class="footer_blog_title">
-                                    <a href="blog.html">New destinations for you</a>
-                                </div>
-                                <div class="footer_blog_date">Nov 29, 2024</div>
-                            </div>
-                        </div>
-
-                        <!-- Footer blog item -->
-                        <div class="footer_blog_item clearfix">
-                            <div class="footer_blog_image">
-                                <img src="image/images (95).jpg" alt="" />
-                            </div>
-                            <div class="footer_blog_content">
-                                <div class="footer_blog_title">
-                                    <a href="blog.html">Travel with us this year</a>
-                                </div>
-                                <div class="footer_blog_date">Nov 29, 2024</div>
+                                <p class="footer_about_text">
+                                    Discover the beauty of Ajloun, Jordan. From historic sites to scenic landscapes,
+                                    explore
+                                    what makes Ajloun a unique
+                                    destination. Contact us for more information or plan your visit today!
+                                </p>
+                                <ul class="footer_social_list">
+                                    <li class="footer_social_item">
+                                        <a href="#"><i class="fa fa-pinterest"></i></a>
+                                    </li>
+                                    <li class="footer_social_item">
+                                        <a href="#"><i class="fa fa-facebook-f"></i></a>
+                                    </li>
+                                    <li class="footer_social_item">
+                                        <a href="#"><i class="fa fa-twitter"></i></a>
+                                    </li>
+                                    <li class="footer_social_item">
+                                        <a href="#"><i class="fa fa-dribbble"></i></a>
+                                    </li>
+                                    <li class="footer_social_item">
+                                        <a href="#"><i class="fa fa-behance"></i></a>
+                                    </li>
+                                </ul>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
 
-            <!-- Footer Column -->
-            <div class="col-lg-3 footer_column">
-                <div class="footer_col">
-                    <div class="footer_title">tags</div>
-                    <div class="footer_content footer_tags">
-                        <ul class="tags_list clearfix">
-                            <li class="tag_item">
-                                <a href="">Telefrik</a>
-                            </li>
-                            <li class="tag_item">
-                                <a href="">Castle</a>
-                            </li>
-                            <li class="tag_item">
-                                <a href="">cabins</a>
-                            </li>
-                            <li class="tag_item">
-                                <a href="">
-                                    Forest Reserve </a>
-                            </li>
-                            <li class="tag_item">
-                                <a href=""> Hiking
-                                    Zipline </a>
-                            </li>
-                            <li class="tag_item">
-                                <a href="">Rajib</a>
-                            </li>
-                            <li class="tag_item">
-                                <a href="">trails</a>
-                            </li>
-                            <li class="tag_item">
-                                <a href=""> Mar Elias
-                                </a>
-                            </li>
-                        </ul>
+                    <!-- Footer Column -->
+                    <div class="col-lg-3 footer_column">
+                        <div class="footer_col">
+                            <div class="footer_title">services</div>
+                            <div class="footer_content footer_blog">
+                                <!-- Footer blog item -->
+                                <div class="footer_blog_item clearfix">
+                                    <div class="footer_blog_image">
+                                        <img src="image/images (91).jpg" alt="" />
+                                    </div>
+                                    <div class="footer_blog_content">
+                                        <div class="footer_blog_title">
+                                            <a href="blog.html">Travel with us this year</a>
+                                        </div>
+                                        <div class="footer_blog_date">Nov 29, 2024</div>
+                                    </div>
+                                </div>
+
+                                <!-- Footer blog item -->
+                                <div class="footer_blog_item clearfix">
+                                    <div class="footer_blog_image">
+                                        <img src="image/images (88).jpg" alt="" />
+                                    </div>
+                                    <div class="footer_blog_content">
+                                        <div class="footer_blog_title">
+                                            <a href="blog.html">New destinations for you</a>
+                                        </div>
+                                        <div class="footer_blog_date">Nov 29, 2024</div>
+                                    </div>
+                                </div>
+
+                                <!-- Footer blog item -->
+                                <div class="footer_blog_item clearfix">
+                                    <div class="footer_blog_image">
+                                        <img src="image/images (95).jpg" alt="" />
+                                    </div>
+                                    <div class="footer_blog_content">
+                                        <div class="footer_blog_title">
+                                            <a href="blog.html">Travel with us this year</a>
+                                        </div>
+                                        <div class="footer_blog_date">Nov 29, 2024</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Footer Column -->
+                    <div class="col-lg-3 footer_column">
+                        <div class="footer_col">
+                            <div class="footer_title">tags</div>
+                            <div class="footer_content footer_tags">
+                                <ul class="tags_list clearfix">
+                                    <li class="tag_item">
+                                        <a href="">Telefrik</a>
+                                    </li>
+                                    <li class="tag_item">
+                                        <a href="">Castle</a>
+                                    </li>
+                                    <li class="tag_item">
+                                        <a href="">cabins</a>
+                                    </li>
+                                    <li class="tag_item">
+                                        <a href="">
+                                            Forest Reserve </a>
+                                    </li>
+                                    <li class="tag_item">
+                                        <a href=""> Hiking
+                                            Zipline </a>
+                                    </li>
+                                    <li class="tag_item">
+                                        <a href="">Rajib</a>
+                                    </li>
+                                    <li class="tag_item">
+                                        <a href="">trails</a>
+                                    </li>
+                                    <li class="tag_item">
+                                        <a href=""> Mar Elias
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Footer Column -->
+                    <div class="col-lg-3 footer_column">
+                        <div class="footer_col">
+                            <div class="footer_title">contact info</div>
+                            <div class="footer_content footer_contact">
+                                <ul class="contact_info_list">
+                                    <li class="contact_info_item d-flex flex-row">
+                                        <div>
+                                            <div class="contact_info_icon">
+                                                <img src="images/placeholder.svg" alt="" />
+                                            </div>
+                                        </div>
+                                        <div class="contact_info_text">
+                                            Ajloun, Jordan, 268 Main Street
+
+                                        </div>
+                                    </li>
+                                    <li class="contact_info_item d-flex f lex-row">
+                                        <div>
+                                            <div class="contact_info_icon">
+                                                <img src="images/phone-call.svg" alt="" />
+                                            </div>
+                                        </div>
+                                        <div class="contact_info_text">0782347393</div>
+                                    </li>
+                                    <li class="contact_info_item d-flex flex-row">
+                                        <div>
+                                            <div class="contact_info_icon">
+                                                <img src="images/message.svg" alt="" />
+                                            </div>
+                                        </div>
+                                        <div class="contact_info_text">
+                                            <a href="mailto:contactme@gmail.com?Subject=Hello"
+                                                target="_top">contactme@gmail.com</a>
+                                        </div>
+                                    </li>
+                                    <li class="contact_info_item d-flex flex-row">
+                                        <div>
+                                            <div class="contact_info_icon">
+                                                <img src="images/planet-earth.svg" alt="" />
+                                            </div>
+                                        </div>
+                                        <div class="contact_info_text">
+                                            <a href="">www.info.com</a>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
+        </footer>
 
-            <!-- Footer Column -->
-            <div class="col-lg-3 footer_column">
-                <div class="footer_col">
-                    <div class="footer_title">contact info</div>
-                    <div class="footer_content footer_contact">
-                        <ul class="contact_info_list">
-                            <li class="contact_info_item d-flex flex-row">
-                                <div>
-                                    <div class="contact_info_icon">
-                                        <img src="images/placeholder.svg" alt="" />
-                                    </div>
-                                </div>
-                                <div class="contact_info_text">
-                                    Ajloun, Jordan, 268 Main Street
+        <!-- Copyright -->
 
-                                </div>
-                            </li>
-                            <li class="contact_info_item d-flex f lex-row">
-                                <div>
-                                    <div class="contact_info_icon">
-                                        <img src="images/phone-call.svg" alt="" />
-                                    </div>
-                                </div>
-                                <div class="contact_info_text">0782347393</div>
-                            </li>
-                            <li class="contact_info_item d-flex flex-row">
-                                <div>
-                                    <div class="contact_info_icon">
-                                        <img src="images/message.svg" alt="" />
-                                    </div>
-                                </div>
-                                <div class="contact_info_text">
-                                    <a href="mailto:contactme@gmail.com?Subject=Hello"
-                                        target="_top">contactme@gmail.com</a>
-                                </div>
-                            </li>
-                            <li class="contact_info_item d-flex flex-row">
-                                <div>
-                                    <div class="contact_info_icon">
-                                        <img src="images/planet-earth.svg" alt="" />
-                                    </div>
-                                </div>
-                                <div class="contact_info_text">
-                                    <a href="">www.info.com</a>
-                                </div>
-                            </li>
-                        </ul>
+        <div class="copyright">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-3 order-lg-1 order-2">
+                        <div class="copyright_content d-flex flex-row align-items-center">
+                            <div>
+                                <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                                &copy;
+
+                                All rights reserved | <a href="" target="_blank" style="color: white">Ahmad Onizat</a>
+
+                                <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</footer>
-
-<!-- Copyright -->
-
-<div class="copyright">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-3 order-lg-1 order-2">
-                <div class="copyright_content d-flex flex-row align-items-center">
-                    <div>
-                        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                        &copy;
-
-                        All rights reserved | <a href="" target="_blank" style="color: white">Ahmad Onizat</a>
-
-                        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-9 order-lg-2 order-1">
-                <div class="footer_nav_container d-flex flex-row align-items-center justify-content-lg-end">
-                    <div class="footer_nav">
-                        <ul class="footer_nav_list">
-                            <li class="footer_nav_item"><a href="index.html">home</a></li>
-                            <li class="footer_nav_item">
-                                <a href="contact.html">contact us</a>
-                            </li>
-                            <li class="footer_nav_item">
-                                <a href="about.html">about us</a>
-                            </li>
-                            <!-- <li class="footer_nav_item">
+                    <div class="col-lg-9 order-lg-2 order-1">
+                        <div class="footer_nav_container d-flex flex-row align-items-center justify-content-lg-end">
+                            <div class="footer_nav">
+                                <ul class="footer_nav_list">
+                                    <li class="footer_nav_item"><a href="index.html">home</a></li>
+                                    <li class="footer_nav_item">
+                                        <a href="contact.html">contact us</a>
+                                    </li>
+                                    <li class="footer_nav_item">
+                                        <a href="about.html">about us</a>
+                                    </li>
+                                    <!-- <li class="footer_nav_item">
                     <a href="offers.html">offers</a>
                   </li> -->
-                            <li class="footer_nav_item">
-                                <!-- <a href="blog.html">news</a> -->
-                            </li>
-                        </ul>
+                                    <li class="footer_nav_item">
+                                        <!-- <a href="blog.html">news</a> -->
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
     </div>
 
 
@@ -698,7 +711,7 @@
 
 
 
-<script src="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
 
     <!-- <script src="js/profile.js"></script> -->
     <script src="js/jquery-3.2.1.min.js"></script>
@@ -718,7 +731,7 @@
 
     <script>
 
-      // Check if JWT is in local storage
+        // Check if JWT is in local storage
         document.addEventListener("DOMContentLoaded", function () {
             // Check if the element with ID 'userBox' exists
             const userBox = document.getElementById('userBox');

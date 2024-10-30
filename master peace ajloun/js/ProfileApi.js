@@ -322,3 +322,58 @@ function logout() {
     alert("Logged out successfully!");
     window.location.reload(); // Reload the page to refresh the navbar
 }
+
+
+
+////////////////// validation
+
+function validateFirstName() {
+    const firstName = document.getElementById("firstName").value.trim();
+    const nameRegex = /^[A-Za-z\s]+$/;
+    const firstNameError = document.getElementById("firstNameError");
+
+    if (!nameRegex.test(firstName)) {
+        firstNameError.textContent = "Only letters allowed.";
+    } else {
+        firstNameError.textContent = "";
+    }
+}
+
+function validateLastName() {
+    const lastName = document.getElementById("lastName").value.trim();
+    const nameRegex = /^[A-Za-z\s]+$/;
+    const lastNameError = document.getElementById("lastNameError");
+
+    if (!nameRegex.test(lastName)) {
+        lastNameError.textContent = "Only letters allowed.";
+    } else {
+        lastNameError.textContent = "";
+    }
+}
+
+function validatePhone() {
+    const phone = document.getElementById("phone").value.trim();
+    const phoneRegex = /^[0-9]{10}$/;
+    const phoneError = document.getElementById("phoneError");
+
+    if (!phoneRegex.test(phone)) {
+        phoneError.textContent = "Enter a 10-digit number.";
+    } else {
+        phoneError.textContent = "";
+    }
+}
+
+function validatePassword() {
+    const password = document.getElementById("password").value;
+    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+    const passwordError = document.getElementById("passwordError");
+
+    if (!passwordRegex.test(password)) {
+        passwordError.textContent = "At least 8 characters with letters and numbers.";
+    } else {
+        passwordError.textContent = "";
+    }
+}
+
+
+
