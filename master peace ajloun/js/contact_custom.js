@@ -138,13 +138,14 @@ $(document).ready(function()
 
 	*/
 
-	function initGoogleMap()
-	{
-		var myLatlng = new google.maps.LatLng(36.132229, -5.351153);
-    	var mapOptions = 
-    	{
-    		center: myLatlng,
-	       	zoom: 17,
+	function initGoogleMap() {
+		// تعديل الإحداثيات الخاصة بعجلون (عند دوار عجلون كمثال)
+		var myLatlng = new google.maps.LatLng(32.3329, 35.7518);  // إحداثيات عجلون
+
+		var mapOptions =
+		{
+			center: myLatlng,
+			zoom: 14,  // مستوى التكبير يمكن تغييره حسب الحاجة
 			mapTypeId: google.maps.MapTypeId.ROADMAP,
 			draggable: true,
 			scrollwheel: false,
@@ -158,17 +159,15 @@ $(document).ready(function()
 			streetViewControl: false,
 			rotateControl: false,
 			fullscreenControl: true,
-			styles:[]
-    	}
+			styles: []
+		}
 
-    	// Initialize a map with options
-    	map = new google.maps.Map(document.getElementById('map'), mapOptions);
-   
+		// Initialize a map with options
+		map = new google.maps.Map(document.getElementById('map'), mapOptions);
+
 		// Re-center map after window resize
-		google.maps.event.addDomListener(window, 'resize', function()
-		{
-			setTimeout(function()
-			{
+		google.maps.event.addDomListener(window, 'resize', function () {
+			setTimeout(function () {
 				google.maps.event.trigger(map, "resize");
 				map.setCenter(myLatlng);
 			}, 1400);

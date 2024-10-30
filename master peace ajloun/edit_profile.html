@@ -97,6 +97,10 @@
             border-radius: 8px;
             /* Optional: Add rounded corners to images */
         }
+
+        #editProfile input[disabled] {
+            cursor: not-allowed;
+        }
     </style>
 </head>
 
@@ -369,50 +373,66 @@
                 <div class="col-md-7 ps-md-4">
                     <div class="row">
                         <div class="col-12 bg-white px-3 mb-3 pb-3">
-                            <input type="text" id="username" class="form-control py-2" placeholder="Username" hidden>
-                            <div class="d-flex align-items-center justify-content-between border-bottom">
-                                <p class="py-2">First Name</p>
-                                <input type="text" id="firstName" class="form-control py-2" name="firstName"
-                                    placeholder="First Name" oninput="validateFirstName()">
-                            </div>
-                            <span id="firstNameError" class="text-danger"></span>
-                            <div class="d-flex align-items-center justify-content-between border-bottom">
-                                <p class="py-2">Last Name</p>
-                                <input type="text" id="lastName" name="lastName" class="form-control py-2"
-                                    placeholder="Last Name" oninput="validateLastName()">
-                            </div>
-                            <span id="lastNameError" class="text-danger"></span>
+                            <form id="userProfileForm">
+                                <input type="text" id="username" class="form-control py-2" placeholder="Username"
+                                    hidden>
+                                <div class="d-flex align-items-center justify-content-between border-bottom">
+                                    <p class="py-2">First Name</p>
+                                    <input type="text" id="firstName" class="form-control py-2" name="firstName"
+                                        placeholder="First Name" oninput="validateFirstName()">
+                                </div>
+                                <span id="firstNameError" class="text-danger"></span>
 
-                            <div class="d-flex align-items-center justify-content-between border-bottom">
-                                <p class="py-2">Email</p>
-                                <input type="email" id="email" class="form-control materialize-textarea" name="email"
-                                    placeholder="Email" disabled style="opacity: 0.3; cursor: not-allowed;">
-                            </div>
-                            <div class="d-flex align-items-center justify-content-between border-bottom">
-                                <p class="py-2">Phone</p>
-                                <input type="tel" id="phone" class="form-control py-2" name="phone"
-                                    placeholder="Enter Phone Number" oninput="validatePhone()">
-                            </div>
-                            <span id="phoneError" class="text-danger"></span>
-                            <div class="d-flex align-items-center justify-content-between border-bottom">
-                                <p class="py-2">Password</p>
-                                <input type="password" id="password" class="form-control py-2" name="password"
-                                    placeholder="*******" oninput="validatePassword()">
-                            </div>
-                            <div class="d-flex align-items-center justify-content-between border-bottom">
-                                <p class="py-2">New Password</p>
-                                <input type="password" id="password" class="form-control py-2" name="password" placeholder="*******">
-                            </div>
-                            <div class="d-flex align-items-center justify-content-between border-bottom">
-                                <p class="py-2">Confirm New password</p>
-                                <input type="password" id="password" class="form-control py-2" name="password" placeholder="*******">
-                            </div>
-                            <div class="d-flex">
-                                <button type="submit" class="btn btn-primary follow me-2" id="saveChanges">Save
-                                    Changes</button>
-                            </div>
+                                <div class="d-flex align-items-center justify-content-between border-bottom">
+                                    <p class="py-2">Last Name</p>
+                                    <input type="text" id="lastName" name="lastName" class="form-control py-2"
+                                        placeholder="Last Name" oninput="validateLastName()">
+                                </div>
+                                <span id="lastNameError" class="text-danger"></span>
+
+                                <div class="d-flex align-items-center justify-content-between border-bottom">
+                                    <p class="py-2">Email</p>
+                                    <input type="email" id="email" class="form-control materialize-textarea"
+                                        name="email" placeholder="Email" disabled
+                                        style="opacity: 0.3; cursor: not-allowed;">
+                                </div>
+
+                                <div class="d-flex align-items-center justify-content-between border-bottom">
+                                    <p class="py-2">Phone</p>
+                                    <input type="tel" id="phone" class="form-control py-2" name="phone"
+                                        placeholder="Enter Phone Number" oninput="validatePhone()">
+                                </div>
+                                <span id="phoneError" class="text-danger"></span>
+
+                                <div class="d-flex align-items-center justify-content-between border-bottom">
+                                    <p class="py-2">Current Password</p>
+                                    <input type="password" id="currentPassword" class="form-control py-2"
+                                        name="currentPassword" placeholder="Enter current password"
+                                        oninput="UserProfileManager.handleCurrentPasswordInput()">
+                                </div>
+                                <span id="currentPasswordError" class="text-danger"></span>
+
+                                <div class="d-flex align-items-center justify-content-between border-bottom">
+                                    <p class="py-2">New Password</p>
+                                    <input type="password" id="newPassword" class="form-control py-2" name="newPassword"
+                                        placeholder="Enter new password" oninput="validateNewPassword()" disabled>
+                                </div>
+                                <span id="newPasswordError" class="text-danger"></span>
+
+                                <div class="d-flex align-items-center justify-content-between border-bottom">
+                                    <p class="py-2">Confirm New Password</p>
+                                    <input type="password" id="confirmPassword" class="form-control py-2"
+                                        name="confirmPassword" placeholder="Confirm new password"
+                                        oninput="validatePasswordMatch()" disabled>
+                                </div>
+                                <span id="confirmPasswordError" class="text-danger"></span>
+
+                                <div class="d-flex mt-3">
+                                    <button type="submit" class="btn btn-primary follow me-2" id="saveChanges">Save
+                                        Changes</button>
+                                </div>
+                            </form>
                         </div>
-                        </form>
                         <!-- Booking Table -->
                         <div class="col-12 bg-white px-3 pb-2 shadow-sm rounded">
                             <h6 class="d-flex align-items-center mb-3 fw-bold py-3">

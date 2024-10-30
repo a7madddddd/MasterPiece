@@ -218,6 +218,13 @@ namespace MasterPieceApi.Controllers
             });
         }
 
+
+
+
+
+
+
+
         /// <summary>
         /// ///////////
         /// </summary>
@@ -496,8 +503,42 @@ namespace MasterPieceApi.Controllers
             }
         }
 
+
+        [HttpPost("VerifyPassword")]
+        public async Task<IActionResult> VerifyPassword([FromBody] VerifyPasswordRequest request)
+        {
+            // Find the user by username or email
+            var user = await _context.Users
+                .FirstOrDefaultAsync(u => u.Username == request.UsernameOrEmail || u.Email == request.UsernameOrEmail);
+
+            if (user == null)
+            {
+                return NotFound(new { message = "User not found" });
+            }
+
+            // Verify the password
+            bool isPasswordValid = BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash);
+
+            if (isPasswordValid)
+            {
+                return Ok(new { message = "Password verified successfully" });
+            }
+            else
+            {
+                return Unauthorized(new { message = "Invalid password" });
+            }
+        }
     }
 
+    public class VerifyPasswordRequest
+    {
+        public string UsernameOrEmail { get; set; }
+        public string Password { get; set; }
+    }
+
+
 }
+
+
 
 

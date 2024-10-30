@@ -118,159 +118,246 @@ document.addEventListener("DOMContentLoaded", function () {
 ///////////////////////
 
 
+// User Profile Manager Module
+const UserProfileManager = {
+    init() {
+        const token = localStorage.getItem('jwt');
+        if (!this.validateToken(token)) return;
 
-
-
-// JavaScript code
-document.addEventListener('DOMContentLoaded', function () {
-    const form = document.getElementById('userProfileForm');
-    const token = localStorage.getItem('jwt');
-
-    // Validate JWT and check token expiration
-    if (token) {
         const decodedToken = jwt_decode(token);
-        const userId = decodedToken.userId || decodedToken.sub; // Adjust based on your JWT
+        const userId = decodedToken.userId || decodedToken.sub;
 
-        // Token expiration check
-        const isTokenExpired = decodedToken.exp * 1000 < Date.now();
-        if (isTokenExpired) {
-            console.error("JWT token is expired");
-            alert("Session expired, please log in again.");
-            window.location.href = 'login.html'; // Adjust the URL as needed
+        this.setupEventListeners(userId, token);
+        this.fetchUserData(userId, token);
+    },
 
+    validateToken(token) {
+        if (!token) {
+            this.handleAuthError("JWT token is missing in local storage");
+            return false;
         }
 
-        console.log('User ID:', userId);
+        try {
+            const decodedToken = jwt_decode(token);
+            if (decodedToken.exp * 1000 < Date.now()) {
+                this.handleAuthError("JWT token is expired");
+                return false;
+            }
+        } catch (error) {
+            console.error("Token decoding failed:", error);
+            this.handleAuthError("Invalid JWT token");
+            return false;
+        }
+        return true;
+    },
 
-        // Function to fetch and display user data
-        function fetchUserData() {
-            fetch(`https://localhost:44321/api/Users/GetUserProfile/${userId}`, {
-                method: 'GET',
+    handleAuthError(message) {
+        console.error(message);
+        alert("Session expired, please log in again.");
+        window.location.href = 'login.html';
+    },
+
+    async verifyPassword(userId, currentPassword, token) {
+        try {
+            const decodedToken = jwt_decode(token);
+            const usernameOrEmail = decodedToken.username || decodedToken.email; // Adjust based on actual token structure
+
+            const response = await fetch(`https://localhost:44321/api/Users/VerifyPassword`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    userId,
+                    password: currentPassword,
+                    UsernameOrEmail: usernameOrEmail // Add the required UsernameOrEmail field
+                })
+            });
+
+            if (!response.ok) {
+                const errorMessage = await response.text();
+                console.error('Password verification failed:', errorMessage);
+            }
+            return response.ok;
+        } catch (error) {
+            console.error('Error verifying password:', error);
+            return false;
+        }
+    },
+    async handleCurrentPasswordInput() {
+        const currentPassword = document.getElementById('currentPassword').value;
+        const token = localStorage.getItem('jwt');
+        const decodedToken = jwt_decode(token);
+        const userId = decodedToken.userId || decodedToken.sub;
+
+        if (currentPassword) {
+            const isPasswordCorrect = await this.verifyPassword(userId, currentPassword, token);
+            if (isPasswordCorrect) {
+                this.enableNewPasswordFields();
+                document.getElementById('currentPasswordError').textContent = ''; // Clear error message if correct
+            } else {
+                this.disableNewPasswordFields();
+                document.getElementById('currentPasswordError').textContent = 'Incorrect current password.';
+            }
+        } else {
+            this.disableNewPasswordFields(); // Keep new password fields disabled if no current password entered
+        }
+    },
+
+    enableNewPasswordFields() {
+        document.getElementById('newPassword').disabled = false;
+        document.getElementById('confirmPassword').disabled = false;
+    },
+
+    disableNewPasswordFields() {
+        document.getElementById('newPassword').disabled = true;
+        document.getElementById('confirmPassword').disabled = true;
+    },
+
+    fetchUserData(userId, token) {
+        fetch(`https://localhost:44321/api/Users/GetUserProfile/${userId}`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        })
+            .then(response => {
+                if (!response.ok) throw new Error(`Failed to fetch user data: ${response.status}`);
+                return response.json();
+            })
+            .then(data => this.populateUserData(data))
+            .catch(error => console.error('Error fetching user data:', error));
+    },
+
+    populateUserData(data) {
+        const fields = ['username', 'firstName', 'lastName', 'email', 'phone'];
+        fields.forEach(field => {
+            const element = document.getElementById(field);
+            if (element) element.value = data[field] || '';
+        });
+
+        if (data.profileImage) {
+            document.getElementById('userPhoto').src = data.profileImage;
+        }
+
+        document.getElementById('userName').textContent = `${data.firstName} ${data.lastName}`;
+        if (data.location) {
+            document.getElementById('userLocation').textContent = data.location;
+        }
+    },
+
+    async validatePasswordChange(newPassword, currentPassword, userId, token) {
+        if (!newPassword) return true;
+
+        if (!currentPassword) {
+            alert('Please enter your current password to change it.');
+            return false;
+        }
+
+        const isPasswordValid = await this.verifyPassword(userId, currentPassword, token);
+        if (!isPasswordValid) {
+            alert('Current password is incorrect.');
+            return false;
+        }
+
+        if (newPassword.length < 6) {
+            alert('New password must be at least 6 characters long.');
+            return false;
+        }
+
+        return true;
+    },
+
+    buildFormData(userId, newPassword) {
+        const formData = new FormData();
+        formData.append('UserId', userId);
+
+        const fields = ['username', 'firstName', 'lastName', 'email', 'phone'];
+        fields.forEach(field => {
+            const element = document.getElementById(field);
+            if (element?.value) formData.append(field, element.value);
+        });
+
+        if (newPassword) {
+            formData.append('password', newPassword);
+        }
+
+        const profilePicture = document.getElementById('profile-picture');
+        if (profilePicture && profilePicture.files && profilePicture.files.length > 0) {
+            formData.append('usersImagesFile', profilePicture.files[0]);
+        }
+
+        return formData;
+    },
+
+    async updateUserProfile(userId, token, formData) {
+        try {
+            const response = await fetch(`https://localhost:44321/api/Users/UpdateUserProfile/${userId}`, {
+                method: 'PUT',
+                body: formData,
                 headers: {
                     'Accept': 'application/json',
                     'Authorization': `Bearer ${token}`
                 }
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Failed to fetch user data');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    // Populate form fields with user data
-                    document.getElementById('username').value = data.username || '';
-                    document.getElementById('firstName').value = data.firstName || '';
-                    document.getElementById('lastName').value = data.lastName || '';
-                    document.getElementById('email').value = data.email || '';
-                    document.getElementById('phone').value = data.phone || '';
-
-                    // Set profile image if available
-                    if (data.profileImage) {
-                        document.getElementById('userPhoto').src = data.profileImage;
-                    }
-
-                    // Set user name and location (if available)
-                    document.getElementById('userName').textContent = `${data.firstName} ${data.lastName}`;
-                    if (data.location) {
-                        document.getElementById('userLocation').textContent = data.location;
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-
-                });
-        }
-
-        // Call the function to fetch and display user data when the page loads
-        fetchUserData();
-
-        if (form) {
-            form.addEventListener('submit', function (event) {
-                event.preventDefault();
-
-                const formData = new FormData();
-                formData.append('UserId', userId);
-
-                // Append form fields (username, firstName, etc.)
-                const fields = ['username', 'firstName', 'lastName', 'email', 'phone', 'password'];
-                fields.forEach(field => {
-                    const element = document.getElementById(field);
-                    if (element && element.value) {
-                        formData.append(field, element.value);
-                    }
-                });
-
-                // Append profile picture (file upload)
-                const profilePicture = document.getElementById('profile-picture');
-                if (profilePicture.files.length > 0) {
-                    formData.append('usersImagesFile', profilePicture.files[0]);
-                }
-
-
-                fetch(`https://localhost:44321/api/Users/UpdateUserProfile/${userId}`, {
-                    method: 'PUT',
-                    body: formData,
-                    headers: {
-                        'Accept': 'application/json',
-                        'Authorization': `Bearer ${token}`
-                    }
-                })
-                    .then(response => {
-                        if (!response.ok) {
-                            return response.text().then(err => {
-                                throw new Error(`Failed to update user data: ${err}`);
-                            });
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        alert(data.message);
-                        document.getElementById('password').value = ''; // Clear password field on success
-                        fetchUserData(); // Refresh the user data after successful update
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        alert('Failed to update profile. Please try again.');
-                    });
             });
-        } else {
-            console.error("User profile form not found");
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(`Failed to update user data: ${errorText}`);
+            }
+
+            const data = await response.json();
+            alert(data.message);
+
+            // Clear password fields
+            ['password', 'currentPassword'].forEach(field => {
+                const element = document.getElementById(field);
+                if (element) element.value = '';
+            });
+
+            this.fetchUserData(userId, token);
+            return true;
+        } catch (error) {
+            console.error('Error updating user profile:', error);
+            alert('Failed to update profile. Please try again.');
+            return false;
         }
-    } else {
-        console.error("JWT token is missing in local storage");
-        alert("You are not authenticated. Please log in.");
-        window.location.href = 'login.html'; // Adjust the URL as needed
+    },
 
-    }
-});
+    setupEventListeners(userId, token) {
+        const form = document.getElementById('userProfileForm');
+        if (!form) {
+            console.error("User profile form not found");
+            return;
+        }
 
-
-
-
-
-/////////// update 
-
-
-
-
-// Usage:
-document.addEventListener('DOMContentLoaded', function () {
-    const form = document.getElementById('userProfileForm');
-    const token = localStorage.getItem('jwt');
-
-    if (form) {
-        form.addEventListener('submit', function (event) {
+        form.addEventListener('submit', async (event) => {
             event.preventDefault();
-            updateUserData(userId, token);
+
+            const newPassword = document.getElementById('confirmPassword').value;
+            const currentPassword = document.getElementById('currentPassword').value;
+
+            const isPasswordValid = await this.validatePasswordChange(
+                newPassword,
+                currentPassword,
+                userId,
+                token
+            );
+
+            if (!isPasswordValid) return;
+
+            const formData = this.buildFormData(userId, newPassword);
+            await this.updateUserProfile(userId, token, formData);
         });
-    } else {
-        console.error("User profile form not found");
     }
-});
+};
 
 
 
+// Initialize the module when the DOM is loaded
+document.addEventListener('DOMContentLoaded', () => UserProfileManager.init());
 
 
 // Check if JWT is in local storage
@@ -326,54 +413,66 @@ function logout() {
 
 
 ////////////////// validation
+function validateNewPassword() {
+    const newPassword = document.getElementById('newPassword').value;
+    const errorElement = document.getElementById('newPasswordError');
 
-function validateFirstName() {
-    const firstName = document.getElementById("firstName").value.trim();
-    const nameRegex = /^[A-Za-z\s]+$/;
-    const firstNameError = document.getElementById("firstNameError");
-
-    if (!nameRegex.test(firstName)) {
-        firstNameError.textContent = "Only letters allowed.";
-    } else {
-        firstNameError.textContent = "";
+    if (newPassword && newPassword.length < 6) {
+        errorElement.textContent = 'Password must be at least 6 characters long';
+        return false;
     }
+
+    errorElement.textContent = '';
+    return true;
 }
 
-function validateLastName() {
-    const lastName = document.getElementById("lastName").value.trim();
-    const nameRegex = /^[A-Za-z\s]+$/;
-    const lastNameError = document.getElementById("lastNameError");
+function validatePasswordMatch() {
+    const newPassword = document.getElementById('newPassword').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
+    const errorElement = document.getElementById('confirmPasswordError');
 
-    if (!nameRegex.test(lastName)) {
-        lastNameError.textContent = "Only letters allowed.";
-    } else {
-        lastNameError.textContent = "";
+    if (confirmPassword && newPassword !== confirmPassword) {
+        errorElement.textContent = 'Passwords do not match';
+        return false;
     }
+
+    errorElement.textContent = '';
+    return true;
 }
 
-function validatePhone() {
-    const phone = document.getElementById("phone").value.trim();
-    const phoneRegex = /^[0-9]{10}$/;
-    const phoneError = document.getElementById("phoneError");
+// Add this to your existing UserProfileManager or form submit handler
+async function validatePasswordFields() {
+    const currentPassword = document.getElementById('currentPassword').value;
+    const newPassword = document.getElementById('newPassword').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
 
-    if (!phoneRegex.test(phone)) {
-        phoneError.textContent = "Enter a 10-digit number.";
-    } else {
-        phoneError.textContent = "";
+    // If no password change is attempted, return true
+    if (!newPassword && !confirmPassword) {
+        return true;
     }
-}
 
-function validatePassword() {
-    const password = document.getElementById("password").value;
-    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
-    const passwordError = document.getElementById("passwordError");
-
-    if (!passwordRegex.test(password)) {
-        passwordError.textContent = "At least 8 characters with letters and numbers.";
-    } else {
-        passwordError.textContent = "";
+    // Check if current password is provided when attempting to change password
+    if (!currentPassword) {
+        document.getElementById('currentPasswordError').textContent = 'Please enter your current password';
+        return false;
     }
+
+    // Validate new password
+    if (!validateNewPassword()) {
+        return false;
+    }
+
+    // Validate password match
+    if (!validatePasswordMatch()) {
+        return false;
+    }
+
+    // Verify current password with server
+    const isPasswordValid = await UserProfileManager.verifyPassword(userId, currentPassword, token);
+    if (!isPasswordValid) {
+        document.getElementById('currentPasswordError').textContent = 'Current password is incorrect';
+        return false;
+    }
+
+    return true;
 }
-
-
-
