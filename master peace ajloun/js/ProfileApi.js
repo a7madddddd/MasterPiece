@@ -153,9 +153,18 @@ const UserProfileManager = {
 
     handleAuthError(message) {
         console.error(message);
-        alert("Session expired, please log in again.");
-        window.location.href = 'login.html';
+
+        
+        Swal.fire({
+            title: 'Session Expired',
+            text: 'Please log in again.',
+            icon: 'warning',
+            confirmButtonText: 'OK'
+        }).then(() => {
+            window.location.href = 'login.html';
+        });
     },
+
 
     async verifyPassword(userId, currentPassword, token) {
         try {
@@ -252,18 +261,30 @@ const UserProfileManager = {
         if (!newPassword) return true;
 
         if (!currentPassword) {
-            alert('Please enter your current password to change it.');
+            await Swal.fire({
+                icon: 'warning',
+                title: 'Missing Current Password',
+                text: 'Please enter your current password to change it.',
+            });
             return false;
         }
 
         const isPasswordValid = await this.verifyPassword(userId, currentPassword, token);
         if (!isPasswordValid) {
-            alert('Current password is incorrect.');
+            await Swal.fire({
+                icon: 'error',
+                title: 'Incorrect Password',
+                text: 'Current password is incorrect.',
+            });
             return false;
         }
 
         if (newPassword.length < 6) {
-            alert('New password must be at least 6 characters long.');
+            await Swal.fire({
+                icon: 'info',
+                title: 'Password Too Short',
+                text: 'New password must be at least 6 characters long.',
+            });
             return false;
         }
 
@@ -309,7 +330,13 @@ const UserProfileManager = {
             }
 
             const data = await response.json();
-            alert(data.message);
+
+            // Display success message from response
+            await Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: data.message,
+            });
 
             // Clear password fields
             ['password', 'currentPassword'].forEach(field => {
@@ -321,7 +348,13 @@ const UserProfileManager = {
             return true;
         } catch (error) {
             console.error('Error updating user profile:', error);
-            alert('Failed to update profile. Please try again.');
+
+            // Display error message
+            await Swal.fire({
+                icon: 'error',
+                title: 'Update Failed',
+                text: 'Failed to update profile. Please try again.',
+            });
             return false;
         }
     },
@@ -404,11 +437,18 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 // Function to handle logout, moved outside of the event listener
-function logout() {
+async function logout() {
     localStorage.removeItem('jwt'); // Remove JWT from local storage
-    alert("Logged out successfully!");
+
+    await Swal.fire({
+        icon: 'success',
+        title: 'Logged Out',
+        text: 'Logged out successfully!',
+    });
+
     window.location.reload(); // Reload the page to refresh the navbar
 }
+
 
 
 
