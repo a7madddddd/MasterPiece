@@ -146,8 +146,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     text: 'Please select whether to continue as Admin or User',
                     icon: 'question',
                     showCancelButton: true,
-                    confirmButtonText: 'Admin',
-                    cancelButtonText: 'User',
+                    confirmButtonText: 'As Admin',
+                    cancelButtonText: 'As User',
                 });
 
                 // Redirect based on the choice
