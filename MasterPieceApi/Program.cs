@@ -1,3 +1,5 @@
+using MasterPieceApi.DTOs;
+using MasterPieceApi;
 using MasterPieceApi.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http.Features;
@@ -68,6 +70,12 @@ builder.Services.AddCors(options =>
 // Configure DbContext
 builder.Services.AddDbContext<MyDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DESKTOP-QJHUPSA")));
+
+
+
+builder.Services.AddScoped<IEmailService, EmailService>(); //  add this for sending email
+builder.Services.AddScoped<EmailServices>();
+builder.Services.AddTransient<EmailServices>();
 
 var app = builder.Build();
 

@@ -9,6 +9,7 @@ using MasterPieceApi.Models;
 using MasterPieceApi.DTOs;
 using System.Net.Mail;
 using System.Net;
+using System.Diagnostics.Contracts;
 
 namespace MasterPieceApi.Controllers
 {
@@ -17,10 +18,13 @@ namespace MasterPieceApi.Controllers
     public class PaymentsController : ControllerBase
     {
         private readonly MyDbContext _context;
+        private readonly IEmailService _emailService;
 
-        public PaymentsController(MyDbContext context)
+        public PaymentsController(MyDbContext context, IEmailService emailService)
         {
+
             _context = context;
+            _emailService = emailService;
         }
 
         // GET: api/Payments
@@ -117,63 +121,9 @@ namespace MasterPieceApi.Controllers
 
         // POST: api/payments/paymentByUserId
         // POST: api/payments/paymentByUserId
-  
 
-[HttpPost("paymentByUserId/{userId}")]
-        //public async Task<IActionResult> CreatePayment(int userId, [FromBody] PaymentDto paymentDto)
-        //{
-        //    if (paymentDto == null || userId <= 0)
-        //    {
-        //        return BadRequest("Invalid payment data.");
-        //    }
 
-        //    // Fetch user details from the database using userId
-        //    var user = await _context.Users.FirstOrDefaultAsync(u => u.UserId == userId);
-
-        //    if (user == null)
-        //    {
-        //        return NotFound("User not found.");
-        //    }
-
-        //    var payment = new Payment
-        //    {
-        //        UserId = userId,
-        //        Amount = paymentDto.Amount,
-        //        PaymentDate = DateTime.Now,
-        //        PaymentStatus = paymentDto.PaymentStatus,
-        //        PaymentMethod = paymentDto.PaymentMethod,
-        //        ServiceId = paymentDto.ServiceId
-        //    };
-
-        //    // Save the payment to the database
-        //    await _context.Payments.AddAsync(payment);
-        //    await _context.SaveChangesAsync();
-
-        //    // Send payment confirmation email
-        //    try
-        //    {
-        //        var service = await _context.Services
-        //                            .FirstOrDefaultAsync(s => s.ServiceId == paymentDto.ServiceId);
-
-        //        if (service != null)
-        //        {
-        //            await SendPaymentConfirmationEmail(user, payment, service);
-        //        }
-        //        else
-        //        {
-        //            Console.WriteLine("Service not found.");
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        // Log the error
-        //        Console.WriteLine($"Error sending payment confirmation email: {ex.Message}");
-        //        // Note: Do not fail the payment creation process due to email issues
-        //    }
-
-        //    return CreatedAtAction(nameof(CreatePayment), new { id = payment.PaymentId }, payment);
-        //}
-
+        [HttpPost("paymentByUserId/{userId}")]
         public async Task<IActionResult> CreatePayment(int userId, [FromBody] PaymentDto paymentDto)
         {
             if (paymentDto == null || userId <= 0)
@@ -214,14 +164,7 @@ namespace MasterPieceApi.Controllers
             await _context.SaveChangesAsync();
 
             // Optionally, remove the booking record or update its status
-            // To delete the booking
             _context.Bookings.Remove(booking);
-
-            // Or, to update the booking status, you might have a field like IsPaid or Status
-            // booking.Status = "Paid"; // Or any other status to indicate payment has been made
-            // _context.Bookings.Update(booking);
-
-            // Save changes to remove the booking
             await _context.SaveChangesAsync();
 
             // Send payment confirmation email
@@ -241,200 +184,62 @@ namespace MasterPieceApi.Controllers
             }
             catch (Exception ex)
             {
-                // Log the error
                 Console.WriteLine($"Error sending payment confirmation email: {ex.Message}");
-                // Note: Do not fail the payment creation process due to email issues
             }
 
             return CreatedAtAction(nameof(CreatePayment), new { id = payment.PaymentId }, payment);
         }
 
-
-
-
-        // Method to send payment confirmation email
+        // Updated method to send payment confirmation email using the email service
         private async Task SendPaymentConfirmationEmail(User user, Payment payment, Service service)
-    {
-        if (string.IsNullOrEmpty(user.Email))
         {
-            Console.WriteLine("User email is null or empty.");
-            return; // Exit the method if email is invalid
-        }
+            if (string.IsNullOrEmpty(user.Email))
+            {
+                Console.WriteLine("User email is null or empty.");
+                return;
+            }
 
             var emailBody = $@"
             <!DOCTYPE html>
             <html lang=""en"">
-            <head>
-                <meta charset=""UTF-8"">
-                <meta name=""viewport"" content=""width=device-width, initial-scale=1.0"">
-                <title>Payment Confirmation - Ajloun Tour 360</title>
-                <style>
-                    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
-
-                    body {{
-                        font-family: 'Roboto', Arial, sans-serif;
-                        margin: 0;
-                        padding: 0;
-                        background-color: #f4f7f9;
-                        color: #333333;
-                        line-height: 1.6;
-                    }}
-                    .container {{
-                        max-width: 90%;
-                        margin: 20px auto;
-                        background: #ffffff;
-                        border-radius: 8px;
-                        overflow: hidden;
-                        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-                    }}
-                    .header {{
-                        background-color: #3498db;
-                        color: #ffffff;
-                        padding: 30px;
-                        text-align: center;
-                    }}
-                    .header h1 {{
-                        margin: 0;
-                        font-size: 2.4em;
-                        font-weight: 700;
-                    }}
-                    .content {{
-                        padding: 30px;
-                    }}
-                    h2 {{
-                        color: #2c3e50;
-                        font-size: 2.2em;
-                        margin-top: 0;
-                    }}
-                    p {{
-                        margin-bottom: 20px;
-                    }}
-                    .service-details, .payment-details {{
-                        background-color: #f8f9fa;
-                        border-radius: 6px;
-                        padding: 20px;
-                        margin-bottom: 20px;
-                    }}
-                    .service-details h3, .payment-details h3 {{
-                        margin-top: 0;
-                        color: #2c3e50;
-                        font-size: 1.7em;
-                    }}
-                    ul {{
-                        list-style-type: none;
-                        padding: 0;
-                    }}
-                    li {{
-                        font-size: 1.2em;
-                        margin-bottom: 10px;
-                    }}
-                    .service-image {{
-                        width: 100%;
-                        height: auto;
-                        border-radius: 6px;
-                        margin-bottom: 20px;
-                    }}
-                    .highlight {{
-                        font-weight: 700;
-                        color: #3498db;
-                    }}
-                    .footer {{
-                        background-color: #34495e;
-                        color: #ffffff;
-                        text-align: center;
-                        padding: 20px;
-                        font-size: 1.5em;
-                    }}
-                    .footer p {{
-                        margin: 5px 0;
-                    }}
-                    .button {{
-                        display: inline-block;
-                        background-color: #3498db;
-                        color: #ffffff;
-                        text-decoration: none;
-                        padding: 10px 20px;
-                        border-radius: 5px;
-                        font-weight: 700;
-                        margin-top: 20px;
-                    }}
-                </style>
-            </head>
             <body>
-                <div class=""container"">
-                    <div class=""header"">
-                        <h1>Payment Confirmation</h1>
-                    </div>
-                    <div class=""content"">
-                        <h2>Thank you for your payment, {user.Username} !</h2>
-                        <p>We're excited to confirm that we've received your payment of <span class=""highlight"">JD {payment.Amount:F2}</span> for the following service:</p>
-
-                        <div class=""service-details"">
-                            <h3>Service Details</h3>
-                            <ul>
-                                <li><strong>Service:</strong> {service.ServiceName}</li>
-                                <li><strong>Price:</strong> JD {service.Price:F2}</li>
-                            </ul>
-                        </div>
-
-                        <img src=""{service.Image}"" alt=""{service.ServiceName}"" class=""service-image"" />
-
-                        <div class=""payment-details"">
-                            <h3>Payment Information</h3>
-                            <ul>
-                                <li><strong>Date:</strong> {(payment.PaymentDate?.ToString("f") ?? "N/A")}</li>
-                                <li><strong>Status:</strong> {payment.PaymentStatus}</li>
-                                <li><strong>Method:</strong> {payment.PaymentMethod}</li>
-                            </ul>
-                        </div>
-
-                        <p>If you have any questions or need further assistance, please don't hesitate to contact our support team. We're here to help!</p>
-
-                        <a href=""http://127.0.0.1:5501/contact.html"" class=""button"">Contact Support</a>
-                    </div>
-                    <div class=""footer"">
-                        <p>Thank you for choosing Ajloun Tour 360</p>
-                        <p>&copy; 2024 Ajloun Tour 360. All rights reserved For Ajloun Tour 360.</p>
-                    </div>
+                <div style='font-family: Arial, sans-serif;'>
+                    <h2>Thank you for your payment, {user.Username}!</h2>
+                    <p>We've received your payment of JD {payment.Amount:F2} for {service.ServiceName}.</p>
+                    <p><strong>Payment Information:</strong><br>
+                    Date: {payment.PaymentDate?.ToString("f") ?? "N/A"}<br>
+                    Status: {payment.PaymentStatus}<br>
+                    Method: {payment.PaymentMethod}</p>
+                    <p>Thank you for choosing Ajloun Tour 360.</p>
                 </div>
             </body>
-            </html>
-            ";
+            </html>";
 
-
-
-
-            var emailMessage = new MailMessage
-        {
-            From = new MailAddress("ajlountour@gmail.com"),
-            Subject = "Payment Confirmation",
-            Body = emailBody,
-            IsBodyHtml = true
-        };
-        emailMessage.To.Add(user.Email); // User's email
-
-        using var smtpClient = new SmtpClient("smtp.gmail.com")
-        {
-            Port = 587, // Standard port for TLS
-            Credentials = new NetworkCredential("ajlountour@gmail.com", "vtlh hmgs geta srzp"), // Use app password if 2FA is enabled
-            EnableSsl = true,
-        };
-
-        try
-        {
-            Console.WriteLine($"Sending email to: {user.Email}");
-            await smtpClient.SendMailAsync(emailMessage);
-            Console.WriteLine("Email sent successfully.");
+            try
+            {
+                await _emailService.SendEmailAsync(user.Email, "Payment Confirmation - Ajloun Tour 360", emailBody);
+                Console.WriteLine("Email sent successfully.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error sending email: {ex.Message}");
+            }
         }
-        catch (SmtpException smtpEx)
-        {
-            Console.WriteLine($"SMTP Error: {smtpEx.StatusCode} - {smtpEx.Message}");
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Error sending payment confirmation email: {ex.Message}, Stack Trace: {ex.StackTrace}");
-        }
-    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
