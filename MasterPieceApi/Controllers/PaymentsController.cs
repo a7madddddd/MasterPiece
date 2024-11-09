@@ -201,19 +201,67 @@ namespace MasterPieceApi.Controllers
 
             var emailBody = $@"
             <!DOCTYPE html>
-            <html lang=""en"">
-            <body>
-                <div style='font-family: Arial, sans-serif;'>
-                    <h2>Thank you for your payment, {user.Username}!</h2>
-                    <p>We've received your payment of JD {payment.Amount:F2} for {service.ServiceName}.</p>
-                    <p><strong>Payment Information:</strong><br>
-                    Date: {payment.PaymentDate?.ToString("f") ?? "N/A"}<br>
-                    Status: {payment.PaymentStatus}<br>
-                    Method: {payment.PaymentMethod}</p>
-                    <p>Thank you for choosing Ajloun Tour 360.</p>
-                </div>
-            </body>
-            </html>";
+                <html lang=""en"">
+                <head>
+                    <meta charset=""UTF-8"">
+                    <meta name=""viewport"" content=""width=device-width, initial-scale=1.0"">
+                </head>
+                <body style=""margin: 0; padding: 0; background-color: #f4f4f4;"">
+                    <table role=""presentation"" style=""width: 100%; border-collapse: collapse; background-color: #f4f4f4; font-family: Arial, sans-serif;"">
+                        <tr>
+                            <td style=""padding: 40px 0;"">
+                                <table role=""presentation"" style=""width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);"">
+                                    <!-- Header -->
+                                    <tr>
+                                        <td style=""background-color: #1a4674; padding: 40px 30px; border-radius: 8px 8px 0 0; text-align: center;"">
+                                            <h1 style=""color: #ffffff; margin: 0; font-size: 28px;"">Payment Confirmation</h1>
+                                        </td>
+                                    </tr>
+                    
+                                    <!-- Content -->
+                                    <tr>
+                                        <td style=""padding: 40px 30px;"">
+                                            <h2 style=""color: #333333; margin: 0 0 20px 0; font-size: 24px;"">Thank you for your payment, {user.Username}!</h2>
+                            
+                                            <p style=""color: #666666; font-size: 16px; line-height: 1.5; margin: 0 0 20px 0;"">
+                                                We're delighted to confirm your payment for <strong>{service.ServiceName}</strong>.
+                                            </p>
+
+                                            <!-- Payment Details Box -->
+                                            <table style=""width: 100%; background-color: #f8f9fa; border-radius: 6px; margin: 20px 0;"">
+                                                <tr>
+                                                    <td style=""padding: 20px;"">
+                                                        <h3 style=""color: #1a4674; margin: 0 0 15px 0; font-size: 18px;"">Payment Details</h3>
+                                                        <p style=""color: #666666; font-size: 16px; line-height: 1.6; margin: 0;"">
+                                                            <strong>Amount:</strong> JD {payment.Amount:F2}<br>
+                                                            <strong>Date:</strong> {payment.PaymentDate?.ToString("f") ?? "N/A"}<br>
+                                                            <strong>Status:</strong> <span style=""color: #28a745;"">{payment.PaymentStatus}</span><br>
+                                                            <strong>Payment Method:</strong> {payment.PaymentMethod}
+                                                        </p>
+                                                    </td>
+                                                </tr>
+                                            </table>
+
+                                            <p style=""color: #666666; font-size: 16px; line-height: 1.5; margin: 20px 0;"">
+                                                We're thrilled to have you experience Ajloun Tour 360. If you have any questions about your payment or our services, please don't hesitate to contact our support team.
+                                            </p>
+                                        </td>
+                                    </tr>
+
+                                    <!-- Footer -->
+                                    <tr>
+                                        <td style=""background-color: #f8f9fa; padding: 30px; border-radius: 0 0 8px 8px; text-align: center; border-top: 1px solid #eeeeee;"">
+                                            <p style=""color: #999999; font-size: 14px; margin: 0;"">
+                                                © 2024 Ajloun Tour 360. All rights reserved.
+                                            </p>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </body>
+                </html>";
 
             try
             {
