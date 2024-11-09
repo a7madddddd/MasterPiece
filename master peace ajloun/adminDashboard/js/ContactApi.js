@@ -162,7 +162,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-
 // Function to fetch and display messages in the main section
 async function fetchMessages() {
     try {
@@ -171,17 +170,22 @@ async function fetchMessages() {
         const data = await response.json();
 
         // Get the messages container div
-        const messagesContainer = document.getElementById('messages-container');
+        const messagesContainer = document.getElementById('messageDropdown');
+        if (!messagesContainer) {
+            console.error("Messages container not found.");
+            return;
+        }
 
         // Limit the number of messages to the first 4
         const limitedMessages = data.$values.slice(0, 4);
 
-        // Loop through the first 4 messages and create HTML content dynamically
+        // Build the HTML for all messages first
+        let messagesHTML = '';
         limitedMessages.forEach(message => {
             // Create the HTML structure for each message
-            const messageHTML = `
+            messagesHTML += `
                 <div class="d-flex align-items-center border-bottom py-3">
-                    <img class="rounded-circle flex-shrink-0" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
+                    
                     <div class="w-100 ms-3">
                         <div class="d-flex w-100 justify-content-between">
                             <h6 class="mb-0">${message.name}</h6>
@@ -190,13 +194,18 @@ async function fetchMessages() {
                         <span>${message.message}</span>
                     </div>
                 </div>
-                `;
-
-            // Append the message to the container
-            messagesContainer.innerHTML += messageHTML;
+            `;
         });
+
+        // Update the container once with all the messages
+        messagesContainer.innerHTML = messagesHTML;
+
     } catch (error) {
         console.error('Error fetching messages:', error);
+        const messagesContainer = document.getElementById('messageDropdown');
+        if (messagesContainer) {
+            messagesContainer.innerHTML = `<p class="text-danger">Unable to fetch messages at this time.</p>`;
+        }
     }
 }
 
@@ -209,16 +218,20 @@ async function fetchDropdownMessages() {
 
         // Get the dropdown menu container
         const messageDropdown = document.getElementById('messageDropdown');
+        if (!messageDropdown) {
+            console.error("Dropdown container not found.");
+            return;
+        }
 
         // Limit the messages to the first 4
         const limitedMessages = data.$values.slice(0, 4);
 
-        // Loop through the limited messages and create dropdown items
+        // Build the HTML for all messages first
+        let dropdownHTML = '';
         limitedMessages.forEach(message => {
-            const messageHTML = `
+            dropdownHTML += `
                 <a href="#" class="dropdown-item">
                     <div class="d-flex align-items-center">
-                        <img class="rounded-circle" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
                         <div class="ms-2">
                             <h6 class="fw-normal mb-0">${message.name} sent you a message</h6>
                             <small>${new Date(message.submittedAt).toLocaleTimeString()}</small>
@@ -226,20 +239,23 @@ async function fetchDropdownMessages() {
                     </div>
                 </a>
                 <hr class="dropdown-divider">
-                `;
-
-            // Append each message to the dropdown
-            messageDropdown.innerHTML += messageHTML;
+            `;
         });
 
         // Add "See all messages" link at the bottom
-        const seeAllLink = `
-                <a href="#" class="dropdown-item text-center">See all messages</a>
-            `;
-        messageDropdown.innerHTML += seeAllLink;
+        dropdownHTML += `
+            <a href="#" class="dropdown-item text-center">See all messages</a>
+        `;
+
+        // Update the dropdown once with all the messages
+        messageDropdown.innerHTML = dropdownHTML;
 
     } catch (error) {
         console.error('Error fetching dropdown messages:', error);
+        const messageDropdown = document.getElementById('messageDropdown');
+        if (messageDropdown) {
+            messageDropdown.innerHTML = `<p class="text-danger">Unable to fetch messages at this time.</p>`;
+        }
     }
 }
 
@@ -248,6 +264,7 @@ window.onload = function () {
     fetchMessages();          // Fetch messages for the main container
     fetchDropdownMessages();  // Fetch messages for the dropdown
 };
+
 
 
 
@@ -327,6 +344,22 @@ async function openReplyModal(messageId) {
     }
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // Confirm and delete a message by ID with SweetAlert
 function confirmDelete(messageId) {
     Swal.fire({
@@ -371,6 +404,115 @@ async function deleteMessage(messageId) {
         });
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+/////////// function to replay messages //////////////////////////////////
+// Function to load message data and populate form
+// Function to load message data and populate form
+async function loadMessageData() {
+    const contactId = localStorage.getItem('selectedContactId'); // Retrieve message ID from localStorage
+    if (!contactId) {
+        Swal.fire('Error', 'No message selected.', 'error');
+        return;
+    }
+
+    try {
+        // Fetch the message data from backend
+        const response = await fetch(`https://localhost:44321/api/ContactMessages/${contactId}`);
+        const data = await response.json();
+
+        // Populate the form with data
+        document.getElementById('userName').value = data.name;
+        document.getElementById('userEmail').value = data.email;
+        document.getElementById('messageSubject').value = data.subject;
+        document.getElementById('userMessage').value = data.message;
+
+    } catch (error) {
+        console.error('Failed to load message data:', error);
+        Swal.fire('Error', 'Failed to load message details.', 'error');
+    }
+}
+
+// Handle form submission for sending the reply
+document.getElementById('replyMessageForm').addEventListener('submit', async (event) => {
+    event.preventDefault();  // Prevent the default form submission behavior
+
+    const adminReply = document.getElementById('adminReply').value;
+
+    // Check if the reply is empty
+    if (!adminReply.trim()) {
+        Swal.fire('Warning', 'Please enter a reply message.', 'warning');
+        return;
+    }
+
+    const contactId = localStorage.getItem('selectedContactId');  // Retrieve selected contact ID
+
+    try {
+        // Create the payload object with the admin's reply
+        const replyData = {
+            name: document.getElementById('userName').value,
+            email: document.getElementById('userEmail').value,
+            subject: document.getElementById('messageSubject').value,
+            message: document.getElementById('userMessage').value,
+            replay: adminReply  // Use the "replay" field for the admin's response
+        };
+
+        // Send the reply to the backend API
+        const response = await fetch(`https://localhost:44321/api/ContactMessages/replyToMessage/${contactId}`, {
+            method: 'POST',  // POST method to send the reply
+            headers: {
+                'Content-Type': 'application/json'  // Set content type as JSON
+            },
+            body: JSON.stringify(replyData)  // Send the payload as a JSON string
+        });
+
+        // If the response is not OK, throw an error
+        if (!response.ok) throw new Error('Failed to send reply message');
+
+        // Show success alert
+        Swal.fire('Success', 'Reply sent successfully.', 'success');
+        document.getElementById('adminReply').value = '';  // Clear reply field after sending
+
+        // Close the modal if required (assuming you are using bootstrap)
+        const replyModal = bootstrap.Modal.getInstance(document.getElementById('replyModal'));
+        replyModal.hide();
+
+    } catch (error) {
+        // Handle error and show error alert
+        console.error('Error sending reply message:', error);
+        Swal.fire('Error', 'Failed to send reply message. Please try again.', 'error');
+    }
+});
+
+// Load message data on page load
+document.addEventListener('DOMContentLoaded', loadMessageData);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // Handle form submission for sending the reply
 document.getElementById('replyMessageForm').addEventListener('submit', async (event) => {
@@ -420,70 +562,3 @@ document.addEventListener('DOMContentLoaded', loadContactMessages);
 
 
 
-
-
-/////////// function to replay messages //////////////////////////////////
-// Function to load message data and populate form
-// Function to load message data and populate form
-async function loadMessageData() {
-    const contactId = localStorage.getItem('selectedContactId'); // Retrieve message ID from localStorage
-    if (!contactId) {
-        Swal.fire('Error', 'No message selected.', 'error');
-        return;
-    }
-
-    try {
-        const response = await fetch(`https://localhost:44321/api/ContactMessages/${contactId}`);
-        const data = await response.json();
-
-        // Populate the form with data
-        document.getElementById('userName').value = data.name;
-        document.getElementById('userEmail').value = data.email;
-        document.getElementById('messageSubject').value = data.subject;
-        document.getElementById('userMessage').value = data.message;
-
-    } catch (error) {
-        console.error('Failed to load message data:', error);
-        Swal.fire('Error', 'Failed to load message details.', 'error');
-    }
-}
-
-// Handle form submission for sending the reply
-document.getElementById('replyMessageForm').addEventListener('submit', async (event) => {
-    event.preventDefault();
-
-    const adminReply = document.getElementById('adminReply').value;
-
-    if (!adminReply.trim()) {
-        Swal.fire('Warning', 'Please enter a reply message.', 'warning');
-        return;
-    }
-
-    try {
-        const formData = new FormData();
-        formData.append('ContactId', localStorage.getItem('selectedContactId'));
-        formData.append('Name', document.getElementById('userName').value);
-        formData.append('Email', document.getElementById('userEmail').value);
-        formData.append('Subject', document.getElementById('messageSubject').value);
-        formData.append('Message', document.getElementById('userMessage').value);
-        formData.append('MessageReply', adminReply);
-
-        // Send reply message to backend API
-        const response = await fetch('http://localhost:25025/api/Contact/PostMessageToEmail', {
-            method: 'POST',
-            body: formData
-        });
-
-        if (!response.ok) throw new Error('Failed to send reply message');
-
-        Swal.fire('Success', 'Reply sent successfully.', 'success');
-        document.getElementById('adminReply').value = '';  // Clear reply field after sending
-
-    } catch (error) {
-        console.error('Error sending reply message:', error);
-        Swal.fire('Error', 'Failed to send reply message. Please try again.', 'error');
-    }
-});
-
-// Load message data on page load
-document.addEventListener('DOMContentLoaded', loadMessageData);
