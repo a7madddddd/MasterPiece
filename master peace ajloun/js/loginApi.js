@@ -39,7 +39,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 title: 'Registration Successful!',
                 text: 'You have successfully registered.',
                 confirmButtonText: 'OK'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Trigger the "Sign In" overlay button to switch to the login form
+                    document.getElementById("signIn").click();
+                }
             });
+
+
 
             // Optionally clear the form
             this.reset();
@@ -60,32 +67,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-
-    // // Sign In functionality
-        // document.getElementById('loginForm').addEventListener('submit', async function (event) {
-        //     event.preventDefault(); // Prevent default form submission
-        //     const email = document.getElementById('loginUsername').value; // Should correspond to Email in DTO
-        //     const password = document.getElementById('loginPassword').value; // Corresponds to Password in DTO
-
-        //     const response = await fetch('https://localhost:44321/api/Users/Login', {
-        //         method: 'POST',
-        //         headers: {
-        //             'Content-Type': 'application/json'
-        //         },
-        //         body: JSON.stringify({ email: email, password: password })
-        //     });
-
-
-        //     if (response.ok) {
-        //         const result = await response.json();
-        //         alert(`Welcome back, ${result.email}`);
-        //         localStorage.setItem('jwt', result.token);
-        //     } else {
-        //         const error = await response.json();
-        //         alert(error.message); // Display the error message from the API
-        //     }
-
-        // });
 
 
 
