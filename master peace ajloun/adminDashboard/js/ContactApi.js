@@ -249,3 +249,241 @@ window.onload = function () {
     fetchDropdownMessages();  // Fetch messages for the dropdown
 };
 
+
+
+
+
+
+
+
+//////////// conatct table //////////
+
+// Function to fetch and display the last 15 messages in the table
+// Function to fetch and display the last 15 messages in the table
+async function loadContactMessages() {
+    try {
+        const response = await fetch('https://localhost:44321/api/ContactMessages');
+
+        if (!response.ok) {
+            throw new Error(`Failed to load contact messages: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        console.log('Contact messages loaded:', data);
+
+        const contactTableBody = document.querySelector('.table tbody');
+        contactTableBody.innerHTML = '';  // Clear any existing rows
+
+        // Get only the last 15 messages in reverse order (newest first)
+        const lastMessages = data.$values.slice(-15).reverse();
+
+        lastMessages.forEach((message, index) => {
+            const formattedDate = new Date(message.submittedAt).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <th scope="row">${index + 1}</th>
+                <td>${message.name}</td>
+                <td>${message.subject}</td>
+                <td>${message.email}</td>
+                <td>${formattedDate}</td>
+                <td>
+                    <button class="btn btn-primary" onclick="openReplyModal(${message.messageId})">Reply</button>
+                    <button class="btn btn-danger" onclick="confirmDelete(${message.messageId})">Delete</button>
+                </td>
+            `;
+            contactTableBody.appendChild(row);
+        });
+    } catch (error) {
+        console.error('Error loading contact messages:', error);
+        Swal.fire('Error', 'Failed to load contact messages. Please try again later.', 'error');
+    }
+}
+
+// Open the reply modal and load the message data for the selected message
+async function openReplyModal(messageId) {
+    try {
+        const response = await fetch(`https://localhost:44321/api/ContactMessages/${messageId}`);
+        const data = await response.json();
+
+        // Populate the form fields with the message data
+        document.getElementById('userName').value = data.name;
+        document.getElementById('userEmail').value = data.email;
+        document.getElementById('messageSubject').value = data.subject;
+        document.getElementById('userMessage').value = data.message;
+
+        // Show the modal
+        const replyModal = new bootstrap.Modal(document.getElementById('replyModal'));
+        replyModal.show();
+    } catch (error) {
+        console.error('Failed to load message data:', error);
+        Swal.fire('Error', 'Failed to load message details.', 'error');
+    }
+}
+
+// Confirm and delete a message by ID with SweetAlert
+function confirmDelete(messageId) {
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "This action cannot be undone!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            deleteMessage(messageId);
+        }
+    });
+}
+
+// Function to delete a message by ID
+async function deleteMessage(messageId) {
+    try {
+        const response = await fetch(`https://localhost:44321/api/ContactMessages/${messageId}`, {
+            method: 'DELETE'
+        });
+
+        if (!response.ok) {
+            throw new Error(`Failed to delete message: ${response.statusText}`);
+        }
+
+        Swal.fire({
+            icon: 'success',
+            title: 'Deleted!',
+            text: 'Message deleted successfully.'
+        });
+
+        loadContactMessages();  // Refresh the table after deletion
+    } catch (error) {
+        console.error('Error deleting message:', error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Failed to delete the message. Please try again later.'
+        });
+    }
+}
+
+// Handle form submission for sending the reply
+document.getElementById('replyMessageForm').addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    const adminReply = document.getElementById('adminReply').value;
+
+    if (!adminReply.trim()) {
+        Swal.fire('Warning', 'Please enter a reply message.', 'warning');
+        return;
+    }
+
+    try {
+        const formData = new FormData();
+        formData.append('ContactId', localStorage.getItem('selectedContactId'));
+        formData.append('Name', document.getElementById('userName').value);
+        formData.append('Email', document.getElementById('userEmail').value);
+        formData.append('Subject', document.getElementById('messageSubject').value);
+        formData.append('Message', document.getElementById('userMessage').value);
+        formData.append('MessageReply', adminReply);
+
+        // Send reply message to backend API
+        const response = await fetch('http://localhost:25025/api/Contact/PostMessageToEmail', {
+            method: 'POST',
+            body: formData
+        });
+
+        if (!response.ok) throw new Error('Failed to send reply message');
+
+        Swal.fire('Success', 'Reply sent successfully.', 'success');
+        document.getElementById('adminReply').value = '';  // Clear reply field after sending
+
+        // Close the modal
+        const replyModal = bootstrap.Modal.getInstance(document.getElementById('replyModal'));
+        replyModal.hide();
+
+    } catch (error) {
+        console.error('Error sending reply message:', error);
+        Swal.fire('Error', 'Failed to send reply message. Please try again.', 'error');
+    }
+});
+
+// Call the function on page load
+document.addEventListener('DOMContentLoaded', loadContactMessages);
+
+
+
+
+
+
+
+/////////// function to replay messages //////////////////////////////////
+// Function to load message data and populate form
+// Function to load message data and populate form
+async function loadMessageData() {
+    const contactId = localStorage.getItem('selectedContactId'); // Retrieve message ID from localStorage
+    if (!contactId) {
+        Swal.fire('Error', 'No message selected.', 'error');
+        return;
+    }
+
+    try {
+        const response = await fetch(`https://localhost:44321/api/ContactMessages/${contactId}`);
+        const data = await response.json();
+
+        // Populate the form with data
+        document.getElementById('userName').value = data.name;
+        document.getElementById('userEmail').value = data.email;
+        document.getElementById('messageSubject').value = data.subject;
+        document.getElementById('userMessage').value = data.message;
+
+    } catch (error) {
+        console.error('Failed to load message data:', error);
+        Swal.fire('Error', 'Failed to load message details.', 'error');
+    }
+}
+
+// Handle form submission for sending the reply
+document.getElementById('replyMessageForm').addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    const adminReply = document.getElementById('adminReply').value;
+
+    if (!adminReply.trim()) {
+        Swal.fire('Warning', 'Please enter a reply message.', 'warning');
+        return;
+    }
+
+    try {
+        const formData = new FormData();
+        formData.append('ContactId', localStorage.getItem('selectedContactId'));
+        formData.append('Name', document.getElementById('userName').value);
+        formData.append('Email', document.getElementById('userEmail').value);
+        formData.append('Subject', document.getElementById('messageSubject').value);
+        formData.append('Message', document.getElementById('userMessage').value);
+        formData.append('MessageReply', adminReply);
+
+        // Send reply message to backend API
+        const response = await fetch('http://localhost:25025/api/Contact/PostMessageToEmail', {
+            method: 'POST',
+            body: formData
+        });
+
+        if (!response.ok) throw new Error('Failed to send reply message');
+
+        Swal.fire('Success', 'Reply sent successfully.', 'success');
+        document.getElementById('adminReply').value = '';  // Clear reply field after sending
+
+    } catch (error) {
+        console.error('Error sending reply message:', error);
+        Swal.fire('Error', 'Failed to send reply message. Please try again.', 'error');
+    }
+});
+
+// Load message data on page load
+document.addEventListener('DOMContentLoaded', loadMessageData);
