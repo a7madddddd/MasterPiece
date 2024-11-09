@@ -87,6 +87,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseStaticFiles();  // Enables serving static files from wwwroot
 
 // Enable CORS before authentication/authorization
 app.UseCors("AllowAllOrigins");

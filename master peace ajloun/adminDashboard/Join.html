@@ -109,9 +109,10 @@
                             class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
                     <a href="element.html" class="nav-item nav-link"><i class="fa fa-laptop me-2"></i>Profile</a>
 
-
-                    <a href="form.html" class="nav-item nav-link active"><i class="fa fa-keyboard me-2"></i>Services</a>
+                    <a href="form.html" class="nav-item nav-link "><i class="fa fa-keyboard me-2"></i>Services</a>
                     <a href="table.html" class="nav-item nav-link"><i class="fa fa-table me-2"></i>Users</a>
+                    <a href="Contact.html" class="nav-item nav-link"><i class="fa fa-table me-2"></i>Contacts</a>
+                    <a href="Join.html" class="nav-item nav-link active"><i class="fa fa-keyboard me-2"></i>Joins</a>
 
                 </div>
             </nav>
@@ -192,64 +193,68 @@
 
 
 
-
-<div class="container-fluid pt-4 px-4">
-    <div class="row g-4">
-        <div class="bg-secondary rounded h-100 p-4">
-            <h6 class="mb-4">Contact Messages</h6>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">Subject</th>
-                        <th scope="col">Email</th>
-                        <th scope="col">Date</th>
-                        <th scope="col">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Table rows will be added here by JavaScript -->
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
-
-<!-- Reply Modal -->
-<div class="modal fade" id="replyModal" tabindex="-1" aria-labelledby="replyModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content bg-secondary rounded">
-            <div class="modal-header">
-                <h5 class="modal-title" id="replyModalLabel">Reply to Message</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="container-fluid pt-4 px-4">
+                <div class="row g-4">
+                    <div class="bg-secondary rounded h-100 p-4">
+                        <h6 class="mb-4">Join Request</h6>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Phone</th>
+                                    <th scope="col">Email</th>
+                                    <th scope="col">Message</th>
+                                    <th scope="col">Image</th>
+                                    <th scope="col">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="joinRequestsTable">
+                                <!-- Dynamic rows will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
-            <div class="modal-body bg-secondary">
-                <form id="replyMessageForm">
-                    
-                    <div class="mb-3">
-                        <label for="userEmail" class="form-label">Email Address</label>
-                        <input type="email" class="form-control" id="userEmail" name="email" disabled>
+
+            <!-- Reply Modal -->
+            <div class="modal fade" id="replyModal" tabindex="-1" aria-labelledby="replyModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content bg-secondary rounded">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="replyModalLabel">Reply to Join Requests</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body bg-secondary">
+                            <form id="replyMessageForm">
+                                
+                                <div class="mb-3">
+                                    <label for="userEmail" class="form-label">Email Address</label>
+                                    <input type="email" class="form-control" id="userEmail" name="email" disabled>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="message" class="form-label">Message</label>
+                                    <input type="text" class="form-control" id="message" name="message" disabled>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="serviceImage" class="form-label">User Service Image</label>
+                                    <!-- Use an image element to display the user's service image -->
+                                    <img id="serviceImage" src="" alt="Service Image" class="form-control"
+                                        style="width: 100%; height:30vh;" disabled />
+                                </div>
+                                <div class="mb-3">
+                                    <label for="adminReply" class="form-label">Your Reply</label>
+                                    <textarea class="form-control" id="adminReply" name="adminMessage" rows="4"
+                                        placeholder="Enter your reply here"></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Send Reply</button>
+                            </form>
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label for="messageSubject" class="form-label">Subject</label>
-                        <input type="text" class="form-control" id="messageSubject" name="subject" disabled>
-                    </div>
-                    <div class="mb-3">
-                        <label for="userMessage" class="form-label">User Message</label>
-                        <textarea class="form-control" id="userMessage" name="message" rows="4" disabled></textarea>
-                    </div>
-                    <div class="mb-3">
-                        <label for="adminReply" class="form-label">Your Reply</label>
-                        <textarea class="form-control" id="adminReply" name="adminMessage" rows="4"
-                            placeholder="Enter your reply here"></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Send Reply</button>
-                </form>
+                </div>
             </div>
-        </div>
-    </div>
-</div>
+
+
 
 
 
@@ -298,13 +303,13 @@
     <script src="lib/tempusdominus/js/moment.min.js"></script>
     <script src="lib/tempusdominus/js/moment-timezone.min.js"></script>
     <script src="lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
-   
+
     <!-- SweetAlert2 JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
     <!-- my js -->
-    <script src="js/ContactApi.js"></script>
+    <script src="js/JoinApi.js"></script>
     <!-- Template Javascript -->
     <script src="js/main.js"></script>
 
@@ -321,13 +326,6 @@
                 toast.style.display = 'none';
             }, 3000);
         }
-
-        
-
-
-
-
-
 
 
     </script>
