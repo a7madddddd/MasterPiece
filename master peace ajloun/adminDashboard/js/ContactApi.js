@@ -420,6 +420,7 @@ async function deleteMessage(messageId) {
 /////////// function to replay messages //////////////////////////////////
 // Function to load message data and populate form
 // Function to load message data and populate form
+// Function to load message data and populate form
 async function loadMessageData() {
     const contactId = localStorage.getItem('selectedContactId'); // Retrieve message ID from localStorage
     if (!contactId) {
@@ -458,16 +459,16 @@ document.getElementById('replyMessageForm').addEventListener('submit', async (ev
 
     const contactId = localStorage.getItem('selectedContactId');  // Retrieve selected contact ID
 
-    try {
-        // Create the payload object with the admin's reply
-        const replyData = {
-            name: document.getElementById('userName').value,
-            email: document.getElementById('userEmail').value,
-            subject: document.getElementById('messageSubject').value,
-            message: document.getElementById('userMessage').value,
-            replay: adminReply  // Use the "replay" field for the admin's response
-        };
+    // Prepare the payload for the backend API
+    const replyData = {
+        name: document.getElementById('userName').value,
+        email: document.getElementById('userEmail').value,
+        subject: document.getElementById('messageSubject').value,
+        message: document.getElementById('userMessage').value,
+        replay: adminReply  // Use the "replay" field for the admin's response
+    };
 
+    try {
         // Send the reply to the backend API
         const response = await fetch(`https://localhost:44321/api/ContactMessages/replyToMessage/${contactId}`, {
             method: 'POST',  // POST method to send the reply
@@ -482,7 +483,9 @@ document.getElementById('replyMessageForm').addEventListener('submit', async (ev
 
         // Show success alert
         Swal.fire('Success', 'Reply sent successfully.', 'success');
-        document.getElementById('adminReply').value = '';  // Clear reply field after sending
+
+        // Clear the reply field after sending
+        document.getElementById('adminReply').value = '';
 
         // Close the modal if required (assuming you are using bootstrap)
         const replyModal = bootstrap.Modal.getInstance(document.getElementById('replyModal'));
@@ -528,7 +531,6 @@ document.getElementById('replyMessageForm').addEventListener('submit', async (ev
     try {
         const formData = new FormData();
         formData.append('ContactId', localStorage.getItem('selectedContactId'));
-        formData.append('Name', document.getElementById('userName').value);
         formData.append('Email', document.getElementById('userEmail').value);
         formData.append('Subject', document.getElementById('messageSubject').value);
         formData.append('Message', document.getElementById('userMessage').value);
@@ -550,8 +552,7 @@ document.getElementById('replyMessageForm').addEventListener('submit', async (ev
         replyModal.hide();
 
     } catch (error) {
-        console.error('Error sending reply message:', error);
-        Swal.fire('Error', 'Failed to send reply message. Please try again.', 'error');
+        
     }
 });
 

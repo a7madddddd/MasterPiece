@@ -170,17 +170,17 @@ namespace MasterPieceApi.Controllers
             // Send the reply email
             try
             {
-                // Send the reply email, using the contact message data and any admin message
-                await SendReplyEmail(contactMessageDto);
+                await SendReplyEmail(contactMessageDto); // Ensure this is awaited properly
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error sending reply email: {ex.Message}");
-                return StatusCode(500, "Error sending reply email.");
+                return StatusCode(500, "Error sending reply email.");  // Detailed error message
             }
 
             return Ok("Reply sent successfully.");
         }
+
 
 
 
@@ -191,79 +191,82 @@ namespace MasterPieceApi.Controllers
             if (string.IsNullOrEmpty(contactMessageDto.Email))
             {
                 Console.WriteLine("Contact email is null or empty.");
-                return;
+                throw new ArgumentException("Email is required.");
             }
 
             var emailBody = $@"
-            <!DOCTYPE html>
-            <html lang=""en"">
-            <head>
-                <meta charset=""UTF-8"">
-                <meta name=""viewport"" content=""width=device-width, initial-scale=1.0"">
-            </head>
-            <body style=""margin: 0; padding: 0; background-color: #f4f4f4;"">
-                <table role=""presentation"" style=""width: 100%; border-collapse: collapse; background-color: #f4f4f4; font-family: Arial, sans-serif;"">
-                    <tr>
-                        <td style=""padding: 40px 0;"">
-                            <table role=""presentation"" style=""width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);"">
-                                <!-- Header -->
-                                <tr>
-                                    <td style=""background-color: #1a4674; padding: 40px 30px; border-radius: 8px 8px 0 0; text-align: center;"">
-                                        <h1 style=""color: #ffffff; margin: 0; font-size: 28px;"">Reply to Your Inquiry</h1>
-                                    </td>
-                                </tr>
+                     <!DOCTYPE html>
+                     <html lang=""en"">
+                     <head>
+                         <meta charset=""UTF-8"">
+                         <meta name=""viewport"" content=""width=device-width, initial-scale=1.0"">
+                     </head>
+                     <body style=""margin: 0; padding: 0; background-color: #f4f4f4;"">
+                         <table role=""presentation"" style=""width: 100%; border-collapse: collapse; background-color: #f4f4f4; font-family: Arial, sans-serif;"">
+                             <tr>
+                                 <td style=""padding: 40px 0;"">
+                                     <table role=""presentation"" style=""width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);"">
+                                         <!-- Header -->
+                                         <tr>
+                                             <td style=""background-color: #1a4674; padding: 40px 30px; border-radius: 8px 8px 0 0; text-align: center;"">
+                                                 <h1 style=""color: #ffffff; margin: 0; font-size: 28px;"">Reply to Your Inquiry</h1>
+                                             </td>
+                                         </tr>
 
-                                <!-- Original Message and Admin Reply -->
-                                <tr>
-                                    <td style=""padding: 40px 30px;"">
-                                        <h2 style=""color: #333333; margin: 0 0 20px 0; font-size: 24px;"">Hello {contactMessageDto.Name},</h2>
+                                         <!-- Original Message and Admin Reply -->
+                                         <tr>
+                                             <td style=""padding: 40px 30px;"">
+                                                 <h2 style=""color: #333333; margin: 0 0 20px 0; font-size: 24px;"">Hello {contactMessageDto.Name},</h2>
 
-                                        <p style=""color: #666666; font-size: 16px; line-height: 1.5; margin: 0 0 20px 0;"">
-                                            Thank you for reaching out to us. Here’s our response to your inquiry regarding <strong>{contactMessageDto.Subject}</strong>.
-                                        </p>
+                                                 <p style=""color: #666666; font-size: 16px; line-height: 1.5; margin: 0 0 20px 0;"">
+                                                     Thank you for reaching out to us. Here’s our response to your inquiry regarding <strong>{contactMessageDto.Subject}</strong>.
+                                                 </p>
 
-                                        <p style=""background-color: #f8f9fa; padding: 20px; border-radius: 6px; color: #666666; font-size: 16px; line-height: 1.6; margin: 0 0 20px 0;"">
-                                            <strong>Your Message:</strong><br>
-                                            {contactMessageDto.Message}
-                                        </p>
+                                                 <p style=""background-color: #f8f9fa; padding: 20px; border-radius: 6px; color: #666666; font-size: 16px; line-height: 1.6; margin: 0 0 20px 0;"">
+                                                     <strong>Your Message:</strong><br>
+                                                     {contactMessageDto.Message}
+                                                 </p>
 
-                                        <p style=""color: #666666; font-size: 16px; line-height: 1.5; margin: 20px 0;"">
-                                            <strong>Admin Reply:</strong><br>
-                                            {contactMessageDto.Replay} <!-- This is the admin's reply -->
-                                        </p>
+                                                 <p style=""color: #666666; font-size: 16px; line-height: 1.5; margin: 20px 0;"">
+                                                     <strong>Admin Reply:</strong><br>
+                                                     {contactMessageDto.Replay} <!-- This is the admin's reply -->
+                                                 </p>
 
-                                        <p style=""color: #666666; font-size: 16px; line-height: 1.5; margin: 20px 0;"">
-                                            We have received your message and will get back to you as soon as possible. If you have any additional questions, feel free to reply to this email.
-                                        </p>
-                                    </td>
-                                </tr>
+                                                 <p style=""color: #666666; font-size: 16px; line-height: 1.5; margin: 20px 0;"">
+                                                     We have received your message and will get back to you as soon as possible. If you have any additional questions, feel free to reply to this email.
+                                                 </p>
+                                             </td>
+                                         </tr>
 
-                                <!-- Footer -->
-                                <tr>
-                                    <td style=""background-color: #f8f9fa; padding: 30px; border-radius: 0 0 8px 8px; text-align: center; border-top: 1px solid #eeeeee;"">
-                                        <p style=""color: #999999; font-size: 14px; margin: 0;"">
-                                            © 2024 Ajloun Tour 360. All rights reserved.
-                                        </p>
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-                </table>
-            </body>
-            </html>";
+                                         <!-- Footer -->
+                                         <tr>
+                                             <td style=""background-color: #f8f9fa; padding: 30px; border-radius: 0 0 8px 8px; text-align: center; border-top: 1px solid #eeeeee;"">
+                                                 <p style=""color: #999999; font-size: 14px; margin: 0;"">
+                                                     © 2024 Ajloun Tour 360. All rights reserved.
+                                                 </p>
+                                             </td>
+                                         </tr>
+                                     </table>
+                                 </td>
+                             </tr>
+                         </table>
+                     </body>
+                     </html>";
 
             try
             {
-                // Send the email with the admin's reply included
+                // Ensure that the email service is working and handling exceptions
                 await _emailService.SendEmailAsync(contactMessageDto.Email, "Reply to Your Inquiry - Ajloun Tour 360", emailBody);
                 Console.WriteLine("Reply email sent successfully.");
             }
             catch (Exception ex)
             {
+                // Handle and log the email sending exception
                 Console.WriteLine($"Error sending reply email: {ex.Message}");
+                throw new Exception("Error sending email", ex); // Rethrow exception for higher-level handling
             }
         }
+
 
     }
 }
