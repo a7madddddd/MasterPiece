@@ -87,8 +87,8 @@ function fetchAndDisplayOffers() {
                                     </div>
                                     <div class="offer_reviews">
                                         <div class="offer_reviews_content">
-                                            <div class="offer_reviews_title">very good</div>
-                                            <div class="offer_reviews_subtitle">${offer.reviewCount} reviews</div>
+                                            <div class="offer_reviews_title">${offer.reviewCount} reviews</div>
+                                            <div class="offer_reviews_subtitle"></div>
                                         </div>
                                         <div class="offer_reviews_rating text-center">${offer.rating * 2}</div>
                                     </div>
@@ -164,8 +164,6 @@ function showMessage(message, type) {
 
 // Call the function when the document is ready
 document.addEventListener('DOMContentLoaded', fetchAndDisplayOffers);
-
-
 
 
 

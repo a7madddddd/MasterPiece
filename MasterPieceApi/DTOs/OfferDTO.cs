@@ -2,11 +2,9 @@
 {
     public class OfferDTO
     {
-        public int? ServiceId { get; set; }
-        public string? Description { get; set; }
-        public string ServiceName { get; set; }  // From the Service table
-        public string ImageUrl { get; set; }     // From the Service table
-        public decimal PricePerTour { get; set; }
+        public int OfferId { get; set; }
+
+        public string ServiceName { get; set; } = null!;
         public decimal DiscountPercentage { get; set; }
         public bool IsActive { get; set; }
         public DateTime StartDate { get; set; }

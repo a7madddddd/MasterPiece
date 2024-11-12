@@ -21,68 +21,7 @@ namespace MasterPieceApi.Controllers
             _context = context;
         }
 
-        // GET: api/Offers
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Offer>>> GetOffers()
-        {
-            return await _context.Offers.ToListAsync();
-        }
 
-        // GET: api/Offers/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Offer>> GetOffer(int id)
-        {
-            var offer = await _context.Offers.FindAsync(id);
-
-            if (offer == null)
-            {
-                return NotFound();
-            }
-
-            return offer;
-        }
-
-        // PUT: api/Offers/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutOffer(int id, Offer offer)
-        {
-            if (id != offer.OfferId)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(offer).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!OfferExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-        // POST: api/Offers
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<Offer>> PostOffer(Offer offer)
-        {
-            _context.Offers.Add(offer);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetOffer", new { id = offer.OfferId }, offer);
-        }
 
         // DELETE: api/Offers/5
         [HttpDelete("{id}")]
@@ -114,7 +53,6 @@ namespace MasterPieceApi.Controllers
                 .Select(o => new
                 {
                     o.OfferId,
-                    //o.Description,
                     Description = o.Service.Description,
                     o.Rating,
                     o.ReviewCount,
@@ -123,7 +61,9 @@ namespace MasterPieceApi.Controllers
                     ServiceId = o.Service.ServiceId,
                     pricePerNight = o.Service.Price,
                     ServiceName = o.Service.ServiceName,
-                    ServiceImage = o.Service.Image
+                    ServiceImage = o.Service.Image,
+                    o.StartDate,
+                    o.EndDate,
                 })
                 .ToList();
 
@@ -141,8 +81,12 @@ namespace MasterPieceApi.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                // Log validation errors to understand what is wrong
+                var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+                return BadRequest(new { Errors = errors });
             }
+
+
 
             // Find the service by ServiceName
             var service = await _context.Services
@@ -157,13 +101,10 @@ namespace MasterPieceApi.Controllers
             var newOffer = new Offer
             {
                 ServiceId = service.ServiceId,
-                Description = offerDto.Description,
-                PricePerNight = offerDto.PricePerTour, // Mapping PricePerTour to PricePerNight
                 DiscountPercentage = offerDto.DiscountPercentage,
                 IsActive = offerDto.IsActive,
                 StartDate = offerDto.StartDate.ToString("yyyy-MM-dd"), // Formatting to string if needed
                 EndDate = offerDto.EndDate.ToString("yyyy-MM-dd"),
-                ImageUrl = offerDto.ImageUrl
             };
 
             // Add the new offer to the database
@@ -174,15 +115,43 @@ namespace MasterPieceApi.Controllers
             return Ok(new
             {
                 OfferId = newOffer.OfferId,
-                Description = newOffer.Description,
-                ServiceName = service.ServiceName, // Returning ServiceName
-                PricePerNight = newOffer.PricePerNight,
+                ServiceName = service.ServiceName,
                 DiscountPercentage = newOffer.DiscountPercentage,
                 IsActive = newOffer.IsActive,
                 StartDate = newOffer.StartDate,
                 EndDate = newOffer.EndDate,
-                ImageUrl = newOffer.ImageUrl
             });
+        }
+        [HttpDelete("DeleteOfferByServiceName")]
+        public async Task<IActionResult> DeleteOfferByServiceName(string serviceName)
+        {
+            if (string.IsNullOrEmpty(serviceName))
+            {
+                return BadRequest("Service name cannot be empty.");
+            }
+
+            // Find the ServiceId based on the ServiceName
+            var service = await _context.Services
+                .FirstOrDefaultAsync(s => s.ServiceName == serviceName);
+
+            if (service == null)
+            {
+                return NotFound($"Service with name '{serviceName}' not found.");
+            }
+
+            // Find the offer based on the ServiceId
+            var offer = await _context.Offers
+                .FirstOrDefaultAsync(o => o.ServiceId == service.ServiceId);
+
+            if (offer == null)
+            {
+                return NotFound($"Offer for service '{serviceName}' not found.");
+            }
+
+            _context.Offers.Remove(offer);
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "Offer deleted successfully" });
         }
 
 
@@ -190,6 +159,86 @@ namespace MasterPieceApi.Controllers
 
 
 
+        [HttpGet("GetOffersbyservicename")]
+        public async Task<IActionResult> GetOffersbyservicename()
+        {
+            try
+            {
+                var offers = await _context.Offers
+                    .Include(o => o.Service) // Optional: Include Service details if related
+                    .Select(o => new OfferDTO
+                    {
+                        OfferId = o.OfferId,
+                        ServiceName = o.Service.ServiceName, // Assuming each Offer has a related Service
+                        DiscountPercentage = o.DiscountPercentage ?? 0,
+                        StartDate = DateTime.Parse(o.StartDate),  // Ensure StartDate is a valid DateTime format
+                        EndDate = DateTime.Parse(o.EndDate),      // Ensure EndDate is a valid DateTime format
+                        IsActive = o.IsActive ?? false            // Default to false if IsActive is null
+                    })
+                    .ToListAsync();
+
+                return Ok(offers);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception details if needed
+                return StatusCode(500, new { Message = "An error occurred while fetching the offers", Details = ex.Message });
+            }
+        }
+
+
+
+
+
+
+
+        [HttpPut("UpdateOfferByServiceName")]
+        public async Task<IActionResult> UpdateOfferByServiceName([FromBody] OfferDTO offerDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+                return BadRequest(new { Errors = errors });
+            }
+
+            // Find the service by its name
+            var service = await _context.Services
+                .FirstOrDefaultAsync(s => s.ServiceName == offerDto.ServiceName);
+
+            if (service == null)
+            {
+                return NotFound($"Service with name {offerDto.ServiceName} not found.");
+            }
+
+            // Find the existing offer by ServiceId (assuming there's a unique Offer for each Service)
+            var existingOffer = await _context.Offers
+                .FirstOrDefaultAsync(o => o.ServiceId == service.ServiceId);
+
+            if (existingOffer == null)
+            {
+                return NotFound($"Offer for service {offerDto.ServiceName} not found.");
+            }
+
+            // Update the offer details
+            existingOffer.DiscountPercentage = offerDto.DiscountPercentage;
+            existingOffer.IsActive = offerDto.IsActive;
+            existingOffer.StartDate = offerDto.StartDate.ToString("yyyy-MM-dd"); // Format if needed
+            existingOffer.EndDate = offerDto.EndDate.ToString("yyyy-MM-dd");
+
+            // Save changes to the database
+            await _context.SaveChangesAsync();
+
+            // Return the updated offer information
+            return Ok(new
+            {
+                OfferId = existingOffer.OfferId,
+                ServiceName = service.ServiceName,
+                DiscountPercentage = existingOffer.DiscountPercentage,
+                IsActive = existingOffer.IsActive,
+                StartDate = existingOffer.StartDate,
+                EndDate = existingOffer.EndDate
+            });
+        }
 
 
 
@@ -256,4 +305,4 @@ namespace MasterPieceApi.Controllers
 
 
 
-    
+
