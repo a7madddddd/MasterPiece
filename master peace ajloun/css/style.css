@@ -771,7 +771,43 @@
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
     background: var(--bs-light);
+    height: 35vh;
 }
+
+.blog .blog-item .blog-content p {
+    overflow: hidden;
+    display: block;
+    text-overflow: ellipsis;
+    line-height: 1.5em;
+    /* Adjust this as needed */
+    max-height: 3em;
+    /* line-height * 2 for two lines */
+    width: 100%;
+}
+
+
+.blog .blog-item .blog-content .h4 {
+    overflow: hidden;
+    display: block;
+    text-overflow: ellipsis;
+    line-height: 1.5em;
+    /* Adjust this as needed */
+    max-height: 3em;
+    /* line-height * 2 for two lines */
+    width: 100%;
+}
+
+
+
+.blog .blog-item .blog-content p {
+    overflow: hidden;
+    height: 3em;
+    /* Adjust based on line height for two lines */
+    line-height: 1.5em;
+    /* Sets line height for a consistent layout */
+}
+
+
 
 /*** Blog End ***/
 
@@ -1107,7 +1143,7 @@ a:hover {
     /* Make the modal content scrolling */
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
     transition: transform 0.3s ease-in-out;
-    position:  relative;
+    position: relative;
     top: 45%;
     transform: translateY(-50%);
 }

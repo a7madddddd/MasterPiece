@@ -10,12 +10,11 @@ document.addEventListener('DOMContentLoaded', function () {
         const email = this.querySelector('input[name="email"]').value;
         const password1 = this.querySelector('input[name="password"]').value;
 
-        // Create a plain JavaScript object with the necessary properties
         const registerDto = {
-            username: name, // Use the name from the form
-            email: email, // Use the email from the form
-            password: password1, // Use the password from the form
-            // Include other properties required by the API if needed
+            username: name, 
+            email: email, 
+            password: password1, 
+            
         };
 
         try {
@@ -24,16 +23,16 @@ document.addEventListener('DOMContentLoaded', function () {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(registerDto), // Send the registerDto object as JSON
+                body: JSON.stringify(registerDto), 
             });
 
             if (!response.ok) {
-                // Handle error responses
+                
                 const errorText = await response.text();
                 throw new Error(`Error: ${response.status} - ${errorText}`);
             }
 
-            // Show success alert using SweetAlert
+            
             Swal.fire({
                 icon: 'success',
                 title: 'Registration Successful!',
@@ -41,18 +40,17 @@ document.addEventListener('DOMContentLoaded', function () {
                 confirmButtonText: 'OK'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // Trigger the "Sign In" overlay button to switch to the login form
                     document.getElementById("signIn").click();
                 }
             });
 
 
 
-            // Optionally clear the form
+           
             this.reset();
         } catch (error) {
             console.error("Registration failed:", error.message);
-            // Show error alert using SweetAlert
+            
             Swal.fire({
                 icon: 'error',
                 title: 'Registration Failed!',

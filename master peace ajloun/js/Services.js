@@ -26,30 +26,31 @@
 
 
 
-    // Fetch services and display them on the page
-    fetch('https://localhost:44321/api/Services')
-        .then(response => response.json())
-        .then(data => {
-            // Access the $values array which holds the actual service objects
-            const servicesArray = data.$values;
+// Fetch services and display them on the page
+fetch('https://localhost:44321/api/Services')
+    .then(response => response.json())
+    .then(data => {
+        // Access the $values array which holds the actual service objects
+        const servicesArray = data.$values;
 
-            // Check if servicesArray is an array and has elements
-            if (!Array.isArray(servicesArray) || servicesArray.length === 0) {
-                throw new Error('No services data received from the API');
-            }
+        // Check if servicesArray is an array and has elements
+        if (!Array.isArray(servicesArray) || servicesArray.length === 0) {
+            throw new Error('No services data received from the API');
+        }
 
-            // Get the container where services will be displayed
-            const servicesContainer = document.getElementById('services-container');
-            if (!servicesContainer) {
-                console.error('Services container element not found');
-                return;
-            }
+        // Get the container where services will be displayed
+        const servicesContainer = document.getElementById('services-container');
+        if (!servicesContainer) {
+            console.error('Services container element not found');
+            return;
+        }
 
-            // Clear the container before adding new content
-            servicesContainer.innerHTML = '';
+        // Clear the container before adding new content
+        servicesContainer.innerHTML = '';
 
-            // Iterate over each service and create the HTML content
-            servicesArray.forEach(service => {
+        // Iterate over each service and create the HTML content if it is active
+        servicesArray.forEach(service => {
+            if (service.isActive) { // Check if the service is active
                 const cardHTML = `
                     <div class="col-lg-4 wow fadeInUp" data-wow-delay="0.2s">
                         <div class="blog-item">
@@ -69,14 +70,14 @@
                             </div>
                         </div>
                     </div>
-                
-                    `;
-                    
-                // Append each card to the container
+                `;
+
+                // Append each active service card to the container
                 servicesContainer.innerHTML += cardHTML;
-            });
-        
-            console.log('Services loaded successfully');
+            }
+        });
+
+        console.log('Services loaded successfully');
 
             // Add event listeners to all "Book Now" buttons
             document.querySelectorAll('.book-button').forEach(button => {

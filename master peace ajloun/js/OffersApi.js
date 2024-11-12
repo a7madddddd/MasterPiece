@@ -1,99 +1,198 @@
-// Function to fetch offers with services from the API
-async function fetchOffersWithServices() {
+// Function to create the star rating HTML
+function createStarRating(containerId, currentRating, isInteractive = false) {
+  const stars = Array(5).fill(0).map((_, index) => {
+    const starClass = index < currentRating ? 'active' : '';
+    return `<i class="fa fa-star ${starClass}" data-rating="${index + 1}"></i>`;
+  }).join('');
+
+  return `<div class="star-rating ${isInteractive ? 'interactive' : ''}" id="${containerId}">
+        ${stars}
+    </div>`;
+}
+
+// Function to handle rating submission
+async function submitRating(offerId, rating) {
   try {
-    const response = await fetch('https://localhost:44321/api/Offers/AllOffers');
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    const data = await response.json();
-    return data.values?.$values || [];
+    const response = await fetch('https://localhost:44321/api/Offers/AddReview', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        offerId: offerId,
+        rating: rating
+      })
+    });
+
+    if (!response.ok) throw new Error('Failed to submit rating');
+
+    // Refresh the offers display to show updated rating
+    fetchAndDisplayOffers();
+    return true;
   } catch (error) {
-    console.error('Error fetching offers:', error);
-    return [];
+    console.error('Error submitting rating:', error);
+    return false;
   }
 }
 
-// Helper function to generate star ratings
-function generateStars(rating) {
-  let starsHTML = '';
-  for (let i = 0; i < 5; i++) {
-    starsHTML += i < rating ? '<i class="active"></i>' : '<i></i>';
-  }
-  return starsHTML;
+// Function to fetch offers and update the DOM
+function fetchAndDisplayOffers() {
+  fetch('https://localhost:44321/api/Offers/AllOffers')
+    .then(response => response.json())
+    .then(data => {
+      const offers = data.values.$values.filter(offer => offer.isActive);
+      const offersGrid = document.querySelector('.offers_grid');
+
+      // Clear existing content
+      offersGrid.innerHTML = '';
+
+      // Create and append offer elements
+      offers.forEach(offer => {
+        const imagePath = offer.serviceImage.replace(/\s+/g, '%20');
+        const ratingContainerId = `rating-${offer.offerId}`;
+        const userRatingContainerId = `user-rating-${offer.offerId}`;
+
+        const offerHTML = `
+                    <div class="offers_item rating_${offer.rating}">
+                        <div class="row">
+                            <div class="col-lg-1 temp_col"></div>
+                            <div class="col-lg-3 col-1680-4">
+                                <div class="offers_image_container">
+                                    <div class="offers_image_background" style="background-image: url('${imagePath}')"></div>
+                                    <div class="offer_name"><a href="#">${offer.serviceName}</a></div>
+                                </div>
+                            </div>
+                            <div class="col-lg-8">
+                                <div class="offers_content">
+                                    <div class="offers_price">${offer.pricePerNight} jd<span>per night</span></div>
+                                    <div class="rating-container">
+                                        <div class="current-rating">
+                                            ${createStarRating(ratingContainerId, offer.rating)}
+                                        </div>
+                                        <div class="user-rating">
+                                            <p>Rate this offer:</p>
+                                            ${createStarRating(userRatingContainerId, 0, true)}
+                                        </div>
+                                    </div>
+                                    <p class="offers_text">${offer.description}</p>
+                                    <div class="offers_icons">
+                                        <ul class="offers_icons_list">
+                                            <li class="offers_icons_item"><img src="images/post.png" alt=""></li>
+                                            <li class="offers_icons_item"><img src="images/compass.png" alt=""></li>
+                                            <li class="offers_icons_item"><img src="images/bicycle.png" alt=""></li>
+                                        </ul>
+                                    </div>
+                                    <div class="button book_button">
+                                        <a href="#">book<span></span><span></span><span></span></a>
+                                    </div>
+                                    <div class="offer_reviews">
+                                        <div class="offer_reviews_content">
+                                            <div class="offer_reviews_title">very good</div>
+                                            <div class="offer_reviews_subtitle">${offer.reviewCount} reviews</div>
+                                        </div>
+                                        <div class="offer_reviews_rating text-center">${offer.rating * 2}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                `;
+        offersGrid.insertAdjacentHTML('beforeend', offerHTML);
+
+        // Add event listeners for the interactive rating
+        const userRatingContainer = document.getElementById(userRatingContainerId);
+        if (userRatingContainer) {
+          const stars = userRatingContainer.querySelectorAll('i');
+
+          // Hover effects
+          stars.forEach(star => {
+            star.addEventListener('mouseover', function () {
+              const rating = this.getAttribute('data-rating');
+              highlightStars(userRatingContainer, rating);
+            });
+          });
+
+          userRatingContainer.addEventListener('mouseleave', function () {
+            highlightStars(userRatingContainer, 0);
+          });
+
+          // Click handler
+          stars.forEach(star => {
+            star.addEventListener('click', async function () {
+              const rating = parseInt(this.getAttribute('data-rating'));
+              const success = await submitRating(offer.offerId, rating);
+              if (success) {
+                // Show success message
+                showMessage('Rating submitted successfully!', 'success');
+              } else {
+                // Show error message
+                showMessage('Failed to submit rating. Please try again.', 'error');
+              }
+            });
+          });
+        }
+      });
+    })
+    .catch(error => {
+      console.error('Error fetching offers:', error);
+      const offersGrid = document.querySelector('.offers_grid');
+      offersGrid.innerHTML = '<div class="text-center p-4">Failed to load offers</div>';
+    });
 }
 
-// Function to generate HTML for a single offer with service details
-function generateOfferHTML(offer) {
-  const imagePath = offer.serviceImage ? offer.serviceImage : 'image/default.jpg';
-  const originalPrice = offer.pricePerNight || 0;
-  const discountPercentage = offer.discountPercentage || 0;
-  const discountedPrice = originalPrice - (originalPrice * (discountPercentage / 100));
-
-  return `
-    <div class="offers_item rating_${Math.round(offer.rating || 0)}">
-      <div class="row">
-        <div class="col-lg-1 temp_col"></div>
-        <div class="col-lg-3 col-1680-4">
-          <div class="offers_image_container">
-            <div class="offers_image_background" style="background-image:url('${imagePath}');"></div>
-            <div class="offer_name"><a href="#">${offer.serviceName}</a></div>
-          </div>
-        </div>
-        <div class="col-lg-8">
-          <div class="offers_content">
-            <div class="offers_price">${discountedPrice.toFixed(2)} jd<span> per tour</span></div>
-            <div class="rating_r rating_r_${Math.round(offer.rating || 0)} offers_rating" data-rating="${Math.round(offer.rating || 0)}">
-              ${generateStars(Math.round(offer.rating || 0))}
-            </div>
-            <p class="offers_text">${offer.description || 'No description available.'}</p>
-            <div class="offers_icons">
-              <ul class="offers_icons_list">
-                <li class="offers_icons_item"><img src="images/post.png" alt="Post icon"></li>
-                <li class="offers_icons_item"><img src="images/compass.png" alt="Compass icon"></li>
-                <li class="offers_icons_item"><img src="images/bicycle.png" alt="Bicycle icon"></li>
-              </ul>
-            </div>
-            <div class="button book_button"><a href="#">book<span></span><span></span><span></span></a></div>
-            <div class="offer_reviews">
-              <div class="offer_reviews_content">
-                <div class="offer_reviews_title">${offer.rating && offer.rating > 8 ? 'very good' : 'good'}</div>
-                <div class="offer_reviews_subtitle">${offer.reviewCount || 0} reviews</div>
-              </div>
-              <div class="offer_reviews_rating text-center">${offer.rating ? offer.rating.toFixed(1) : 'N/A'}</div>
-            </div>
-            <div class="review_dropdown">
-              <select>
-                <option value="">Rate this offer...</option>
-                <option value="1">1 Star</option>
-                <option value="2">2 Stars</option>
-                <option value="3">3 Stars</option>
-                <option value="4">4 Stars</option>
-                <option value="5">5 Stars</option>
-              </select>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  `;
+// Helper function to highlight stars
+function highlightStars(container, rating) {
+  const stars = container.querySelectorAll('i');
+  stars.forEach((star, index) => {
+    star.classList.toggle('active', index < rating);
+  });
 }
 
-// Function to render offers with services into the DOM
-async function renderOffersWithServices() {
-  const offersContainer = document.getElementById('offersContainer');
-  const offers = await fetchOffersWithServices();
+// Function to show messages to the user
+function showMessage(message, type) {
+  const messageDiv = document.createElement('div');
+  messageDiv.className = `message ${type}`;
+  messageDiv.textContent = message;
+  document.body.appendChild(messageDiv);
 
-  if (offers.length === 0) {
-    offersContainer.innerHTML = '<p>No offers available at the moment.</p>';
-  } else {
-    offersContainer.innerHTML = offers.map(offer => generateOfferHTML(offer)).join('');
-  }
+  // Remove the message after 3 seconds
+  setTimeout(() => {
+    messageDiv.remove();
+  }, 3000);
 }
 
-// Call renderOffersWithServices when the page loads
-document.addEventListener('DOMContentLoaded', () => {
-  renderOffersWithServices();
-});
+// Call the function when the document is ready
+document.addEventListener('DOMContentLoaded', fetchAndDisplayOffers);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

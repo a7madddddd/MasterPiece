@@ -63,7 +63,7 @@ namespace MasterPieceApi.Controllers
         [HttpGet("GetUserByUsernameOrEmail/{searchTerm}")]
         public async Task<ActionResult<User>> GetUserByUsernameOrEmail(string searchTerm)
         {
-            // Search for user by username or email
+            
             var user = await _context.Users
                 .FirstOrDefaultAsync(u => u.Username == searchTerm || u.Email == searchTerm);
 

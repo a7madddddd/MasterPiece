@@ -185,8 +185,75 @@ namespace MasterPieceApi.Controllers
             });
         }
 
+
+
+
+
+
+
+
+
+
+        [HttpPost("AddReview")]
+        public async Task<ActionResult<ReviewResponseDto>> AddReview([FromBody] ReviewRequestDto request)
+        {
+            try
+            {
+                // Input validation
+                if (request.Rating < 1 || request.Rating > 5)
+                {
+                    return BadRequest(new ReviewResponseDto
+                    {
+                        Success = false,
+                        Message = "Rating must be between 1 and 5"
+                    });
+                }
+
+                // Get the offer
+                var offer = await _context.Offers.FindAsync(request.OfferId);
+                if (offer == null)
+                {
+                    return NotFound(new ReviewResponseDto
+                    {
+                        Success = false,
+                        Message = "Offer not found"
+                    });
+                }
+
+                // Calculate new rating
+                decimal currentTotalRating = (offer.Rating ?? 0) * (offer.ReviewCount ?? 0);
+                int newReviewCount = (offer.ReviewCount ?? 0) + 1;
+                decimal newRating = (currentTotalRating + request.Rating) / newReviewCount;
+
+                // Update the offer
+                offer.Rating = Math.Round(newRating, 1); // Round to 1 decimal place
+                offer.ReviewCount = newReviewCount;
+
+                await _context.SaveChangesAsync();
+
+                // Return success response
+                return Ok(new ReviewResponseDto
+                {
+                    Success = true,
+                    Message = "Review added successfully",
+                    NewRating = offer.Rating.Value,
+                    NewReviewCount = offer.ReviewCount.Value
+                });
+            }
+            catch (Exception ex)
+            {
+                // Log the exception here
+                return StatusCode(500, new ReviewResponseDto
+                {
+                    Success = false,
+                    Message = "An error occurred while processing your review"
+                });
+            }
+        }
     }
+
 }
+
 
 
     

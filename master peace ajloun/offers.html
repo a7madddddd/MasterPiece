@@ -7,218 +7,483 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="description" content="Travelix Project">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 	<link rel="stylesheet" type="text/css" href="styles/bootstrap4/bootstrap.min.css">
+	<link href="plugins/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 	<link rel="stylesheet" type="text/css" href="styles/offers_styles.css">
 	<link rel="stylesheet" type="text/css" href="styles/offers_responsive.css">
-	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
-	<link href="plugins/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
-		integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
-		crossorigin="anonymous" referrerpolicy="no-referrer" />
-		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css" />
-
-	<link href="plugins/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-	<script src="js/OffersApi.js"></script>
 	<style>
-		.search_tabs_container i {
-			color: green !important;
+		/* Star Rating Styles */
+		.rating-container {
+			margin: 15px 0;
 		}
 
-		#containerrrr {
-			margin-bottom: 8%;
+		.star-rating {
+			display: inline-block;
+			font-size: 20px;
+			cursor: default;
 		}
+
+		.star-rating.interactive {
+			cursor: pointer;
+		}
+
+		.star-rating i {
+			color: #ddd;
+			margin-right: 5px;
+			transition: color 0.2s ease;
+		}
+
+		.star-rating i.active {
+			color: #ffd700;
+		}
+
+		.star-rating.interactive i:hover {
+			color: #ffed4a;
+		}
+
+		.user-rating {
+			margin-top: 10px;
+		}
+
+		.user-rating p {
+			margin-bottom: 5px;
+			font-size: 14px;
+			color: #666;
+		}
+
+		/* Message Styles */
+		.message {
+			position: fixed;
+			top: 20px;
+			right: 20px;
+			padding: 15px 25px;
+			border-radius: 4px;
+			color: white;
+			z-index: 1000;
+			animation: slideIn 0.3s ease-in-out;
+		}
+
+		.message.success {
+			background-color: #4CAF50;
+		}
+
+		.message.error {
+			background-color: #f44336;
+		}
+
+		@keyframes slideIn {
+			from {
+				transform: translateX(100%);
+				opacity: 0;
+			}
+
+			to {
+				transform: translateX(0);
+				opacity: 1;
+			}
+		}
+
+		#offersContainer {
+
+			margin-bottom: auto;
+			padding-bottom: 20%;
+		}
+		.super_container {
+
+			margin-bottom: 3%;
+			padding-bottom: 3%;
+		}
+		
 	</style>
 </head>
 
-<div>
+<body>
 
 	<div class="super_container">
 
 		<!-- Header -->
-	</div>
-	<header class="header">
 
-		<!-- Top Bar -->
+		<header class="header">
 
-		<div class="top_bar" id="topBar">
-			<div class="container">
-				<div class="row">
-					<div class="col d-flex flex-row">
-						<div class="phone">
-							<sup>Ajloun Tour
-								<sup>360</sup>
-							</sup>
-						</div>
-						<div class="social">
-							<ul class="social_list">
-								<li class="social_list_item">
-									<!-- <a href="#">
-		                      <i class="fa fa-pinterest" aria-hidden="true"></i>
-		                    </a> -->
-								</li>
-								<li class="social_list_item">
-									<a href="#">
-										<i class="fa fa-facebook" aria-hidden="true"></i>
-									</a>
-								</li>
-								<li class="social_list_item">
-									<a href="#">
-										<i class="fa fa-twitter" aria-hidden="true"></i>
-									</a>
-								</li>
-								<li class="social_list_item">
-									<a href="#">
-										<i class="fa fa-dribbble" aria-hidden="true"></i>
-									</a>
-								</li>
-								<li class="social_list_item">
-									<a href="#">
-										<i class="fa fa-behance" aria-hidden="true"></i>
-									</a>
-								</li>
-								<li class="social_list_item">
-									<a href="#">
-										<i class="fa fa-linkedin" aria-hidden="true"></i>
-									</a>
-								</li>
-							</ul>
-						</div>
-						<div class="user_box ml-auto" id="userBox">
-							<!-- logOut and logIn will Apeare here -->
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
+			<!-- Top Bar -->
 
-		<!-- Main Navigation -->
-
-		<nav class="main_nav">
-			<div class="container">
-				<div class="row">
-					<div class="col main_nav_col d-flex flex-row align-items-center justify-content-start">
-						<div class="logo_container">
-							<div class="logo"><a href="index.html"><img src="image/alogo.png" alt></a></div>
-						</div>
-						<div class="main_nav_container ml-auto">
-							<ul class="main_nav_list">
-								<li class="main_nav_item"><a href="index.html">home</a></li>
-								<li class="main_nav_item"><a href="services.html">services</a></li>
-								<li class="main_nav_item"><a href="contact.html">contact us</a></li>
-								<li class="main_nav_item"><a href="about.html">about us</a></li>
-								<!-- <li class="main_nav_item"><a href="offers.html">offers</a></li> -->
-							</ul>
-						</div>
-						<div class="content_search ml-lg-0 ml-auto">
-							<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
-								xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="17px" height="17px"
-								viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve">
-								<g>
-									<g>
-										<g>
-											<path class="mag_glass" fill="#FFFFFF" d="M78.438,216.78c0,57.906,22.55,112.343,63.493,153.287c40.945,40.944,95.383,63.494,153.287,63.494
-											s112.344-22.55,153.287-63.494C489.451,329.123,512,274.686,512,216.78c0-57.904-22.549-112.342-63.494-153.286
-											C407.563,22.549,353.124,0,295.219,0c-57.904,0-112.342,22.549-153.287,63.494C100.988,104.438,78.439,158.876,78.438,216.78z
-											M119.804,216.78c0-96.725,78.69-175.416,175.415-175.416s175.418,78.691,175.418,175.416
-											c0,96.725-78.691,175.416-175.416,175.416C198.495,392.195,119.804,313.505,119.804,216.78z" />
-										</g>
-									</g>
-									<g>
-										<g>
-											<path class="mag_glass" fill="#FFFFFF" d="M6.057,505.942c4.038,4.039,9.332,6.058,14.625,6.058s10.587-2.019,14.625-6.058L171.268,369.98
-											c8.076-8.076,8.076-21.172,0-29.248c-8.076-8.078-21.172-8.078-29.249,0L6.057,476.693
-											C-2.019,484.77-2.019,497.865,6.057,505.942z" />
-										</g>
-									</g>
-								</g>
-							</svg>
-						</div>
-
-						<form id="search_form" class="search_form bez_1">
-							<input type="search" class="search_content_input bez_1">
-						</form>
-
-						<div class="hamburger">
-							<i class="fa fa-bars trans_200"></i>
+			<div class="top_bar" id="topBar">
+				<div class="container">
+					<div class="row">
+						<div class="col d-flex flex-row">
+							<div class="phone">
+								<sup>Ajloun Tour
+									<sup>360</sup>
+								</sup>
+							</div>
+							<div class="social">
+								<ul class="social_list">
+									<li class="social_list_item">
+										<!-- <a href="#">
+					                      <i class="fa fa-pinterest" aria-hidden="true"></i>
+					                    </a> -->
+									</li>
+									<li class="social_list_item">
+										<a href="#">
+											<i class="fa fa-facebook" aria-hidden="true"></i>
+										</a>
+									</li>
+									<li class="social_list_item">
+										<a href="#">
+											<i class="fa fa-twitter" aria-hidden="true"></i>
+										</a>
+									</li>
+									<li class="social_list_item">
+										<a href="#">
+											<i class="fa fa-dribbble" aria-hidden="true"></i>
+										</a>
+									</li>
+									<li class="social_list_item">
+										<a href="#">
+											<i class="fa fa-behance" aria-hidden="true"></i>
+										</a>
+									</li>
+									<li class="social_list_item">
+										<a href="#">
+											<i class="fa fa-linkedin" aria-hidden="true"></i>
+										</a>
+									</li>
+								</ul>
+							</div>
+							<div class="user_box ml-auto" id="userBox">
+								<!-- logOut and logIn will Apeare here -->
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-		</nav>
 
-	</header>
+			<!-- Main Navigation -->
 
-	<body>
+			<nav class="main_nav">
+				<div class="container">
+					<div class="row">
+						<div class="col main_nav_col d-flex flex-row align-items-center justify-content-start">
+							<div class="logo_container">
+								<div class="logo"><a href="index.html"><img src="image/alogo.png" alt></a></div>
+							</div>
+							<div class="main_nav_container ml-auto">
+								<ul class="main_nav_list">
+									<li class="main_nav_item"><a href="index.html">home</a></li>
+									<li class="main_nav_item"><a href="services.html">services</a></li>
+									<li class="main_nav_item"><a href="contact.html">contact us</a></li>
+									<li class="main_nav_item"><a href="about.html">about us</a></li>
+									<!-- <li class="main_nav_item"><a href="offers.html">offers</a></li> -->
+								</ul>
+							</div>
+							<div class="content_search ml-lg-0 ml-auto">
+								<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
+									xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="17px" height="17px"
+									viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve">
+									<g>
+										<g>
+											<g>
+												<path class="mag_glass" fill="#FFFFFF" d="M78.438,216.78c0,57.906,22.55,112.343,63.493,153.287c40.945,40.944,95.383,63.494,153.287,63.494
+																s112.344-22.55,153.287-63.494C489.451,329.123,512,274.686,512,216.78c0-57.904-22.549-112.342-63.494-153.286
+																C407.563,22.549,353.124,0,295.219,0c-57.904,0-112.342,22.549-153.287,63.494C100.988,104.438,78.439,158.876,78.438,216.78z
+																M119.804,216.78c0-96.725,78.69-175.416,175.415-175.416s175.418,78.691,175.418,175.416
+																c0,96.725-78.691,175.416-175.416,175.416C198.495,392.195,119.804,313.505,119.804,216.78z" />
+											</g>
+										</g>
+										<g>
+											<g>
+												<path class="mag_glass" fill="#FFFFFF" d="M6.057,505.942c4.038,4.039,9.332,6.058,14.625,6.058s10.587-2.019,14.625-6.058L171.268,369.98
+																c8.076-8.076,8.076-21.172,0-29.248c-8.076-8.078-21.172-8.078-29.249,0L6.057,476.693
+																C-2.019,484.77-2.019,497.865,6.057,505.942z" />
+											</g>
+										</g>
+									</g>
+								</svg>
+							</div>
+					
+							<form id="search_form" class="search_form bez_1">
+								<input type="search" class="search_content_input bez_1">
+							</form>
+					
+							<div class="hamburger">
+								<i class="fa fa-bars trans_200"></i>
+							</div>
+						</div>
+					</div>
+				</div>
+			</nav>
+
+		</header>
+
 		<div class="menu trans_500">
 			<div class="menu_content d-flex flex-column align-items-center justify-content-center text-center">
 				<div class="menu_close_container">
 					<div class="menu_close"></div>
 				</div>
-				<div class="logo menu_logo"><a href="index.html"><img src="image/alogo.png" alt></a></div>
+				<div class="logo menu_logo"><a href="#"><img src="images/logo.png" alt=""></a></div>
 				<ul>
 					<li class="menu_item"><a href="index.html">home</a></li>
-					<li class="menu_item"><a href="services.html">services</a></li>
-					<li class="menu_item"><a href="contact.html">contact</a></li>
 					<li class="menu_item"><a href="about.html">about us</a></li>
-					<li class="menu_item"><a href="offers.html">offers</a></li>
+					<li class="menu_item"><a href="#">offers</a></li>
+					<li class="menu_item"><a href="blog.html">news</a></li>
+					<li class="menu_item"><a href="contact.html">contact</a></li>
 				</ul>
 			</div>
 		</div>
+
 		<!-- Home -->
+
 		<div class="home">
-			<div class="home_background parallax-window" data-parallax="scroll" data-image-src="image2/back8.jpg">
-			</div>
+			<div class="home_background parallax-window" data-parallax="scroll"
+				data-image-src="image2/back8.jpg"></div>
 			<div class="home_content">
 				<div class="home_title">our offers</div>
 			</div>
 		</div>
-		<!-- Offers -->
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-1 temp_col"></div>
-				<div class="col-lg-11">
-					<!-- Offers Sorting -->
-				</div>
-				<div class="col-lg-12">
-					<!-- Offers Grid -->
-					<div class="offers_grid" id="offersContainer">
-						<!-- Dynamic Offers will be injected here -->
+
+		
+		<div class="offers">
+
+			<!-- Search -->
+
+
+			<!-- Offers -->
+
+			<div class="container" id="offersContainer">
+				<div class="row">
+					<div class="col-lg-1 temp_col"></div>
+					<div class="col-lg-11">
+
+						<!-- Offers Sorting -->
+						
+					</div>
+
+					<div class="col-lg-12">
+						<!-- Offers Grid -->
+
+						<div class="offers_grid">
+
+							<!-- Offers Item -->
+
+							<div class="offers_item rating_4">
+								<div class="row">
+									<div class="col-lg-1 temp_col"></div>
+									<div class="col-lg-3 col-1680-4">
+										<div class="offers_image_container">
+											<!-- Image by https://unsplash.com/@kensuarez -->
+											<div class="offers_image_background" style="background-image:url()"></div>
+											<div class="offer_name"><a href="single_listing.html"></a></div>
+										</div>
+									</div>
+									<div class="col-lg-8">
+										<div class="offers_content">
+											<div class="offers_price"><span></span></div>
+											<div class="rating_r rating_r_4 offers_rating" data-rating="4">
+												<i></i>
+												<i></i>
+												<i></i>
+												<i></i>
+												<i></i>
+											</div>
+											<p class="offers_text"></p>
+											<div class="offers_icons">
+												<ul class="offers_icons_list">
+													<li class="offers_icons_item"><img src="images/post.png" alt="">
+													</li>
+													<li class="offers_icons_item"><img src="images/compass.png" alt="">
+													</li>
+													<li class="offers_icons_item"><img src="images/bicycle.png" alt="">
+													</li>
+													</li>
+												</ul>
+											</div>
+											<div class="button book_button"><a
+													href="#"><span></span><span></span><span></span></a></div>
+											<div class="offer_reviews">
+												<div class="offer_reviews_content">
+													<div class="offer_reviews_title"></div>
+													<div class="offer_reviews_subtitle"></div>
+												</div>
+												<div class="offer_reviews_rating text-center"></div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<!-- Offers Item -->
+
+							<div class="offers_item rating_3">
+								<div class="row">
+									<div class="col-lg-1 temp_col"></div>
+									<div class="col-lg-3 col-1680-4">
+										<div class="offers_image_container">
+											<!-- Image by https://unsplash.com/@thoughtcatalog -->
+											<div class="offers_image_background"
+												style="background-image:url(images/offer_5.jpg)"></div>
+											<div class="offer_name"><a href="single_listing.html"></a>
+											</div>
+										</div>
+									</div>
+									<div class="col-lg-8">
+										<div class="offers_content">
+											<div class="offers_price"><span></span></div>
+											<div class="rating_r rating_r_3 offers_rating" data-rating="3">
+												<i></i>
+												<i></i>
+												<i></i>
+												<i></i>
+												<i></i>
+											</div>
+											<p class="offers_text">Suspendisse potenti. In faucibus massa. Lorem ipsum
+												dolor sit amet, consectetur adipiscing elit. Nullam eu convallis tortor.
+												Lorem ipsum dolor sit amet.</p>
+											<div class="offers_icons">
+												<ul class="offers_icons_list">
+													<li class="offers_icons_item"><img src="images/post.png" alt="">
+													</li>
+													<li class="offers_icons_item"><img src="images/compass.png" alt="">
+													</li>
+													<li class="offers_icons_item"><img src="images/bicycle.png" alt="">
+													</li>
+													<li class="offers_icons_item"><img src="images/sailboat.png" alt="">
+													</li>
+												</ul>
+											</div>
+											<div class="button book_button"><a
+													href="#">book<span></span><span></span><span></span></a></div>
+											<div class="offer_reviews">
+												<div class="offer_reviews_content">
+													<div class="offer_reviews_title">very good</div>
+													<div class="offer_reviews_subtitle">100 reviews</div>
+												</div>
+												<div class="offer_reviews_rating text-center">8.1</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<!-- Offers Item -->
+
+
+
+							<!-- Offers Item -->
+
+
+							<!-- Offers Item -->
+
+							<div class="offers_item rating_3">
+								<div class="row">
+									<div class="col-lg-1 temp_col"></div>
+									<div class="col-lg-3 col-1680-4">
+										<div class="offers_image_container">
+											<!-- Image by https://unsplash.com/@itsnwa -->
+											<div class="offers_image_background" style="background-image:url()"></div>
+											<div class="offer_name"><a href="single_listing.html">grand castle</a></div>
+										</div>
+									</div>
+									<div class="col-lg-8">
+										<div class="offers_content">
+											<div class="offers_price">$90<span>per night</span></div>
+											<div class="rating_r rating_r_3 offers_rating" data-rating="3">
+												<i></i>
+												<i></i>
+												<i></i>
+												<i></i>
+												<i></i>
+											</div>
+											<p class="offers_text">Suspendisse potenti. In faucibus massa. Lorem ipsum
+												dolor sit amet, consectetur adipiscing elit. Nullam eu convallis tortor.
+												Lorem ipsum dolor sit amet.</p>
+											<div class="offers_icons">
+												<ul class="offers_icons_list">
+													<li class="offers_icons_item"><img src="images/post.png" alt="">
+													</li>
+													<li class="offers_icons_item"><img src="images/compass.png" alt="">
+													</li>
+													<li class="offers_icons_item"><img src="images/bicycle.png" alt="">
+													</li>
+													<li class="offers_icons_item"><img src="images/sailboat.png" alt="">
+													</li>
+												</ul>
+											</div>
+											<div class="button book_button"><a
+													href="#">book<span></span><span></span><span></span></a></div>
+											<div class="offer_reviews">
+												<div class="offer_reviews_content">
+													<div class="offer_reviews_title">very good</div>
+													<div class="offer_reviews_subtitle">100 reviews</div>
+												</div>
+												<div class="offer_reviews_rating text-center">8.1</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="offers_item rating_3">
+								<div class="row">
+									<div class="col-lg-1 temp_col"></div>
+									<div class="col-lg-3 col-1680-4">
+										<div class="offers_image_container">
+											<!-- Image by https://unsplash.com/@itsnwa -->
+											<div class="offers_image_background" style="background-image:url()"></div>
+											<div class="offer_name"><a href="single_listing.html">grand castle</a></div>
+										</div>
+									</div>
+									<div class="col-lg-8">
+										<div class="offers_content">
+											<div class="offers_price">$90<span>per night</span></div>
+											<div class="rating_r rating_r_3 offers_rating" data-rating="3">
+												<i></i>
+												<i></i>
+												<i></i>
+												<i></i>
+												<i></i>
+											</div>
+											<p class="offers_text">Suspendisse potenti. In faucibus massa. Lorem ipsum
+												dolor sit amet, consectetur adipiscing elit. Nullam eu convallis tortor.
+												Lorem ipsum dolor sit amet.</p>
+											<div class="offers_icons">
+												<ul class="offers_icons_list">
+													<li class="offers_icons_item"><img src="images/post.png" alt="">
+													</li>
+													<li class="offers_icons_item"><img src="images/compass.png" alt="">
+													</li>
+													<li class="offers_icons_item"><img src="images/bicycle.png" alt="">
+													</li>
+													<li class="offers_icons_item"><img src="images/sailboat.png" alt="">
+													</li>
+												</ul>
+											</div>
+											<div class="button book_button"><a
+													href="#">book<span></span><span></span><span></span></a></div>
+											<div class="offer_reviews">
+												<div class="offer_reviews_content">
+													<div class="offer_reviews_title">very good</div>
+													<div class="offer_reviews_subtitle">100 reviews</div>
+												</div>
+												<div class="offer_reviews_rating text-center">8.1</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+						</div>
+
+
 					</div>
 				</div>
+
 			</div>
 		</div>
-		<br>
-		<br><br><br>
-		<br>
-		<br>
-		<br><br><br><br><br><br><br>
-		<br><br><br><br><br><br><br><br>
-		<br><br><br><br><br><br><br><br>
-		<br>
-		<br>
-		<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-		<!-- Footer -->
+	</div>
+	</div>
 	<!-- Footer -->
+
 	<footer class="footer">
 	
 		<div class="container">
@@ -234,7 +499,8 @@
 							</div>
 							<p class="footer_about_text">
 								Discover the beauty of Ajloun, Jordan. From historic sites to scenic landscapes, explore
-								what makes Ajloun a unique
+								what makes Ajloun
+								a unique
 								destination. Contact us for more information or plan your visit today!
 							</p>
 							<ul class="footer_social_list">
@@ -426,8 +692,8 @@
 									<a href="about.html">about us</a>
 								</li>
 								<!-- <li class="footer_nav_item">
-	                    <a href="offers.html">offers</a>
-	                  </li> -->
+	                        <a href="offers.html">offers</a>
+	                      </li> -->
 								<li class="footer_nav_item">
 									<!-- <a href="blog.html">news</a> -->
 								</li>
@@ -439,71 +705,16 @@
 		</div>
 	</div>
 
-		<script src="js/jqu<script src="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
-ery-3.2.1.min.js"></script>
-		<script src="styles/bootstrap4/popper.js"></script>
-		<script src="styles/bootstrap4/bootstrap.min.js"></script>
-		<script src="plugins/Isotope/isotope.pkgd.min.js"></script>
-		<script src="plugins/easing/easing.js"></script>
-		<script src="plugins/parallax-js-master/parallax.min.js"></script>
-		<script src="js/offers_custom.js"></script>
-		<script>
+	</div>
 
-			// Check if JWT is in local storage
-			 // Check if JWT is in local storage
-				document.addEventListener("DOMContentLoaded", function () {
-					// Check if the element with ID 'userBox' exists
-					const userBox = document.getElementById('userBox');
+	<script src="js/jquery-3.2.1.min.js"></script>
+	<script src="styles/bootstrap4/popper.js"></script>
+	<script src="styles/bootstrap4/bootstrap.min.js"></script>
+	<script src="plugins/Isotope/isotope.pkgd.min.js"></script>
+	<script src="plugins/easing/easing.js"></script>
+	<script src="plugins/parallax-js-master/parallax.min.js"></script>
+	<script src="js/offers_custom.js"></script>
+	<script src="js/OffersApi.js"></script>
+</body>
 
-					if (userBox) {
-						// Check if JWT is in local storage
-						const token = localStorage.getItem('jwt');
-
-						if (token) {
-							// If user is logged in (JWT token found), show profile link
-							userBox.innerHTML = `
-                            <a href="edit_profile.html" id ="profile_icon">Profile</a>         
-                            <small style="color: whitesmoke;">|</small>
-                            <div class="user_box_link">
-                                <a href="#" id="logoutButton">Logout</a>
-                            </div>
-                        `;
-
-							// Attach logout functionality to the "Logout" button
-							document.getElementById('logoutButton').addEventListener('click', function (event) {
-								event.preventDefault(); // Prevent default link behavior
-								logout();
-							});
-						} else {
-							// If user is not logged in, show login/register links
-							userBox.innerHTML = `
-                            <div class="user_box_login user_box_link">
-                                <a href="login.html">Login</a>
-                            </div>
-                            <div class="user_box_register user_box_link">
-                                <a href="login.html">Register</a>
-                            </div>
-                        `;
-						}
-					} else {
-						console.error("Element with ID 'userBox' not found.");
-					}
-				});
-
-				// Function to handle logout, moved outside of the event listener
-				function logout() {
-					localStorage.removeItem('jwt'); // Remove JWT from local storage
-
-					// استخدام AlertifyJS لإظهار رسالة نجاح عند تسجيل الخروج
-					alertify.success("Logged out successfully!");
-
-					// إعادة تحميل الصفحة لتحديث الشريط العلوي
-					setTimeout(() => {
-						window.location.reload();
-					}, 1000); // تأخير قليل قبل إعادة التحميل حتى يمكن رؤية الرسالة
-				}
-
-
-		</script>
-	</body>
-	</htm>
+</html>
