@@ -288,7 +288,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 // Temporarily hardcode a service ID for testing
 ////////////////function to display service Details in service page 
-debugger
+
 document.addEventListener('DOMContentLoaded', function () {
     // Log the current URL for debugging
     console.log('Current URL:', window.location.href);

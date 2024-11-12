@@ -156,7 +156,8 @@ namespace MasterPieceApi.Controllers
                 PaymentDate = DateTime.Now,
                 PaymentStatus = paymentDto.PaymentStatus,
                 PaymentMethod = paymentDto.PaymentMethod,
-                ServiceId = paymentDto.ServiceId
+                ServiceId = paymentDto.ServiceId,
+                BookingId = paymentDto.BookingId,
             };
 
             // Save the payment to the database

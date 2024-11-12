@@ -2128,3 +2128,116 @@ strong {
 	color: #FFFFFF;
 	text-shadow: 0 0 4px rgb(0, 0, 0);
 }
+
+
+
+
+
+
+
+/* Star Rating Styles */
+.rating-container {
+	margin: 15px 0;
+}
+
+.star-rating {
+	display: inline-block;
+	font-size: 20px;
+	cursor: default;
+}
+
+.star-rating.interactive {
+	cursor: pointer;
+}
+
+.star-rating i {
+	color: #ddd;
+	margin-right: 5px;
+	transition: color 0.2s ease;
+}
+
+.star-rating i.active {
+	color: #ffd700;
+}
+
+.star-rating.interactive i:hover {
+	color: #ffed4a;
+}
+
+.user-rating {
+	margin-top: 10px;
+}
+
+.user-rating p {
+	margin-bottom: 5px;
+	font-size: 14px;
+	color: #666;
+}
+
+/* Message Styles */
+.message {
+	position: fixed;
+	top: 20px;
+	right: 20px;
+	padding: 15px 25px;
+	border-radius: 4px;
+	color: white;
+	z-index: 1000;
+	animation: slideIn 0.3s ease-in-out;
+}
+
+.message.success {
+	background-color: #4CAF50;
+}
+
+.message.error {
+	background-color: #f44336;
+}
+
+@keyframes slideIn {
+	from {
+		transform: translateX(100%);
+		opacity: 0;
+	}
+
+	to {
+		transform: translateX(0);
+		opacity: 1;
+	}
+}
+
+#offersContainer {
+	margin-top: 6%;
+	margin-bottom: auto;
+	padding-bottom: 20%;
+}
+
+.super_container {
+	margin-bottom: 3%;
+	padding-bottom: 3%;
+}
+
+/* Style for the original price with a line through */
+.offers_item .original-price {
+	text-decoration: line-through;
+	text-decoration-thickness: 3px;
+	/* Increase the thickness of the line */
+	color: #888;
+	/* Optional: Light grey color for the original price */
+
+	font-size: large;
+}
+
+/* Style for the discounted price */
+.offers_item .discounted-price {
+	font-weight: bold;
+	color: #e74c3c;
+	/* Optional: Red color for the discounted price */
+	font-size: large;
+}
+
+.offers {
+
+	margin-top: 0ch;
+	margin-bottom: 0ch;
+}

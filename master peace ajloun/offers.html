@@ -13,102 +13,34 @@
 	<link rel="stylesheet" type="text/css" href="styles/offers_styles.css">
 	<link rel="stylesheet" type="text/css" href="styles/offers_responsive.css">
 	<style>
-		/* Star Rating Styles */
-		.rating-container {
-			margin: 15px 0;
+		/* Popup Styling */
+		.popup {
+			display: none;
+			position: fixed;
+			z-index: 1000;
+			left: 0;
+			top: 0;
+			width: 100%;
+			height: 100%;
+			background-color: rgba(0, 0, 0, 0.5);
 		}
-
-		.star-rating {
-			display: inline-block;
-			font-size: 20px;
-			cursor: default;
+	
+		.popup-content {
+			background-color: #fff;
+			margin: 10% auto;
+			padding: 20px;
+			width: 80%;
+			max-width: 500px;
+			position: relative;
 		}
-
-		.star-rating.interactive {
+	
+		.close {
+			position: absolute;
+			top: 10px;
+			right: 15px;
+			font-size: 24px;
 			cursor: pointer;
 		}
-
-		.star-rating i {
-			color: #ddd;
-			margin-right: 5px;
-			transition: color 0.2s ease;
-		}
-
-		.star-rating i.active {
-			color: #ffd700;
-		}
-
-		.star-rating.interactive i:hover {
-			color: #ffed4a;
-		}
-
-		.user-rating {
-			margin-top: 10px;
-		}
-
-		.user-rating p {
-			margin-bottom: 5px;
-			font-size: 14px;
-			color: #666;
-		}
-
-		/* Message Styles */
-		.message {
-			position: fixed;
-			top: 20px;
-			right: 20px;
-			padding: 15px 25px;
-			border-radius: 4px;
-			color: white;
-			z-index: 1000;
-			animation: slideIn 0.3s ease-in-out;
-		}
-
-		.message.success {
-			background-color: #4CAF50;
-		}
-
-		.message.error {
-			background-color: #f44336;
-		}
-
-		@keyframes slideIn {
-			from {
-				transform: translateX(100%);
-				opacity: 0;
-			}
-
-			to {
-				transform: translateX(0);
-				opacity: 1;
-			}
-		}
-
-		#offersContainer {
-
-			margin-bottom: auto;
-			padding-bottom: 20%;
-		}
-		.super_container {
-
-			margin-bottom: 3%;
-			padding-bottom: 3%;
-		}
-		/* Style for the original price with a line through */
-		.original-price {
-		text-decoration: line-through;
-		text-decoration-thickness: 3px; /* Increase the thickness of the line */
-		color: #888; /* Optional: Light grey color for the original price */
-		margin-right: 10px; /* Optional: Add space between old and new price */
-		}
-
-		/* Style for the discounted price */
-		.discounted-price {
-		font-weight: bold;
-		color: #e74c3c; /* Optional: Red color for the discounted price */
-		}
-
-		
 	</style>
 </head>
 
@@ -437,54 +369,7 @@
 								</div>
 							</div>
 
-							<div class="offers_item rating_3">
-								<div class="row">
-									<div class="col-lg-1 temp_col"></div>
-									<div class="col-lg-3 col-1680-4">
-										<div class="offers_image_container">
-											<!-- Image by https://unsplash.com/@itsnwa -->
-											<div class="offers_image_background" style="background-image:url()"></div>
-											<div class="offer_name"><a href="single_listing.html">grand castle</a></div>
-										</div>
-									</div>
-									<div class="col-lg-8">
-										<div class="offers_content">
-											<div class="offers_price">$90<span>per night</span></div>
-											<div class="rating_r rating_r_3 offers_rating" data-rating="3">
-												<i></i>
-												<i></i>
-												<i></i>
-												<i></i>
-												<i></i>
-											</div>
-											<p class="offers_text">Suspendisse potenti. In faucibus massa. Lorem ipsum
-												dolor sit amet, consectetur adipiscing elit. Nullam eu convallis tortor.
-												Lorem ipsum dolor sit amet.</p>
-											<div class="offers_icons">
-												<ul class="offers_icons_list">
-													<li class="offers_icons_item"><img src="images/post.png" alt="">
-													</li>
-													<li class="offers_icons_item"><img src="images/compass.png" alt="">
-													</li>
-													<li class="offers_icons_item"><img src="images/bicycle.png" alt="">
-													</li>
-													<li class="offers_icons_item"><img src="images/sailboat.png" alt="">
-													</li>
-												</ul>
-											</div>
-											<div class="button book_button"><a
-													href="#">book<span></span><span></span><span></span></a></div>
-											<div class="offer_reviews">
-												<div class="offer_reviews_content">
-													<div class="offer_reviews_title">very good</div>
-													<div class="offer_reviews_subtitle">100 reviews</div>
-												</div>
-												<div class="offer_reviews_rating text-center">8.1</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
+							
 
 						</div>
 
@@ -497,6 +382,33 @@
 	</div>
 	</div>
 	<!-- Footer -->
+
+
+
+
+				
+
+<!-- Booking Popup Form -->
+<div id="bookingPopup5" class="popup5">
+	<div class="popup-content5">
+		<span class="close" onclick="closeBookingPopup()">&times;</span>
+		<h2>Book this Tour</h2>
+		<form id="bookingForm">
+			<label for="fullName">Full Name:</label>
+			<input type="text" id="fullName" name="fullName" required>
+
+			<label for="email">Email:</label>
+			<input type="email" id="email" name="email" required>
+
+			<label for="phone">Phone:</label>
+			<input type="text" id="phone" name="phone" required>
+
+			<button type="submit">Submit Booking</button>
+		</form>
+	</div>
+</div>
+
+
 
 	<footer class="footer">
 	
@@ -720,7 +632,6 @@
 	</div>
 
 	</div>
-
 	<script src="js/jquery-3.2.1.min.js"></script>
 	<script src="styles/bootstrap4/popper.js"></script>
 	<script src="styles/bootstrap4/bootstrap.min.js"></script>
