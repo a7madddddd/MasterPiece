@@ -12,11 +12,19 @@ function createStarRating(containerId, currentRating, isInteractive = false) {
 
 // Function to handle rating submission
 async function submitRating(offerId, rating) {
+  // Check if user is logged in by verifying JWT token in localStorage
+  const token = localStorage.getItem('jwt');
+  if (!token) {
+    showMessage('You need to log in first to submit a review.', 'error');
+    return false;
+  }
+
   try {
     const response = await fetch('https://localhost:44321/api/Offers/AddReview', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`  // Send JWT token in Authorization header
       },
       body: JSON.stringify({
         offerId: offerId,
@@ -31,6 +39,7 @@ async function submitRating(offerId, rating) {
     return true;
   } catch (error) {
     console.error('Error submitting rating:', error);
+    showMessage('Failed to submit rating. Please try again.', 'error');
     return false;
   }
 }
@@ -52,52 +61,62 @@ function fetchAndDisplayOffers() {
         const ratingContainerId = `rating-${offer.offerId}`;
         const userRatingContainerId = `user-rating-${offer.offerId}`;
 
+        // Calculate the discounted price
+        const discountAmount = offer.pricePerNight * (offer.discountPercentage / 100);
+        const discountedPrice = offer.pricePerNight - discountAmount;
+
+        // HTML structure with price and discount
         const offerHTML = `
-                    <div class="offers_item rating_${offer.rating}">
-                        <div class="row">
-                            <div class="col-lg-1 temp_col"></div>
-                            <div class="col-lg-3 col-1680-4">
-                                <div class="offers_image_container">
-                                    <div class="offers_image_background" style="background-image: url('${imagePath}')"></div>
-                                    <div class="offer_name"><a href="#">${offer.serviceName}</a></div>
-                                </div>
-                            </div>
-                            <div class="col-lg-8">
-                                <div class="offers_content">
-                                    <div class="offers_price">${offer.pricePerNight} jd<span>per night</span></div>
-                                    <div class="rating-container">
-                                        <div class="current-rating">
-                                            ${createStarRating(ratingContainerId, offer.rating)}
-                                        </div>
-                                        <div class="user-rating">
-                                            <p>Rate this offer:</p>
-                                            ${createStarRating(userRatingContainerId, 0, true)}
-                                        </div>
-                                    </div>
-                                    <p class="offers_text">${offer.description}</p>
-                                    <div class="offers_icons">
-                                        <ul class="offers_icons_list">
-                                            <li class="offers_icons_item"><img src="images/post.png" alt=""></li>
-                                            <li class="offers_icons_item"><img src="images/compass.png" alt=""></li>
-                                            <li class="offers_icons_item"><img src="images/bicycle.png" alt=""></li>
-                                        </ul>
-                                    </div>
-                                    <div class="button book_button">
-                                        <a href="#">book<span></span><span></span><span></span></a>
-                                    </div>
-                                    <div class="offer_reviews">
-                                        <div class="offer_reviews_content">
-                                            <div class="offer_reviews_title">${offer.reviewCount} reviews</div>
-                                            <div class="offer_reviews_subtitle"></div>
-                                        </div>
-                                        <div class="offer_reviews_rating text-center">${offer.rating * 2}</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+          <div class="offers_item rating_${offer.rating}">
+            <div class="row">
+              <div class="col-lg-1 temp_col"></div>
+              <div class="col-lg-3 col-1680-4">
+                <div class="offers_image_container">
+                  <div class="offers_image_background" style="background-image: url('${imagePath}')"></div>
+                  <div class="offer_name"><a href="#">${offer.serviceName}</a></div>
                 </div>
-                `;
+              </div>
+              <div class="col-lg-8">
+                <div class="offers_content">
+                  <div class="offers_price">
+                  ${offer.discountPercentage > 0 ?
+                            `<span class="original-price">${offer.pricePerNight} jd</span>` : ''}
+                  <span class="discounted-price">${discountedPrice.toFixed(2)} jd</span>
+                  <span>per Tour</span>
+                </div>
+
+                  <div class="rating-container">
+                    <div class="current-rating">
+                      ${createStarRating(ratingContainerId, offer.rating)}
+                    </div>
+                    <div class="user-rating">
+                      <p>Rate this offer:</p>
+                      ${createStarRating(userRatingContainerId, 0, true)}
+                    </div>
+                  </div>
+                  <p class="offers_text">${offer.description}</p>
+                  <div class="offers_icons">
+                    <ul class="offers_icons_list">
+                      <li class="offers_icons_item"><img src="images/post.png" alt=""></li>
+                      <li class="offers_icons_item"><img src="images/compass.png" alt=""></li>
+                      <li class="offers_icons_item"><img src="images/bicycle.png" alt=""></li>
+                    </ul>
+                  </div>
+                  <div class="button book_button">
+                    <a href="#">book<span></span><span></span><span></span></a>
+                  </div>
+                  <div class="offer_reviews">
+                    <div class="offer_reviews_content">
+                      <div class="offer_reviews_title">${offer.reviewCount} reviews</div>
+                      <div class="offer_reviews_subtitle"></div>
+                    </div>
+                    <div class="offer_reviews_rating text-center">${offer.rating * 2}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
         offersGrid.insertAdjacentHTML('beforeend', offerHTML);
 
         // Add event listeners for the interactive rating
@@ -127,7 +146,7 @@ function fetchAndDisplayOffers() {
                 showMessage('Rating submitted successfully!', 'success');
               } else {
                 // Show error message
-                showMessage('Failed to submit rating. Please try again.', 'error');
+                showMessage('You need to log in first to submit a review.', 'error');
               }
             });
           });
@@ -140,6 +159,7 @@ function fetchAndDisplayOffers() {
       offersGrid.innerHTML = '<div class="text-center p-4">Failed to load offers</div>';
     });
 }
+
 
 // Helper function to highlight stars
 function highlightStars(container, rating) {
@@ -164,7 +184,6 @@ function showMessage(message, type) {
 
 // Call the function when the document is ready
 document.addEventListener('DOMContentLoaded', fetchAndDisplayOffers);
-
 
 
 
