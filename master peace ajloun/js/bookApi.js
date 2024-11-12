@@ -219,7 +219,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 // Check if JWT is in local storage
-document.addEventListener("DOMContentLoaded", function () {
+docume
+nt.addEventListener("DOMContentLoaded", function () {
     // Check if the element with ID 'userBox' exists
     const userBox = document.getElementById('userBox');
 

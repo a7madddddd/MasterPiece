@@ -529,62 +529,8 @@
     <script src="js/telefrik.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/Shard.js"></script>
 
-    <script>
-    // Check if JWT is in local storage
-    document.addEventListener("DOMContentLoaded", function () {
-        // Check if the element with ID 'userBox' exists
-        const userBox = document.getElementById('userBox');
-
-        if (userBox) {
-            // Check if JWT is in local storage
-            const token = localStorage.getItem('jwt');
-
-            if (token) {
-                // If user is logged in (JWT token found), show profile link
-                userBox.innerHTML = `
-                            <a href="edit_profile.html" id ="profile_icon">Profile</a>         
-                            <small style="color: whitesmoke;">|</small>
-                            <div class="user_box_link">
-                                <a href="#" id="logoutButton">Logout</a>
-                            </div>
-                        `;
-
-                // Attach logout functionality to the "Logout" button
-                document.getElementById('logoutButton').addEventListener('click', function (event) {
-                    event.preventDefault(); // Prevent default link behavior
-                    logout();
-                });
-            } else {
-                // If user is not logged in, show login/register links
-                userBox.innerHTML = `
-                            <div class="user_box_login user_box_link">
-                                <a href="login.html">Login</a>
-                            </div>
-                            <div class="user_box_register user_box_link">
-                                <a href="login.html">Register</a>
-                            </div>
-                        `;
-            }
-        } else {
-            console.error("Element with ID 'userBox' not found.");
-        }
-    });
-
-    // Function to handle logout, moved outside of the event listener
-    function logout() {
-        localStorage.removeItem('jwt'); // Remove JWT from local storage
-
-        // استخدام AlertifyJS لإظهار رسالة نجاح عند تسجيل الخروج
-        alertify.success("Logged out successfully!");
-
-        // إعادة تحميل الصفحة لتحديث الشريط العلوي
-        setTimeout(() => {
-            window.location.reload();
-        }, 1000); // تأخير قليل قبل إعادة التحميل حتى يمكن رؤية الرسالة
-    }
-
-    </script>
 </body>
 
 </html>
