@@ -146,13 +146,13 @@ namespace MasterPieceApi.Controllers
                 .Select(b => new BookingDto
                 {
                     BookingId = b.BookingId,
-                    UserId = b.UserId, // Default to 0 if UserId is nullable
-                    ServiceId = b.ServiceId ?? 0, // Default to 0 if ServiceId is nullable
+                    UserId = b.UserId, 
+                    ServiceId = b.ServiceId ?? 0, 
                     BookingDate = b.BookingDate.HasValue ? b.BookingDate.Value.ToDateTime(new TimeOnly(0, 0)) : DateTime.MinValue,
-                    NumberOfPeople = b.NumberOfPeople ?? 0, // Default to 0 if NumberOfPeople is nullable
-                    TotalAmount = b.TotalAmount ?? 0, // Default to 0 if TotalAmount is nullable
-                    Status = b.Status ?? string.Empty, // Default to empty string if Status is nullable
-                    CreatedAt = b.CreatedAt ?? DateTime.MinValue // Default to MinValue if CreatedAt is nullable
+                    NumberOfPeople = b.NumberOfPeople ?? 0, 
+                    TotalAmount = b.TotalAmount ?? 0, 
+                    Status = b.Status ?? string.Empty, 
+                    CreatedAt = b.CreatedAt ?? DateTime.MinValue 
                 })
                 .FirstOrDefaultAsync();
 
