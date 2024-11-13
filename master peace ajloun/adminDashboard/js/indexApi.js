@@ -19,7 +19,7 @@ async function fetchMessages() {
                     <img class="rounded-circle flex-shrink-0" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
                     <div class="w-100 ms-3">
                         <div class="d-flex w-100 justify-content-between">
-                            <h6 class="mb-0">${message.name}</h6>
+                            <h6 class="mb-0">${message.name}-${message.email}</h6>
                             <small>${new Date(message.submittedAt).toLocaleTimeString()}</small>
                         </div>
                         <span>${message.message}</span>
