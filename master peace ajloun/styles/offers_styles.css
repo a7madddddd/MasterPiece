@@ -2241,3 +2241,120 @@ strong {
 	margin-top: 0ch;
 	margin-bottom: 0ch;
 }
+
+
+
+
+
+
+
+
+.booking-modal {
+	display: none;
+	position: fixed;
+	z-index: 1000;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.7);
+	backdrop-filter: blur(10px);
+	overflow-y: auto;
+	padding: 3rem;
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.modal-content {
+	background-color: #fff;
+	margin: 2% auto;
+	padding: 2.5rem;
+	border-radius: 0.75rem;
+	box-shadow: 0 0 3rem rgba(0, 0, 0, 0.2);
+	max-width: 50%;
+	position: relative;
+}
+
+.close-modal {
+	position: absolute;
+	top: 1.5rem;
+	right: 1.5rem;
+	font-size: 1.75rem;
+	color: #777;
+	cursor: pointer;
+	transition: color 0.3s ease;
+}
+
+.close-modal:hover {
+	color: #444;
+}
+
+.form-group {
+	margin-bottom: 2rem;
+}
+
+.form-group label {
+	display: block;
+	font-weight: 600;
+	color: #555;
+	margin-bottom: 0.75rem;
+	font-size: 0.95rem;
+}
+
+.form-group input {
+	width: 100%;
+	padding: 1rem;
+	border: 1px solid #ccc;
+	border-radius: 0.35rem;
+	font-size: 1rem;
+	color: #333;
+	transition: border-color 0.3s ease;
+}
+
+.form-group input:focus {
+	border-color: green;
+	outline: none;
+}
+
+.total-amount {
+	margin: 2rem 0;
+	font-weight: 600;
+	font-size: 1.4rem;
+	color: #333;
+}
+
+.submit-booking {
+	background-color: green;
+	color: #fff;
+	padding: 1rem 1.75rem;
+	border: none;
+	border-radius: 0.35rem;
+	cursor: pointer;
+	font-size: 1.1rem;
+	font-weight: 500;
+	transition: background-color 0.3s ease;
+	width: 100%;
+}
+
+.submit-booking:hover {
+	background-color: darkgreen;
+}
+
+.error-details {
+	margin-top: 2rem;
+	color: #dc3545;
+	background-color: #f8d7da;
+	border: 1px solid #f5c6cb;
+	border-radius: 0.35rem;
+	padding: 1.25rem;
+	display: none;
+	font-size: 0.95rem;
+}
+
+.error-details:not(:empty) {
+	display: block;
+}
+
+.error-message {
+	margin: 0.75rem 0;
+}
+

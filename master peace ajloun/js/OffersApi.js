@@ -82,7 +82,7 @@ function fetchAndDisplayOffers() {
                   ${offer.discountPercentage > 0 ?
                             `<span class="original-price">${offer.pricePerNight} jd</span>` : ''}
                   <span class="discounted-price">${discountedPrice.toFixed(2)} jd</span>
-                  <span>per Tour</span>
+                  <span style="font-size = 0.6em; font-weight: bold;">per Tour</span>
                 </div>
 
                   <div class="rating-container">
@@ -216,8 +216,7 @@ document.addEventListener('DOMContentLoaded', fetchAndDisplayOffers);
 
 
 
-// Modified submitBooking function with enhanced error handling
-// Function to get userId from JWT token
+
 // Function to get userId from JWT token
 function getUserIdFromToken() {
   const token = localStorage.getItem('jwt');
@@ -289,25 +288,33 @@ async function submitBooking(offerId, serviceName, serviceImage, pricePerTour) {
   }
 
   const modalHTML = `
-    <div class="booking-modal" id="bookingModal">
+      <div class="booking-modal" id="bookingModal">
       <div class="modal-content">
-        <span class="close-modal">&times;</span>
-        <h2>Book Tour</h2>
-        <form id="bookingForm">
-          <div class="form-group">
-            <label for="numberOfPeople">Number of People:</label>
-            <input type="number" id="numberOfPeople" min="1" required>
-          </div>
-          <div class="form-group">
-            <label for="bookingDate">Booking Date:</label>
-            <input type="datetime-local" id="bookingDate" required>
-          </div>
-          <div class="total-amount">
-            Total Amount: <span id="totalAmount">0</span> JD
-          </div>
-          <button type="submit" class="submit-booking">Confirm Booking</button>
-        </form>
-        <div id="errorDetails" class="error-details"></div>
+        <div class="modal-header">
+          <h2 class="modal-title">Book Tour</h2>
+          <span class="close-modal">&times;</span>
+        </div>
+        <div class="modal-body">
+          <form id="bookingForm">
+            <div class="form-group">
+              <label for="numberOfPeople" class="form-label">Number of People:</label>
+              <input type="number" id="numberOfPeople" min="1" max="10" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label for="bookingDate" class="form-label">Booking Date:</label>
+              <input type="datetime-local" id="bookingDate" class="form-control" step="86400" required>
+            </div>
+            <div class="form-group">
+              <div class="total-amount">
+                Total Amount: <span id="totalAmount">0</span> JD
+              </div>
+            </div>
+            <div class="form-group">
+              <button type="submit" class="btn btn-success submit-booking">Confirm Booking</button>
+            </div>
+          </form>
+          <div id="errorDetails" class="alert alert-danger error-details"></div>
+        </div>
       </div>
     </div>
   `;
@@ -350,10 +357,10 @@ async function submitBooking(offerId, serviceName, serviceImage, pricePerTour) {
 
       try {
         const numberOfPeople = parseInt(numberOfPeopleInput.value);
-        if (numberOfPeople <= 0) {
+        if (numberOfPeople <= 0 ) {
           throw new Error('Number of people must be greater than 0');
         }
-
+        
         const bookingDateTime = new Date(document.getElementById('bookingDate').value);
         if (bookingDateTime < new Date()) {
           throw new Error('Booking date cannot be in the past');
@@ -402,7 +409,7 @@ async function submitBooking(offerId, serviceName, serviceImage, pricePerTour) {
         const responseData = await response.json();
         console.log('Booking response:', responseData);
 
-        showMessage('Booking submitted successfully!', 'success');
+        showMessage('Booking submitted successfully See it on your profile!', 'success');
         modal.remove();
         resolve(true);
 
@@ -420,98 +427,7 @@ async function submitBooking(offerId, serviceName, serviceImage, pricePerTour) {
   });
 }
 
-// The getUserIdFromToken and modal styles remain the same...
 
-// CSS styles remain the same as before...
-const modalStyles = `
-  <style>
-    .booking-modal {
-      display: none;
-      position: fixed;
-      z-index: 1000;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0,0,0,0.5);
-    }
-
-    .modal-content {
-      background-color: white;
-      margin: 15% auto;
-      padding: 20px;
-      border-radius: 5px;
-      width: 80%;
-      max-width: 500px;
-      position: relative;
-    }
-
-    .close-modal {
-      position: absolute;
-      right: 10px;
-      top: 10px;
-      font-size: 24px;
-      cursor: pointer;
-    }
-
-    .form-group {
-      margin-bottom: 15px;
-    }
-
-    .form-group label {
-      display: block;
-      margin-bottom: 5px;
-    }
-
-    .form-group input {
-      width: 100%;
-      padding: 8px;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-    }
-
-    .total-amount {
-      margin: 15px 0;
-      font-weight: bold;
-    }
-
-    .submit-booking {
-      background-color: #fa9e1b;
-      color: white;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      width: 100%;
-    }
-
-    .submit-booking:hover {
-      background-color: #e89016;
-    }
-
-    .error-details {
-      margin-top: 15px;
-      color: #dc3545;
-      background-color: #f8d7da;
-      border: 1px solid #f5c6cb;
-      border-radius: 4px;
-      padding: 10px;
-      display: none;
-    }
-
-    .error-details:not(:empty) {
-      display: block;
-    }
-
-    .error-message {
-      margin: 5px 0;
-      font-size: 14px;
-    }
-  </style>
-`;
-// Rest of the code remains the same...
-
-// Add the styles to the document head
 document.head.insertAdjacentHTML('beforeend', modalStyles);
 
 
