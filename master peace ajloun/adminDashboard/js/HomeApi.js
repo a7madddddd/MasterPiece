@@ -67,9 +67,7 @@ function populateTable(data) {
             <td>${(booking.totalAmount || 0).toFixed(2)} jd</td>
             <td>${booking.status || 'N/A'}</td>
             <td>
-                <button class="btn btn-sm btn-danger delete-btn" data-id="${booking.bookingId}">Delete</button>
                 <button class="btn btn-sm btn-warning reject-btn" data-id="${booking.bookingId}">Reject</button>
-                <button class="btn btn-sm btn-success accept-btn" data-id="${booking.bookingId}">Accept</button>
             </td>
         `;
         tableBody.appendChild(row);

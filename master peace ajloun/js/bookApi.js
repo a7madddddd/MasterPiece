@@ -130,7 +130,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         paymentMethod: 'PayPal',
                         serviceId: booking.serviceId,
                         bookingId: booking.bookingId,
-                        serviceName: orderData.serviceName,  // Added service name here
+                        serviceName: orderData.serviceName,  
                         
                     };
 

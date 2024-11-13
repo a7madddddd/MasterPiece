@@ -423,10 +423,7 @@ async function deleteMessage(messageId) {
 // Function to load message data and populate form
 async function loadMessageData() {
     const contactId = localStorage.getItem('selectedContactId'); // Retrieve message ID from localStorage
-    if (!contactId) {
-        Swal.fire('Error', 'No message selected.', 'error');
-        return;
-    }
+
 
     try {
         // Fetch the message data from backend
