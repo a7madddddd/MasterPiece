@@ -43,32 +43,17 @@ document.addEventListener("DOMContentLoaded", function () {
                     }
 
                     const row = document.createElement("tr");
-
-                    // Generate the table row content based on the booking status
                     row.innerHTML = `
-                    <td>${booking.serviceName}</td>
-                    <td><img src="${booking.image}" alt="${booking.serviceName}"></td>
-                    <td>${new Date(booking.bookingDate).toLocaleDateString()}</td>
-                    <td>${booking.numberOfPeople}</td>
-                    <td>${booking.totalAmount} jd</td>
-                    <td>${booking.status}</td>
-                    <td>${generatePaymentButton(booking)}</td>
-                `;
-
+                        <td>${booking.serviceName}</td>
+                        <td><img src="${booking.image}" alt="${booking.serviceName}"></td>
+                        <td>${new Date(booking.bookingDate).toLocaleDateString()}</td>
+                        <td>${booking.numberOfPeople}</td>
+                        <td>${booking.totalAmount}  jd</td>
+                        <td>${booking.status}</td>
+                        <td><button class="btn btn-primary btn-sm payment-btn" data-booking-id="${booking.bookingId}">Pay Now</button></td>
+                    `;
                     tableBody.appendChild(row);
                 });
-
-                // Function to generate payment button or status message based on booking status
-                function generatePaymentButton(booking) {
-                    if (booking.status === "Rejected") {
-                        // Return a message instead of a payment button if booking is rejected
-                        return `<span class="text-danger">Payment Not Allowed</span>`;
-                    }else if (booking.status === "Pending") {
-                        // Display "Pay Now" button only if the status is pending
-                        return `<button class="btn btn-primary btn-sm payment-btn" data-booking-id="${booking.bookingId}">Pay Now</button>`;
-                    }
-                    return `<span>${booking.status}</span>`;
-                }
 
                 // Add event listeners for payment buttons
                 document.querySelectorAll(".payment-btn").forEach(button => {
@@ -77,19 +62,20 @@ document.addEventListener("DOMContentLoaded", function () {
                         window.location.href = `book.html?bookingId=${bookingId}`;
                     });
                 });
-
             }
         })
         .catch(error => {
             console.error("There was an error fetching the bookings:", error);
         });
 
-    // Fetch and display payment status
-    fetch(paymentApiUrl, {
-        headers: {
-            'Authorization': `Bearer ${token}`
-        }
-    })
+
+
+        // Fetch and display payment status
+        fetch(paymentApiUrl, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
         .then(response => {
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
@@ -178,7 +164,7 @@ const UserProfileManager = {
     handleAuthError(message) {
         console.error(message);
 
-        
+
         Swal.fire({
             title: 'Session Expired',
             text: 'Please log in again.',
