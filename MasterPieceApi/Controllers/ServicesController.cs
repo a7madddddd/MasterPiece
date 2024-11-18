@@ -25,7 +25,7 @@ namespace MasterPieceApi.Controllers
             return await _context.Services.ToListAsync();
         }
 
-        // GET: api/Services/5
+        // GET: api/Services
         [HttpGet("{id}")]
         public async Task<ActionResult<Service>> GetService(int id)
         {
@@ -50,7 +50,6 @@ namespace MasterPieceApi.Controllers
 
 
         // PUT: api/Services/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutService(int id, Service service)
         {
@@ -81,7 +80,6 @@ namespace MasterPieceApi.Controllers
         }
 
         // POST: api/Services
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Service>> PostService(Service service)
         {
@@ -154,7 +152,7 @@ namespace MasterPieceApi.Controllers
                 Price = serviceDto.Price,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow,
-                IsActive = serviceDto.IsActive,  // Set default value or modify as needed
+                IsActive = serviceDto.IsActive,  
                 Description2 = serviceDto.Description2,
                 Question = serviceDto.Question,
                 Dates = serviceDto.Dates,
@@ -166,17 +164,14 @@ namespace MasterPieceApi.Controllers
                 var fileName = $"{Guid.NewGuid()}_{Path.GetFileName(serviceDto.ImageFile.FileName)}";
                 var filePath = Path.Combine(_imagePath, fileName);
 
-                // Ensure the directory exists
                 Directory.CreateDirectory(_imagePath);
 
-                // Save the file
                 using (var stream = new FileStream(filePath, FileMode.Create))
                 {
                     await serviceDto.ImageFile.CopyToAsync(stream);
                 }
 
-                // Set the image path in the service model
-                service.Image = $"/services images/{fileName}"; // Adjust the path as needed
+                service.Image = $"/services images/{fileName}"; 
             }
 
             _context.Services.Add(service);
@@ -195,14 +190,12 @@ namespace MasterPieceApi.Controllers
         [HttpPut("UpdateServiceByName")]
         public async Task<ActionResult<Service>> UpdateServiceByName([FromForm] ServiceCreateDto serviceDto)
         {
-            // Find the existing service by name
             var service = await _context.Services.FirstOrDefaultAsync(s => s.ServiceName == serviceDto.ServiceName);
             if (service == null)
             {
                 return NotFound();
             }
 
-            // Update the service properties
             service.Description = serviceDto?.Description;
             service.Price = serviceDto?.Price;
             service.Description2 = serviceDto?.Description2;
@@ -213,24 +206,20 @@ namespace MasterPieceApi.Controllers
 
             if (serviceDto.ImageFile != null && serviceDto.ImageFile.Length > 0)
             {
-                // Generate a unique file name for the uploaded image
                 var fileName = $"{Guid.NewGuid()}_{Path.GetFileName(serviceDto?.ImageFile.FileName)}";
                 var filePath = Path.Combine(@"C:\Users\Orange\Desktop\test_ajloun\master peace ajloun\services images", fileName);
 
-                // Save the new file
                 using (var stream = new FileStream(filePath, FileMode.Create))
                 {
                     await serviceDto?.ImageFile.CopyToAsync(stream);
                 }
 
-                // Update the image path in the service model
-                service.Image = $"/services images/{fileName}"; // Adjust based on how you serve images
+                service.Image = $"/services images/{fileName}"; 
             }
 
-            // Save changes to the database
             await _context.SaveChangesAsync();
 
-            return Ok(service); // Return the updated service
+            return Ok(service);
         }
 
 

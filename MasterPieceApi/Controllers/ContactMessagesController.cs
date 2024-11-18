@@ -45,8 +45,7 @@ namespace MasterPieceApi.Controllers
             return contactMessage;
         }
 
-        // PUT: api/ContactMessages/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        // PUT: api/ContactMessages
         [HttpPut("{id}")]
         public async Task<IActionResult> PutContactMessage(int id, ContactMessage contactMessage)
         {
@@ -77,7 +76,6 @@ namespace MasterPieceApi.Controllers
         }
 
         // POST: api/ContactMessages
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<ContactMessage>> PostContactMessage(ContactMessage contactMessage)
         {
@@ -87,7 +85,7 @@ namespace MasterPieceApi.Controllers
             return CreatedAtAction("GetContactMessage", new { id = contactMessage.MessageId }, contactMessage);
         }
 
-        // DELETE: api/ContactMessages/5
+        // DELETE: api/ContactMessages/
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteContactMessage(int id)
         {
@@ -114,7 +112,6 @@ namespace MasterPieceApi.Controllers
         {
 
 
-            // Map DTO to entity
             var contactMessage = new ContactMessage
             {
                 Name = contactMessageDto.Name,
@@ -124,7 +121,6 @@ namespace MasterPieceApi.Controllers
                 SubmittedAt = DateTime.UtcNow
             };
 
-            // Add the message to the context
             _context.ContactMessages.Add(contactMessage);
 
             try
@@ -133,11 +129,9 @@ namespace MasterPieceApi.Controllers
             }
             catch (DbUpdateException ex)
             {
-                // Handle error (e.g., log it, return an appropriate response)
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
 
-            // Return the created message with a 201 status code
             return CreatedAtAction(nameof(PostMessageByUserId), new { id = contactMessage.MessageId }, contactMessage);
         }
 
@@ -159,7 +153,6 @@ namespace MasterPieceApi.Controllers
                 return BadRequest("Invalid reply data.");
             }
 
-            // Fetch the original contact message from the database using messageId
             var contactMessage = await _context.ContactMessages.FirstOrDefaultAsync(m => m.MessageId == messageId);
 
             if (contactMessage == null)
@@ -167,15 +160,14 @@ namespace MasterPieceApi.Controllers
                 return NotFound("Contact message not found.");
             }
 
-            // Send the reply email
             try
             {
-                await SendReplyEmail(contactMessageDto); // Ensure this is awaited properly
+                await SendReplyEmail(contactMessageDto); 
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error sending reply email: {ex.Message}");
-                return StatusCode(500, "Error sending reply email.");  // Detailed error message
+                return StatusCode(500, "Error sending reply email.");  
             }
 
             return Ok("Reply sent successfully.");
@@ -255,13 +247,11 @@ namespace MasterPieceApi.Controllers
 
             try
             {
-                // Ensure that the email service is working and handling exceptions
                 await _emailService.SendEmailAsync(contactMessageDto.Email, "Reply to Your Inquiry - Ajloun Tour 360", emailBody);
                 Console.WriteLine("Reply email sent successfully.");
             }
             catch (Exception ex)
             {
-                // Handle and log the email sending exception
                 Console.WriteLine($"Error sending reply email: {ex.Message}");
                 throw new Exception("Error sending email", ex); // Rethrow exception for higher-level handling
             }

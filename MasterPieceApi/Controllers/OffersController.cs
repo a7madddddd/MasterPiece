@@ -23,7 +23,7 @@ namespace MasterPieceApi.Controllers
 
 
 
-        // DELETE: api/Offers/5
+        // DELETE: api/Offers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteOffer(int id)
         {
@@ -81,14 +81,12 @@ namespace MasterPieceApi.Controllers
         {
             if (!ModelState.IsValid)
             {
-                // Log validation errors to understand what is wrong
                 var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
                 return BadRequest(new { Errors = errors });
             }
 
 
 
-            // Find the service by ServiceName
             var service = await _context.Services
                 .FirstOrDefaultAsync(s => s.ServiceName == offerDto.ServiceName);
 
@@ -97,21 +95,18 @@ namespace MasterPieceApi.Controllers
                 return NotFound($"Service with name {offerDto.ServiceName} not found.");
             }
 
-            // Map the DTO to the Offer entity
             var newOffer = new Offer
             {
                 ServiceId = service.ServiceId,
                 DiscountPercentage = offerDto.DiscountPercentage,
                 IsActive = offerDto.IsActive,
-                StartDate = offerDto.StartDate.ToString("yyyy-MM-dd"), // Formatting to string if needed
+                StartDate = offerDto.StartDate.ToString("yyyy-MM-dd"), 
                 EndDate = offerDto.EndDate.ToString("yyyy-MM-dd"),
             };
 
-            // Add the new offer to the database
             _context.Offers.Add(newOffer);
             await _context.SaveChangesAsync();
 
-            // Return success response
             return Ok(new
             {
                 OfferId = newOffer.OfferId,
@@ -122,6 +117,8 @@ namespace MasterPieceApi.Controllers
                 EndDate = newOffer.EndDate,
             });
         }
+
+
         [HttpDelete("DeleteOfferByServiceName")]
         public async Task<IActionResult> DeleteOfferByServiceName(string serviceName)
         {
@@ -130,7 +127,6 @@ namespace MasterPieceApi.Controllers
                 return BadRequest("Service name cannot be empty.");
             }
 
-            // Find the ServiceId based on the ServiceName
             var service = await _context.Services
                 .FirstOrDefaultAsync(s => s.ServiceName == serviceName);
 
@@ -139,7 +135,6 @@ namespace MasterPieceApi.Controllers
                 return NotFound($"Service with name '{serviceName}' not found.");
             }
 
-            // Find the offer based on the ServiceId
             var offer = await _context.Offers
                 .FirstOrDefaultAsync(o => o.ServiceId == service.ServiceId);
 
@@ -165,15 +160,15 @@ namespace MasterPieceApi.Controllers
             try
             {
                 var offers = await _context.Offers
-                    .Include(o => o.Service) // Optional: Include Service details if related
+                    .Include(o => o.Service) 
                     .Select(o => new OfferDTO
                     {
                         OfferId = o.OfferId,
-                        ServiceName = o.Service.ServiceName, // Assuming each Offer has a related Service
+                        ServiceName = o.Service.ServiceName, 
                         DiscountPercentage = o.DiscountPercentage ?? 0,
-                        StartDate = DateTime.Parse(o.StartDate),  // Ensure StartDate is a valid DateTime format
-                        EndDate = DateTime.Parse(o.EndDate),      // Ensure EndDate is a valid DateTime format
-                        IsActive = o.IsActive ?? false            // Default to false if IsActive is null
+                        StartDate = DateTime.Parse(o.StartDate),  
+                        EndDate = DateTime.Parse(o.EndDate),     
+                        IsActive = o.IsActive ?? false           
                     })
                     .ToListAsync();
 
@@ -181,7 +176,6 @@ namespace MasterPieceApi.Controllers
             }
             catch (Exception ex)
             {
-                // Log the exception details if needed
                 return StatusCode(500, new { Message = "An error occurred while fetching the offers", Details = ex.Message });
             }
         }
@@ -201,7 +195,6 @@ namespace MasterPieceApi.Controllers
                 return BadRequest(new { Errors = errors });
             }
 
-            // Find the service by its name
             var service = await _context.Services
                 .FirstOrDefaultAsync(s => s.ServiceName == offerDto.ServiceName);
 
@@ -210,7 +203,6 @@ namespace MasterPieceApi.Controllers
                 return NotFound($"Service with name {offerDto.ServiceName} not found.");
             }
 
-            // Find the existing offer by ServiceId (assuming there's a unique Offer for each Service)
             var existingOffer = await _context.Offers
                 .FirstOrDefaultAsync(o => o.ServiceId == service.ServiceId);
 
@@ -219,16 +211,13 @@ namespace MasterPieceApi.Controllers
                 return NotFound($"Offer for service {offerDto.ServiceName} not found.");
             }
 
-            // Update the offer details
             existingOffer.DiscountPercentage = offerDto.DiscountPercentage;
             existingOffer.IsActive = offerDto.IsActive;
             existingOffer.StartDate = offerDto.StartDate.ToString("yyyy-MM-dd"); // Format if needed
             existingOffer.EndDate = offerDto.EndDate.ToString("yyyy-MM-dd");
 
-            // Save changes to the database
             await _context.SaveChangesAsync();
 
-            // Return the updated offer information
             return Ok(new
             {
                 OfferId = existingOffer.OfferId,
@@ -248,7 +237,6 @@ namespace MasterPieceApi.Controllers
         {
             try
             {
-                // Input validation
                 if (request.Rating < 1 || request.Rating > 5)
                 {
                     return BadRequest(new ReviewResponseDto
@@ -258,7 +246,6 @@ namespace MasterPieceApi.Controllers
                     });
                 }
 
-                // Get the offer
                 var offer = await _context.Offers.FindAsync(request.OfferId);
                 if (offer == null)
                 {
@@ -269,18 +256,15 @@ namespace MasterPieceApi.Controllers
                     });
                 }
 
-                // Calculate new rating
                 decimal currentTotalRating = (offer.Rating ?? 0) * (offer.ReviewCount ?? 0);
                 int newReviewCount = (offer.ReviewCount ?? 0) + 1;
                 decimal newRating = (currentTotalRating + request.Rating) / newReviewCount;
 
-                // Update the offer
-                offer.Rating = Math.Round(newRating, 1); // Round to 1 decimal place
+                offer.Rating = Math.Round(newRating, 1); 
                 offer.ReviewCount = newReviewCount;
 
                 await _context.SaveChangesAsync();
 
-                // Return success response
                 return Ok(new ReviewResponseDto
                 {
                     Success = true,
@@ -291,7 +275,6 @@ namespace MasterPieceApi.Controllers
             }
             catch (Exception ex)
             {
-                // Log the exception here
                 return StatusCode(500, new ReviewResponseDto
                 {
                     Success = false,

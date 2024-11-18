@@ -1,11 +1,8 @@
 
-// Function to update UI with user data
-// Function to get JWT from local storage
 function getJWTFromLocalStorage() {
     return localStorage.getItem('jwt');
 }
 
-// Function to decode JWT token
 function decodeJWT(token) {
     try {
         const base64Url = token.split('.')[1];
@@ -21,7 +18,6 @@ function decodeJWT(token) {
     }
 }
 
-// Function to fetch user data
 async function fetchUserData(userId) {
     try {
         const response = await fetch(`https://localhost:44321/api/Users/${userId}`);
@@ -35,7 +31,6 @@ async function fetchUserData(userId) {
     }
 }
 
-// Function to update UI with user data
 function updateUI(userData) {
     if (!userData) {
         console.error('No user data available to update UI');

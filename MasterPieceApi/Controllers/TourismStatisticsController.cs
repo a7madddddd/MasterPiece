@@ -23,7 +23,7 @@ namespace MasterPieceApi.Controllers
             return await _context.TourismStatistics.ToListAsync();
         }
 
-        // GET: api/TourismStatistics/5
+        // GET: api/TourismStatistics
         [HttpGet("{id}")]
         public async Task<ActionResult<TourismStatistic>> GetTourismStatistic(int id)
         {
@@ -37,8 +37,7 @@ namespace MasterPieceApi.Controllers
             return tourismStatistic;
         }
 
-        // PUT: api/TourismStatistics/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        // PUT: api/TourismStatistics
         [HttpPut("{id}")]
         public async Task<IActionResult> PutTourismStatistic(int id, TourismStatistic tourismStatistic)
         {
@@ -69,7 +68,6 @@ namespace MasterPieceApi.Controllers
         }
 
         // POST: api/TourismStatistics
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<TourismStatistic>> PostTourismStatistic(TourismStatistic tourismStatistic)
         {
@@ -93,7 +91,7 @@ namespace MasterPieceApi.Controllers
             return CreatedAtAction("GetTourismStatistic", new { id = tourismStatistic.Year }, tourismStatistic);
         }
 
-        // DELETE: api/TourismStatistics/5
+        // DELETE: api/TourismStatistics
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTourismStatistic(int id)
         {

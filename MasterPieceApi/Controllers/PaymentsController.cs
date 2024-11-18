@@ -34,7 +34,7 @@ namespace MasterPieceApi.Controllers
             return await _context.Payments.ToListAsync();
         }
 
-        // GET: api/Payments/5
+        // GET: api/Payments
         [HttpGet("{id}")]
         public async Task<ActionResult<Payment>> GetPayment(int id)
         {
@@ -48,8 +48,7 @@ namespace MasterPieceApi.Controllers
             return payment;
         }
 
-        // PUT: api/Payments/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        // PUT: api/Payments
         [HttpPut("{id}")]
         public async Task<IActionResult> PutPayment(int id, Payment payment)
         {
@@ -80,7 +79,6 @@ namespace MasterPieceApi.Controllers
         }
 
         // POST: api/Payments
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Payment>> PostPayment(Payment payment)
         {
@@ -90,7 +88,7 @@ namespace MasterPieceApi.Controllers
             return CreatedAtAction("GetPayment", new { id = payment.PaymentId }, payment);
         }
 
-        // DELETE: api/Payments/5
+        // DELETE: api/Payments
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePayment(int id)
         {
@@ -120,8 +118,6 @@ namespace MasterPieceApi.Controllers
 
 
         // POST: api/payments/paymentByUserId
-        // POST: api/payments/paymentByUserId
-
 
         [HttpPost("paymentByUserId/{userId}")]
         public async Task<IActionResult> CreatePayment(int userId, [FromBody] PaymentDto paymentDto)
@@ -131,7 +127,6 @@ namespace MasterPieceApi.Controllers
                 return BadRequest("Invalid payment data.");
             }
 
-            // Fetch user details from the database using userId
             var user = await _context.Users.FirstOrDefaultAsync(u => u.UserId == userId);
 
             if (user == null)
@@ -139,7 +134,6 @@ namespace MasterPieceApi.Controllers
                 return NotFound("User not found.");
             }
 
-            // Fetch the associated booking using the serviceId from paymentDto
             var booking = await _context.Bookings
                                          .FirstOrDefaultAsync(b => b.ServiceId == paymentDto.ServiceId && b.UserId == userId);
 
@@ -148,7 +142,6 @@ namespace MasterPieceApi.Controllers
                 return NotFound("Booking not found.");
             }
 
-            // Create the payment record
             var payment = new Payment
             {
                 UserId = userId,
@@ -160,15 +153,12 @@ namespace MasterPieceApi.Controllers
                 BookingId = paymentDto.BookingId,
             };
 
-            // Save the payment to the database
             await _context.Payments.AddAsync(payment);
             await _context.SaveChangesAsync();
 
-            // Optionally, remove the booking record or update its status
             _context.Bookings.Remove(booking);
             await _context.SaveChangesAsync();
 
-            // Send payment confirmation email
             try
             {
                 var service = await _context.Services
@@ -191,7 +181,6 @@ namespace MasterPieceApi.Controllers
             return CreatedAtAction(nameof(CreatePayment), new { id = payment.PaymentId }, payment);
         }
 
-        // Updated method to send payment confirmation email using the email service
         private async Task SendPaymentConfirmationEmail(User user, Payment payment, Service service)
         {
             if (string.IsNullOrEmpty(user.Email))
@@ -306,7 +295,6 @@ namespace MasterPieceApi.Controllers
         [HttpGet("userPayment/{id}")]
         public IActionResult GetUserPayment(int id)
         {
-            // Fetch payments with related service data using the provided user ID
             var payments = _context.Payments
                 .Where(p => p.UserId == id)
                 .Select(p => new
@@ -316,7 +304,7 @@ namespace MasterPieceApi.Controllers
                     p.Amount,
                     PaymentDate = p.PaymentDate,
                     p.PaymentStatus,
-                    ServiceName = p.Service.ServiceName // Access the service name directly
+                    ServiceName = p.Service.ServiceName 
                 })
                 .ToList();
 

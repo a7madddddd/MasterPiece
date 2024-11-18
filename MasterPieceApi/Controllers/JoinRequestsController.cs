@@ -33,7 +33,6 @@ namespace MasterPieceApi.Controllers
         }
 
         // GET: api/JoinRequests/5
-        // Add this method to retrieve a specific join request (optional)
         [HttpGet("{id}")]
         public async Task<ActionResult<JoinRequest>> GetJoinRequest(int id)
         {
@@ -47,8 +46,7 @@ namespace MasterPieceApi.Controllers
             return joinRequest;
         }
 
-        // PUT: api/JoinRequests/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        // PUT: api/JoinRequests
         [HttpPut("{id}")]
         public async Task<IActionResult> PutJoinRequest(int id, JoinRequest joinRequest)
         {
@@ -83,32 +81,26 @@ namespace MasterPieceApi.Controllers
         {
             try
             {
-                // Specify the directory to save the uploaded files
                 var uploadsDirectory = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "JoinUSImages");
 
-                // Check if the directory exists, if not, create it
                 if (!Directory.Exists(uploadsDirectory))
                 {
                     Directory.CreateDirectory(uploadsDirectory);
                 }
 
-                // Save the file if it's not null
                 if (serviceImage != null && serviceImage.Length > 0)
                 {
                     var fileName = $"{DateTime.Now.Ticks}_{serviceImage.FileName}";
                     var filePath = Path.Combine(uploadsDirectory, fileName);
 
-                    // Save the file to the specified path
                     using (var fileStream = new FileStream(filePath, FileMode.Create))
                     {
                         await serviceImage.CopyToAsync(fileStream);
                     }
 
-                    // Store only the relative path to the image in the database
                     joinRequest.ServiceImage = $"JoinUSImages/{fileName}";
                 }
 
-                // Save the join request to the database
                 _context.JoinRequests.Add(joinRequest);
                 await _context.SaveChangesAsync();
 
@@ -116,7 +108,6 @@ namespace MasterPieceApi.Controllers
             }
             catch (Exception ex)
             {
-                // Return the error message if something went wrong
                 return StatusCode(500, new { message = $"Internal Server Error: {ex.Message}" });
             }
         }
@@ -124,7 +115,7 @@ namespace MasterPieceApi.Controllers
 
 
 
-        // DELETE: api/JoinRequests/5
+        // DELETE: api/JoinRequests
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteJoinRequest(int id)
         {
@@ -162,14 +153,12 @@ namespace MasterPieceApi.Controllers
                 return BadRequest("Invalid reply data.");
             }
 
-            // Fetch the original join request from the database using requestId
             var joinRequest = await _context.JoinRequests.FirstOrDefaultAsync(r => r.RequestId == requestId);
 
             if (joinRequest == null)
             {
                 return NotFound("Join request not found.");
             }
-            // Create the email body
             var emailBody = $@"
                      <!DOCTYPE html>
                      <html lang=""en"">
@@ -231,7 +220,6 @@ namespace MasterPieceApi.Controllers
 
             try
             {
-                // Assuming _emailService is correctly injected
                 await _emailService.SendEmailAsync(joinRequest.Email, "Reply to Your Join Request", emailBody);
                 return Ok("Reply sent successfully.");
             }

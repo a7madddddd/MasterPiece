@@ -12,9 +12,9 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Configuration;
-using Microsoft.AspNetCore.Http; // Add this for IFormFile
-using Microsoft.AspNetCore.Cryptography.KeyDerivation; // For password hashing
-using System.Security.Cryptography; // For using Rfc2898DeriveBytes
+using Microsoft.AspNetCore.Http; 
+using Microsoft.AspNetCore.Cryptography.KeyDerivation; 
+using System.Security.Cryptography; 
 
 namespace MasterPieceApi.Controllers
 {
@@ -23,12 +23,12 @@ namespace MasterPieceApi.Controllers
     public class UsersController : ControllerBase
     {
         private readonly MyDbContext _context;
-        private readonly IConfiguration _configuration;  // Add this field
+        private readonly IConfiguration _configuration;  
 
         public UsersController(MyDbContext context, IConfiguration configuration)
         {
             _context = context;
-            _configuration = configuration;  // Assign the injected configuration
+            _configuration = configuration; 
 
         }
 
@@ -39,7 +39,7 @@ namespace MasterPieceApi.Controllers
             return await _context.Users.ToListAsync();
         }
 
-        // GET: api/Users/5
+        // GET: api/Users
         [HttpGet("{id}")]
         public async Task<ActionResult<User>> GetUser(int id)
         {
@@ -80,7 +80,6 @@ namespace MasterPieceApi.Controllers
 
 
         // PUT: api/Users/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutUser(int id, User user)
         {
@@ -111,7 +110,6 @@ namespace MasterPieceApi.Controllers
         }
 
         // POST: api/Users
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<User>> PostUser(User user)
         {
@@ -125,7 +123,7 @@ namespace MasterPieceApi.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        // DELETE: api/Users/5
+        // DELETE: api/Users
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(int id)
         {
@@ -164,7 +162,7 @@ namespace MasterPieceApi.Controllers
             _context.Users.Remove(user);
             await _context.SaveChangesAsync();
 
-            return NoContent(); // Successfully deleted
+            return NoContent(); 
         }
 
 
@@ -188,14 +186,12 @@ namespace MasterPieceApi.Controllers
                 return BadRequest("Password is required.");
             }
 
-            // Check if a user with the same email already exists
             var existingUser = _context.Users.FirstOrDefault(u => u.Email == registerDto.Email);
             if (existingUser != null)
             {
                 return Conflict("User with this email already exists.");
             }
 
-            // Hash the password
             var passwordHash = BCrypt.Net.BCrypt.HashPassword(registerDto.Password);
 
             var newUser = new User
@@ -203,8 +199,8 @@ namespace MasterPieceApi.Controllers
                 Username = registerDto.Username,
                 Email = registerDto.Email,
                 PasswordHash = passwordHash,
-                UserRole = "User", // Default role
-                ProfileImage = null, // Set or retrieve as needed
+                UserRole = "User",
+                ProfileImage = null, 
             };
 
             _context.Users.Add(newUser);
@@ -233,7 +229,6 @@ namespace MasterPieceApi.Controllers
         [HttpPost("Login")]
         public IActionResult Login(LoginDTO loginDto)
         {
-            // Ensure the email and password are provided
             if (string.IsNullOrEmpty(loginDto.Email) || string.IsNullOrEmpty(loginDto.Password))
             {
                 return BadRequest("Email and password are required.");
@@ -245,36 +240,30 @@ namespace MasterPieceApi.Controllers
                 return Unauthorized(new { message = "Invalid email or password" });
             }
 
-            // Generate JWT token
             var token = GenerateJwtToken(user);
 
-            // Return the token and the user's role
-            return Ok(new { token, userRole = user.UserRole }); // Make sure UserRole is included in the response
+            return Ok(new { token, userRole = user.UserRole }); 
         }
 
-        // Method to generate the JWT token
         private string GenerateJwtToken(User user)
         {
             var jwtSettings = _configuration.GetSection("JwtSettings");
 
-            // Get the secret key from appsettings.json
             var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["SecretKey"]));
 
-            // Create signing credentials using the secret key
             var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
 
-            // Create claims for the JWT payload (You can add more claims as needed)
             var claims = new[]
                     {
-                new Claim(JwtRegisteredClaimNames.Sub, user.UserId.ToString()), // Use UserId as the subject
-                new Claim(JwtRegisteredClaimNames.Name, user.Username), // Add username as a separate claim
+                new Claim(JwtRegisteredClaimNames.Sub, user.UserId.ToString()), 
+                new Claim(JwtRegisteredClaimNames.Name, user.Username),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim("userId", user.UserId.ToString()), // Keep this custom claim for consistency
-                new Claim("UserRole", user.UserRole) // Add UserRole as a claim
+                new Claim("userId", user.UserId.ToString()), 
+                new Claim("UserRole", user.UserRole) 
             };
 
-            // Define token options
+            
             var tokenOptions = new JwtSecurityToken(
                 issuer: jwtSettings["Issuer"],
                 audience: jwtSettings["Audience"],
@@ -283,7 +272,7 @@ namespace MasterPieceApi.Controllers
                 signingCredentials: signinCredentials
             );
 
-            // Create and return the JWT token
+           
             var tokenString = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
             return tokenString;
         }
@@ -320,61 +309,54 @@ namespace MasterPieceApi.Controllers
         /// <param name="userDto"></param>
         /// <param name="usersImagesFile"></param>
         /// <returns></returns>
-        // Your UpdateUserProfile method remains as follows
         [HttpPut("UpdateUserProfile/{userId}")]
         public async Task<IActionResult> UpdateUser(int userId, [FromForm] UserResponseDTO userDto, IFormFile? usersImagesFile)
         {
-            // Check if the provided userId matches the DTO
+            
             if (userId != userDto.UserId)
             {
                 return BadRequest(new { message = "User ID mismatch" });
             }
 
-            // Find the user in the database
+            
             var user = await _context.Users.FindAsync(userId);
             if (user == null)
             {
                 return NotFound(new { message = "User not found" });
             }
 
-            // Update user properties if provided
+            
             user.Username = userDto.Username ?? user.Username;
             user.Email = userDto.Email ?? user.Email;
             user.FirstName = userDto.FirstName ?? user.FirstName;
             user.LastName = userDto.LastName ?? user.LastName;
             user.Phone = userDto.Phone ?? user.Phone;
 
-            // Handle file upload for profile image if provided
+            
             if (usersImagesFile != null && usersImagesFile.Length > 0)
             {
-                // Directory for storing user images
+                
                 var uploadsFolder = @"C:\Users\Orange\Desktop\test_ajloun\master peace ajloun/usersImages/";
-                Directory.CreateDirectory(uploadsFolder); // Ensure the directory exists
+                Directory.CreateDirectory(uploadsFolder); 
 
                 var fileName = Guid.NewGuid() + Path.GetExtension(usersImagesFile.FileName);
                 var filePath = Path.Combine(uploadsFolder, fileName);
 
-                // Save the image to the specified folder
                 using (var stream = new FileStream(filePath, FileMode.Create))
                 {
                     await usersImagesFile.CopyToAsync(stream);
                 }
 
-                // Update the user's profile image path
                 user.ProfileImage = $"usersImages/{fileName}";
             }
 
-            // Hash the password if it's provided
             if (!string.IsNullOrEmpty(userDto.Password))
             {
-                // Hash the new password using BCrypt
                 user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(userDto.Password);
             }
 
-            // Save changes to the database
             var updatedRows = await _context.SaveChangesAsync();
 
-            // Check if any rows were updated
             if (updatedRows > 0)
             {
                 return Ok(new { message = "User profile updated successfully" });
@@ -385,13 +367,7 @@ namespace MasterPieceApi.Controllers
             }
         }
 
-        // You can delete the following custom method
-        // private string HashPassword(string password)
-        // {
-        //     // Custom hashing logic that is no longer needed
-        // }
-
-
+        
 
 
         /// <summary>
@@ -403,10 +379,9 @@ namespace MasterPieceApi.Controllers
         [HttpGet("user/{userId}/services")]
         public async Task<ActionResult<IEnumerable<UserServiceDto>>> GetServicesByUserId(int userId)
         {
-            // Get the list of services booked by the user
             var services = await _context.Bookings
                 .Where(b => b.UserId == userId)
-                .Include(b => b.Service) // Assuming Booking has a navigation property to Service
+                .Include(b => b.Service) 
                 .Select(b => new UserServiceDto
                 {
                     ServiceId = b.Service.ServiceId,
@@ -429,18 +404,17 @@ namespace MasterPieceApi.Controllers
         [HttpGet("user/username/{username}/bookings")]
         public async Task<ActionResult<IEnumerable<UsersBookings>>> GetBookingsByUsername(string username)
         {
-            // Get the user bookings based on the username
             var bookings = await _context.Bookings
-                .Where(b => b.User.Username == username) // Assuming Booking has a navigation property to User
+                .Where(b => b.User.Username == username) 
                 .Select(b => new UsersBookings
                 {
                     BookingId = b.BookingId,
-                    BookingDate = b.BookingDate.HasValue ? b.BookingDate.Value.ToDateTime(new TimeOnly(0, 0)) : DateTime.MinValue, // Convert DateOnly to DateTime
+                    BookingDate = b.BookingDate.HasValue ? b.BookingDate.Value.ToDateTime(new TimeOnly(0, 0)) : DateTime.MinValue,
                     NumberOfPeople = b.NumberOfPeople,
-                    TotalAmount = b.TotalAmount.HasValue ? b.TotalAmount.Value : 0m, // Convert decimal? to decimal with a default value
+                    TotalAmount = b.TotalAmount.HasValue ? b.TotalAmount.Value : 0m, 
                     Status = b.Status,
-                    Username = b.User.Username, // Assuming User has a Username property
-                    ServiceName = b.Service.ServiceName,// Assuming Booking has a navigation property to Service
+                    Username = b.User.Username, 
+                    ServiceName = b.Service.ServiceName,
 
                 })
                 .ToListAsync();
@@ -469,10 +443,8 @@ namespace MasterPieceApi.Controllers
                 return NotFound(new { success = false, message = "User not found." });
             }
 
-            // Log current and new role
             Console.WriteLine($"Current Role: {user.UserRole}, New Role: {updateUserRoleDto.UserRole}");
 
-            // Check if the role is different before updating
             if (user.UserRole == updateUserRoleDto.UserRole)
             {
                 return Ok(new { success = false, message = "No changes to update." });
@@ -482,7 +454,6 @@ namespace MasterPieceApi.Controllers
 
             try
             {
-                // Mark the entity as modified
                 _context.Entry(user).State = EntityState.Modified;
 
                 var changes = await _context.SaveChangesAsync();
@@ -498,7 +469,6 @@ namespace MasterPieceApi.Controllers
             }
             catch (Exception ex)
             {
-                // Log the exception for debugging purposes
                 return StatusCode(500, new { success = false, message = "An error occurred while updating the user role." });
             }
         }
@@ -507,7 +477,6 @@ namespace MasterPieceApi.Controllers
         [HttpPost("VerifyPassword")]
         public async Task<IActionResult> VerifyPassword([FromBody] VerifyPasswordRequest request)
         {
-            // Find the user by username or email
             var user = await _context.Users
                 .FirstOrDefaultAsync(u => u.Username == request.UsernameOrEmail || u.Email == request.UsernameOrEmail);
 
@@ -516,7 +485,6 @@ namespace MasterPieceApi.Controllers
                 return NotFound(new { message = "User not found" });
             }
 
-            // Verify the password
             bool isPasswordValid = BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash);
 
             if (isPasswordValid)
