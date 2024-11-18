@@ -21,19 +21,15 @@ namespace MasterPieceApi.Controllers
             _context = context;
         }
 
-        // GET: api/Bookings
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Booking>>> GetBookings()
         {
             return await _context.Bookings.ToListAsync();
         }
 
-        // GET: api/Bookings/5
 
 
-        // PUT: api/Bookings/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
+       [HttpPut("{id}")]
         public async Task<IActionResult> PutBooking(int id, Booking booking)
         {
             if (id != booking.BookingId)
@@ -62,9 +58,7 @@ namespace MasterPieceApi.Controllers
             return NoContent();
         }
 
-        // POST: api/Bookings
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
+          [HttpPost]
         public async Task<ActionResult<Booking>> PostBooking(Booking booking)
         {
             _context.Bookings.Add(booking);
@@ -73,7 +67,6 @@ namespace MasterPieceApi.Controllers
             return CreatedAtAction("GetBooking", new { id = booking.BookingId }, booking);
         }
 
-        // DELETE: api/Bookings/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteBooking(int id)
         {
@@ -94,7 +87,6 @@ namespace MasterPieceApi.Controllers
             return _context.Bookings.Any(e => e.BookingId == id);
         }
 
-        // POST: api/Booking
         [HttpPost("bookingtour")]
         public async Task<IActionResult> CreateBooking([FromBody] BookingDto bookingDto)
         {
@@ -103,37 +95,32 @@ namespace MasterPieceApi.Controllers
                 return BadRequest(ModelState);
             }
 
-            // Check if the UserId exists
             var user = await _context.Users.FindAsync(bookingDto.UserId);
             if (user == null)
             {
                 return NotFound(new { message = "User not found" });
             }
 
-            // Check if the ServiceId exists
             var service = await _context.Services.FindAsync(bookingDto.ServiceId);
             if (service == null)
             {
                 return NotFound(new { message = "Service not found" });
             }
 
-            // Create a new Booking entity
             var newBooking = new Booking
             {
-                UserId = bookingDto.UserId,  // Use the UserId from the bookingDto
+                UserId = bookingDto.UserId,  
                 ServiceId = bookingDto.ServiceId,
-                BookingDate = DateOnly.FromDateTime(bookingDto.BookingDate),  // Convert DateTime to DateOnly
+                BookingDate = DateOnly.FromDateTime(bookingDto.BookingDate),  
                 NumberOfPeople = bookingDto.NumberOfPeople,
                 TotalAmount = bookingDto.TotalAmount,
-                Status = bookingDto?.Status ?? "Waiting",  // Default status to "Pending" if not provided
-                CreatedAt = DateTime.UtcNow  // Set the current UTC time as CreatedAt
+                Status = bookingDto?.Status ?? "Waiting",  
+                CreatedAt = DateTime.UtcNow  
             };
 
-            // Add the new booking to the database
             _context.Bookings.Add(newBooking);
             await _context.SaveChangesAsync();
 
-            // Return the created booking details
             return CreatedAtAction(nameof(GetBookingById), new { id = newBooking.BookingId }, newBooking);
         }
 
@@ -163,18 +150,18 @@ namespace MasterPieceApi.Controllers
 
             return Ok(booking);
         }
-        // GET: api/Bookings/user/{userId}
+
+
+
         [HttpGet("user/{userId}")]
         public async Task<IActionResult> GetBookingsByUserId(int userId)
         {
-            // Check if the user exists
             var user = await _context.Users.FindAsync(userId);
             if (user == null)
             {
                 return NotFound(new { message = "User not found" });
             }
 
-            // Retrieve bookings for the given user ID with service details and payment status
             var bookings = await _context.Bookings
                 .Where(b => b.UserId == userId)
                 .Select(b => new BookingDto
@@ -190,7 +177,6 @@ namespace MasterPieceApi.Controllers
                     Status = b.Status ?? string.Empty,
                     CreatedAt = b.CreatedAt ?? DateTime.MinValue,
 
-                    // Get the service details
                     ServiceName = _context.Services
                         .Where(s => s.ServiceId == b.ServiceId)
                         .Select(s => s.ServiceName)
@@ -200,7 +186,6 @@ namespace MasterPieceApi.Controllers
                         .Select(s => s.Image)
                         .FirstOrDefault(),
 
-                    // Check if payment is completed for this booking
                     PaymentStatus = _context.Payments
                         .Where(p => p.BookingId == b.BookingId && p.UserId == userId)
                         .Select(p => p.PaymentStatus)
@@ -227,14 +212,13 @@ namespace MasterPieceApi.Controllers
                 .Select(b => new UsersBookings
                 {
                     BookingId = b.BookingId,
-                    // Just return BookingDate as DateTime instead of converting to DateOnly
                     BookingDate = b.BookingDate.HasValue ? b.BookingDate.Value.ToDateTime(new TimeOnly(0, 0)) : DateTime.MinValue,
 
                     NumberOfPeople = b.NumberOfPeople,
-                    TotalAmount = b.TotalAmount ?? 0, // Handle null values for TotalAmount
+                    TotalAmount = b.TotalAmount ?? 0, 
                     Status = b.Status,
-                    Username = b.User.FirstName + " " + b.User.LastName, // Combining first and last name
-                    ServiceName = b.Service.ServiceName // Assuming ServiceName exists
+                    Username = b.User.FirstName + " " + b.User.LastName, 
+                    ServiceName = b.Service.ServiceName 
                 }).ToListAsync();
 
             return Ok(bookings);
