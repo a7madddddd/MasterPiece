@@ -314,7 +314,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     Email: document.getElementById('userEmail')?.value || '',
                     Subject: document.getElementById('messageSubject')?.value || '',
                     Message: document.getElementById('userMessage')?.value || '',
-                    Reply: adminReply,
+                    replay: adminReply,
                     Name: document.getElementById('username')?.value || ''
                 };
 
@@ -332,11 +332,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 Swal.fire('Success', 'Reply sent successfully.', 'success');
                 replyForm.reset();
 
-                // Close modal
                 const modalInstance = bootstrap.Modal.getInstance(document.getElementById('replyModal'));
                 modalInstance?.hide();
 
-                // Refresh contact messages
                 await loadContactMessages();
             } catch (error) {
                 console.error('Error:', error);
@@ -408,7 +406,7 @@ async function openReplyModal(messageId) {
         document.getElementById('messageSubject').value = data.subject || '';
         document.getElementById('userMessage').value = data.message || '';
         document.getElementById('username').value = data.name || '';
-        document.getElementById('adminReply').value = '';
+        document.getElementById('adminReply').value = data.replay ||  '';
 
         const replyModal = new bootstrap.Modal(document.getElementById('replyModal'));
         replyModal.show();
