@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (!response.ok) {
                 
                 const errorText = await response.text();
-                throw new Error(`Error: ${response.status} - ${errorText}`);
+                throw new Error(`${errorText}`);
             }
 
             
@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', function () {
             Swal.fire({
                 icon: 'error',
                 title: 'Registration Failed!',
-                text: `Error: ${error.message}`,
+                text: ` ${error.message}`,
                 confirmButtonText: 'OK'
             });
         }
