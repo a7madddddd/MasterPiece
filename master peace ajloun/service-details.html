@@ -55,109 +55,108 @@
     <script src="js/Services.js"></script>
     <link rel="stylesheet" type="text/css" href="styles/telefrik_styles.css" />
     <link rel="stylesheet" type="text/css" href="styles/telefrik_responsive.css" />
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css" />
 
     <script src="js/ServiceDetailsApi.js"></script>
     <style>
         /* Style the popup container */
-.popup {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: #fff;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    border-radius: 10px;
-    max-width: 400px;
-    width: 100%;
-    padding: 20px;
-    z-index: 9999;
-}
+        .popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            max-width: 400px;
+            width: 100%;
+            padding: 20px;
+            z-index: 9999;
+        }
 
-/* Container within the popup */
-
-
-h1 {
-    text-align: center;
-    font-size: 24px;
-    color: #333;
-    margin-bottom: 20px;
-}
-
-h2 {
-    font-size: 18px;
-    color: #333;
-    margin-bottom: 20px;
-}
+        /* Container within the popup */
 
 
+        h1 {
+            text-align: center;
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 20px;
+        }
 
-.popcard {
-    background-color: #f9f9f9;
-    border-radius: 10px;
-    padding: 20px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
+        h2 {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 20px;
+        }
 
-.popcard-content {
-    width: 100%;
-}
 
-.bookingForm {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
 
-.form-group {
-    position: relative;
-}
+        .popcard {
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
 
-.popinput {
-    width: 100%;
-    padding: 10px 15px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background-color: #f1f1f1;
-    color: #333;
-    outline: none;
-    transition: border-color 0.3s, background-color 0.3s;
-}
+        .popcard-content {
+            width: 100%;
+        }
 
-.popinput:focus {
-    border-color: #4caf50;
-    background-color: #fff;
-}
+        .bookingForm {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
 
-/* Disabled inputs style */
-.popinput[disabled] {
-    background-color: #e9e9e9;
-    color: #777;
-    cursor: not-allowed;
-}
+        .form-group {
+            position: relative;
+        }
 
-/* Submit button */
-#close-popup {
-    display: block;
-    width: 100%;
-    padding: 10px;
-    color: white;
-    font-size: 16px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    text-align: center;
-    transition: background-color 0.3s;
-}
+        .popinput {
+            width: 100%;
+            padding: 10px 15px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f1f1f1;
+            color: #333;
+            outline: none;
+            transition: border-color 0.3s, background-color 0.3s;
+        }
 
-#close-popup:hover {
-}
+        .popinput:focus {
+            border-color: #4caf50;
+            background-color: #fff;
+        }
 
-.title{
+        /* Disabled inputs style */
+        .popinput[disabled] {
+            background-color: #e9e9e9;
+            color: #777;
+            cursor: not-allowed;
+        }
 
-    text-align: start;
-}
+        /* Submit button */
+        #close-popup {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            color: white;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+            transition: background-color 0.3s;
+        }
+
+        #close-popup:hover {}
+
+        .title {
+
+            text-align: start;
+        }
     </style>
 </head>
 
@@ -542,7 +541,7 @@ h2 {
 
     <!-- Footer -->
     <footer class="footer">
-    
+
         <div class="container">
             <div class="row">
                 <!-- Footer Column -->
@@ -579,7 +578,7 @@ h2 {
                         </div>
                     </div>
                 </div>
-    
+
                 <!-- Footer Column -->
                 <div class="col-lg-3 footer_column">
                     <div class="footer_col">
@@ -597,7 +596,7 @@ h2 {
                                     <div class="footer_blog_date">Nov 29, 2024</div>
                                 </div>
                             </div>
-    
+
                             <!-- Footer blog item -->
                             <div class="footer_blog_item clearfix">
                                 <div class="footer_blog_image">
@@ -610,7 +609,7 @@ h2 {
                                     <div class="footer_blog_date">Nov 29, 2024</div>
                                 </div>
                             </div>
-    
+
                             <!-- Footer blog item -->
                             <div class="footer_blog_item clearfix">
                                 <div class="footer_blog_image">
@@ -626,7 +625,7 @@ h2 {
                         </div>
                     </div>
                 </div>
-    
+
                 <!-- Footer Column -->
                 <div class="col-lg-3 footer_column">
                     <div class="footer_col">
@@ -664,7 +663,7 @@ h2 {
                         </div>
                     </div>
                 </div>
-    
+
                 <!-- Footer Column -->
                 <div class="col-lg-3 footer_column">
                     <div class="footer_col">
@@ -679,7 +678,7 @@ h2 {
                                     </div>
                                     <div class="contact_info_text">
                                         Ajloun, Jordan, 268 Main Street
-    
+
                                     </div>
                                 </li>
                                 <li class="contact_info_item d-flex f lex-row">
@@ -718,9 +717,9 @@ h2 {
             </div>
         </div>
     </footer>
-    
+
     <!-- Copyright -->
-    
+
     <div class="copyright">
         <div class="container">
             <div class="row">
@@ -729,9 +728,9 @@ h2 {
                         <div>
                             <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
                             &copy;
-    
+
                             All rights reserved | <a href="" target="_blank" style="color: white">Ahmad Onizat</a>
-    
+
                             <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
                         </div>
                     </div>
@@ -788,7 +787,7 @@ h2 {
     <script src="js 2- Copy/main.js"></script>
 
 
-<script src="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
 
     <!-- <script src="js/telefrik.js"></script> -->
     <script src="js/telefrik_custom.js"></script>

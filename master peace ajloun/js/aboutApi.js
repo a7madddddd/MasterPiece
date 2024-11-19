@@ -3,7 +3,7 @@
 
 
     ///////////////////////////
-// Function to fetch tourism statistics
+// tourism statistics
 async function fetchTourismStatistics() {
     try {
         const response = await fetch('https://localhost:44321/api/TourismStatistics');
@@ -18,7 +18,6 @@ async function fetchTourismStatistics() {
     }
 }
 
-// Function to create a stats item
 function createStatsItem(prevYear, currentYear, statType, icon) {
     return `
     <div class="stats_item d-flex flex-md-row flex-column clearfix">
@@ -51,7 +50,6 @@ function createStatsItem(prevYear, currentYear, statType, icon) {
   `;
 }
 
-// Function to get color based on change percentage
 function getColor(changePercentage) {
     if (changePercentage > 5) return 'darkgreen';
     if (changePercentage > 0) return 'green';
@@ -84,8 +82,7 @@ async function populateStatistics() {
         statsContainer.innerHTML += createStatsItem(prevYear, currentYear, type, icon);
     });
 
-    // Initialize any JavaScript that depends on the DOM elements being present
-    // This might include code to animate the stats bars
+    
 }
 
 // Call the function when the DOM is fully loaded

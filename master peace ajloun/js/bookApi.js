@@ -102,7 +102,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 label: 'paypal',
             },
             createOrder: function (data, actions) {
-                return actions.order.create({
+                return actions.order.create({   
                     purchase_units: [{ "amount": { "currency_code": "USD", "value": totalAmount } }]
                 });
             },

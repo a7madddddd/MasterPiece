@@ -1,11 +1,9 @@
 
-
+// Sign Up functionality
 document.addEventListener('DOMContentLoaded', function () {
-    // Sign Up functionality
     document.querySelector('#sign-up-form').addEventListener('submit', async function (event) {
-        event.preventDefault(); // Prevent the default form submission
+        event.preventDefault(); 
 
-        // Get form input values
         const name = this.querySelector('input[name="name"]').value;
         const email = this.querySelector('input[name="email"]').value;
         const password1 = this.querySelector('input[name="password"]').value;
@@ -44,8 +42,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             });
 
-
-
            
             this.reset();
         } catch (error) {
@@ -68,20 +64,18 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-
+// Login functionality
 document.addEventListener('DOMContentLoaded', function () {
-    // Login functionality
+    
     document.querySelector('#loginForm').addEventListener('submit', async function (event) {
-        event.preventDefault(); // Prevent the default form submission
+        event.preventDefault(); 
 
-        // Get form input values
-        const email = document.getElementById('loginUsername').value; // Corresponds to Email in DTO
-        const password = document.getElementById('loginPassword').value; // Corresponds to Password in DTO
+        const email = document.getElementById('loginUsername').value; 
+        const password = document.getElementById('loginPassword').value; 
 
-        // Create a plain JavaScript object with the necessary properties
         const loginDto = {
-            Email: email,       // Ensure the key matches your DTO property
-            Password: password   // Ensure the key matches your DTO property
+            Email: email,      
+            Password: password  
         };
 
         try {
@@ -90,36 +84,33 @@ document.addEventListener('DOMContentLoaded', function () {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(loginDto), // Send the loginDto object as JSON
+                body: JSON.stringify(loginDto), 
             });
 
             if (!response.ok) {
-                // Handle error responses
                 const errorText = await response.text();
-                throw new Error(`Error: ${response.status} - ${errorText}`);
+                throw new Error(`Error: Email Or Password Is Not Valid`);
             }
 
-            const data = await response.json(); // Get the token and userRole from the response
+            const data = await response.json(); 
 
-            // Show success alert for regular users or admins
+           
             await Swal.fire({
                 icon: 'success',
                 title: 'Login successful!',
                 text: `Welcome back! ${email}`,
             });
 
-            // Store JWT token and user role in local storage
+            
             localStorage.setItem('jwt', data.token);
-            localStorage.setItem('userRole', data.userRole); // Store userRole as well
 
-            console.log("Login successful:", data);
 
-            // Reset the form
+           
             this.reset();
 
-            // Check if the user is an admin
+           
             if (data.userRole === 'Admin') {
-                // If admin, show options to continue as Admin or User
+               
                 const result = await Swal.fire({
                     title: 'Continue as Admin or User?',
                     text: 'Please select whether to continue as Admin or User',
@@ -129,19 +120,19 @@ document.addEventListener('DOMContentLoaded', function () {
                     cancelButtonText: 'As User',
                 });
 
-                // Redirect based on the choice
+                
                 if (result.isConfirmed) {
-                    // Admin button clicked
+                   
                     window.location.href = '../adminDashboard/signin.html';
                 } else {
-                    // User button clicked or cancel button (continue as User)
-                    window.location.href = 'services.html';
+                    window.location.href = document.referrer || 'services.html';
                 }
+
             } else if (data.userRole === 'User') {
-                // Redirect to user dashboard if it's a regular user
-                window.location.href = 'services.html';
+                
+                window.location.href = document.referrer || 'services.html';
             } else {
-                // Handle other roles if needed or show an error
+                
                 console.warn('Unknown role:', data.userRole);
                 await Swal.fire({
                     icon: 'warning',
@@ -152,11 +143,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
         } catch (error) {
             console.error("Login failed:", error);
-            // Show error alert
+           
             await Swal.fire({
                 icon: 'error',
                 title: 'Login failed',
-                text: error.message, // Show error message
+                text: error.message, 
             });
         }
     });

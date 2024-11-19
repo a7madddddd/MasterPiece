@@ -2,14 +2,14 @@ document.addEventListener('DOMContentLoaded', function () {
     fetch('https://localhost:44321/api/Services/most')
         .then(response => response.json())
         .then(data => {
-            // Check if the data contains the $values property
+
             const services = data.$values ? data.$values : data;
 
             const servicesContainer = document.getElementById('services-container');
-            servicesContainer.innerHTML = ''; // Clear existing content
+            servicesContainer.innerHTML = ''; 
 
             services.forEach((service, index) => {
-                // Create a new blog item for each service
+               
                 const blogItem = document.createElement('div');
                 blogItem.className = 'col-lg-4 wow fadeInUp';
                 blogItem.setAttribute('data-wow-delay', `${0.2 * (index + 1)}s`);
@@ -43,8 +43,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 // Fetch the data from the API
-// Fetch the data from the API
-// Function to safely update an element's text content
 function safelyUpdateElement(selector, value) {
     const element = document.querySelector(selector);
     if (element) {
@@ -66,16 +64,14 @@ function fetchTourismStatistics() {
             return response.json();
         })
         .then(data => {
-            // Check for the $values key and data array
+            
             const statisticsArray = data.$values;
             if (!Array.isArray(statisticsArray) || statisticsArray.length === 0) {
                 throw new Error('No data received from the API');
             }
-
-            // Assuming we're interested in the first set of statistics
             const statistics = statisticsArray[0];
 
-            // Update elements with statistics data
+            // Update 
             safelyUpdateElement('#clients', statistics.clients);
             safelyUpdateElement('#clientsChangePercentage', `${statistics.clientsChangePercentage}%`);
             safelyUpdateElement('#returningClients', statistics.returningClients);
@@ -95,37 +91,11 @@ function fetchTourismStatistics() {
         });
 }
 
-// Call the function when the DOM is fully loaded
 document.addEventListener('DOMContentLoaded', fetchTourismStatistics);
 
 
 
-/////////////////////////////////////////////////////
-// Function to safely update an element's text content
-// Function to safely update an element's text content
-function safelyUpdateElement(selector, value) {
-    const element = document.querySelector(selector);
-    if (element) {
-        element.textContent = value;
-        console.log(`Updated ${selector} with value: ${value}`);
-    } else {
-        console.warn(`Element not found: ${selector}. Skipping update.`);
-    }
-    return element;
-}
-
-// Function to safely update an element's text content
-function safelyUpdateElement(selector, value) {
-    const element = document.querySelector(selector);
-    if (element) {
-        element.textContent = value;
-        console.log(`Updated ${selector} with value: ${value}`);
-    } else {
-        console.warn(`Element not found: ${selector}. Skipping update.`);
-    }
-    return element;
-}
-
+// fetchOpeningHours
 function fetchOpeningHours() {
     fetch('https://localhost:44321/api/TourismStatistics')
         .then(response => {
@@ -135,16 +105,16 @@ function fetchOpeningHours() {
             return response.json();
         })
         .then(data => {
-            // Check if the response contains the expected $values key and it's an array
+           
             const schedules = data.$values;
             if (!Array.isArray(schedules) || schedules.length === 0) {
                 throw new Error('No data received from the API');
             }
 
-            // Iterate through the schedules array and update each row
+           
             schedules.forEach((schedule, index) => {
                 if (schedule.days && schedule.duration) {
-                    const rowIndex = index + 1; // CSS nth-child is 1-indexed
+                    const rowIndex = index + 1; 
                     safelyUpdateElement(`.service-days .py-2:nth-child(${rowIndex}) h4`, schedule.days);
                     safelyUpdateElement(`.service-days .py-2:nth-child(${rowIndex}) p`, schedule.duration);
                 }
@@ -157,22 +127,23 @@ function fetchOpeningHours() {
         });
 }
 
-// Call the function when the DOM is fully loaded
 document.addEventListener('DOMContentLoaded', fetchOpeningHours);
 
 
-///// function to display the user name from api 
+
+
+/////display name in loader
 document.addEventListener('DOMContentLoaded', function () {
-    // Assuming JWT token is stored in localStorage
+    
     const jwt = localStorage.getItem('jwt');
     const loadingText = document.querySelector('.loading-text');
 
     if (jwt) {
-        // Extract user ID from JWT (if you need it)
+       
         const decodedToken = parseJwt(jwt);
         const userId = decodedToken.userId || decodedToken.sub;
 
-        // Fetch user details
+       
         fetch(`https://localhost:44321/api/Users/${userId}`, {
             headers: {
                 'Authorization': `Bearer ${jwt}`
@@ -185,20 +156,20 @@ document.addEventListener('DOMContentLoaded', function () {
                 return response.json();
             })
             .then(user => {
-                // Update the loading text with the user's first name
+                
                 loadingText.textContent = `Welcome ${user.firstName} ...`;
             })
             .catch(error => {
                 console.error('Error fetching user data:', error);
-                // Set loading text to "Guest" if there is an error (e.g., user not logged in)
+                
                 loadingText.textContent = 'Welcome Guest ...';
             });
     } else {
-        // If no JWT is present, set loading text to "Guest"
+       
         loadingText.textContent = 'Welcome Guest ...';
     }
 
-    // Function to parse JWT
+   
     function parseJwt(token) {
         const base64Url = token.split('.')[1];
         const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');

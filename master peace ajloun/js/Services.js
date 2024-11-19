@@ -1,56 +1,54 @@
 
 
-    // Fetch and display all services in services page
-    // Helper function to decode the JWT and extract payload
-    function parseJwt(token) {
-        // Split the token into its parts
-        const base64Url = token.split('.')[1];
-        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+function parseJwt(token) {
 
-        // Decode the payload
-        const jsonPayload = decodeURIComponent(escape(window.atob(base64)));
-        return JSON.parse(jsonPayload);
-    }
+    const base64Url = token.split('.')[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+
+
+    const jsonPayload = decodeURIComponent(escape(window.atob(base64)));
+    return JSON.parse(jsonPayload);
+}
 
 
 
-    // const jwt = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkZCIsImVtYWlsIjoiaHJfbWFuYWdlckBvdXRsb29rLmNvbSIsImp0aSI6IjYyZTAzZGY3LWFkZDYtNDNiYS04MmEwLTVmMzg2MWVkMGU2NSIsImV4cCI6MTcyNjg4MDc5MywiaXNzIjoieW91cklzc3VlciIsImF1ZCI6InlvdXJBdWRpZW5jZSJ9.uHiTy3srFbcMvZcx0za11gia5FFBCO2bIZQ9IMgtAN4';
+// const jwt = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkZCIsImVtYWlsIjoiaHJfbWFuYWdlckBvdXRsb29rLmNvbSIsImp0aSI6IjYyZTAzZGY3LWFkZDYtNDNiYS04MmEwLTVmMzg2MWVkMGU2NSIsImV4cCI6MTcyNjg4MDc5MywiaXNzIjoieW91cklzc3VlciIsImF1ZCI6InlvdXJBdWRpZW5jZSJ9.uHiTy3srFbcMvZcx0za11gia5FFBCO2bIZQ9IMgtAN4';
 
-    // const decodedToken = parseJwt(jwt);
-    // const userId = decodedToken.sub || decodedToken.userId; // Adjust based on your token structure
-    // if (userId != 0 && null) {
+// const decodedToken = parseJwt(jwt);
+// const userId = decodedToken.sub || decodedToken.userId; 
+// if (userId != 0 && null) {
 
-    //     alert('User ID:', userId);
-    // }
+//     alert('User ID:', userId);
+// }
 
 
 
 
-// Fetch services and display them on the page
+// Fetch services
 fetch('https://localhost:44321/api/Services')
     .then(response => response.json())
     .then(data => {
-        // Access the $values array which holds the actual service objects
+        // access to values
         const servicesArray = data.$values;
 
-        // Check if servicesArray is an array and has elements
+
         if (!Array.isArray(servicesArray) || servicesArray.length === 0) {
             throw new Error('No services data received from the API');
         }
 
-        // Get the container where services will be displayed
+
         const servicesContainer = document.getElementById('services-container');
         if (!servicesContainer) {
             console.error('Services container element not found');
             return;
         }
 
-        // Clear the container before adding new content
+
         servicesContainer.innerHTML = '';
 
-        // Iterate over each service and create the HTML content if it is active
+
         servicesArray.forEach(service => {
-            if (service.isActive) { // Check if the service is active
+            if (service.isActive) {
                 const cardHTML = `
                     <div class="col-lg-4 wow fadeInUp" data-wow-delay="0.2s">
                         <div class="blog-item">
@@ -72,54 +70,53 @@ fetch('https://localhost:44321/api/Services')
                     </div>
                 `;
 
-                // Append each active service card to the container
+
                 servicesContainer.innerHTML += cardHTML;
             }
         });
 
         console.log('Services loaded successfully');
 
-            // Add event listeners to all "Book Now" buttons
-            document.querySelectorAll('.book-button').forEach(button => {
-                button.addEventListener('click', function () {
-                    const serviceName = this.textContent; // Use textContent for service name
-                    const serviceId = this.getAttribute('data-service-id');
-                    const serviceImage = this.getAttribute('data-image');
+        // for all book buttons
+        document.querySelectorAll('.book-button').forEach(button => {
+            button.addEventListener('click', function () {
+                const serviceName = this.textContent;
+                const serviceId = this.getAttribute('data-service-id');
+                const serviceImage = this.getAttribute('data-image');
 
-                    // Set the service details in the popup
-                    document.getElementById('service-title').textContent = serviceName;
-                    document.getElementById('open-popup').setAttribute('data-service-id', serviceId);
-                    document.getElementById('open-popup').setAttribute('data-service', serviceName);
-                    document.getElementById('open-popup').setAttribute('data-image', serviceImage);
-                    
-                    // Show the popup
-                    document.getElementById('popup').style.display = 'block';
-                });
+                document.getElementById('service-title').textContent = serviceName;
+                document.getElementById('open-popup').setAttribute('data-service-id', serviceId);
+                document.getElementById('open-popup').setAttribute('data-service', serviceName);
+                document.getElementById('open-popup').setAttribute('data-image', serviceImage);
+
+                document.getElementById('popup').style.display = 'block';
             });
-
-            console.log('Services loaded successfully');
-        })
-        .catch(error => {
-            console.error('Error fetching the services:', error);
         });
 
-    // Function to close the popup and submit booking form
-    // Helper function to decode the JWT and extract payload
-    // Helper function to decode the JWT and extract payload
-    function parseJwt(token) {
-        const base64Url = token.split('.')[1]; // Get the payload part of the JWT
-        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-        const jsonPayload = decodeURIComponent(
-            atob(base64)
-                .split('')
-                .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
-                .join('')
-        );
-        return JSON.parse(jsonPayload); 
-    }
+        console.log('Services loaded successfully');
+    })
+    .catch(error => {
+        console.error('Error fetching the services:', error);
+    });
 
-    // Function to handle booking submission
-    // JWT parsing function
+
+
+
+
+function parseJwt(token) {
+    const base64Url = token.split('.')[1]; // Get the payload part of the JWT
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const jsonPayload = decodeURIComponent(
+        atob(base64)
+            .split('')
+            .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+            .join('')
+    );
+    return JSON.parse(jsonPayload);
+}
+
+
+//close popup 
 
 document.addEventListener('DOMContentLoaded', function () {
     const closePopupButton = document.getElementById('close-popup');
@@ -130,11 +127,11 @@ document.addEventListener('DOMContentLoaded', function () {
         const jwt = localStorage.getItem('jwt');
         if (jwt) {
             const decodedToken = parseJwt(jwt);
-            const userName = decodedToken.name || ''; 
-            const email = decodedToken.email || ''; 
+            const userName = decodedToken.name || '';
+            const email = decodedToken.email || '';
 
-            
-            
+
+
             document.getElementById('name-city').value = userName;
             document.getElementById('email-city').value = email;
         }
@@ -181,13 +178,13 @@ document.addEventListener('DOMContentLoaded', function () {
         const userId = decodedToken.userId || decodedToken.sub;
 
         const bookingDate = new Date(date);
-        var price = document.getElementById('price').textContent.trim(); // or .innerText
+        var price = document.getElementById('price').textContent.trim();
 
-        // Calculate total amount based on number of guests and price
+        // total amount 
         const totalAmountFinal = parseInt(guests) * parseFloat(price);
 
         const urlParams = new URLSearchParams(window.location.search);
-        const serviceId1 = parseInt(urlParams.get('id')); // Parse the service ID as an integer
+        const serviceId1 = parseInt(urlParams.get('id')); // service id
 
         const bookingData = {
             userId: userId,
@@ -196,7 +193,7 @@ document.addEventListener('DOMContentLoaded', function () {
             numberOfPeople: guests,
             totalAmount: totalAmountFinal,
             status: "pending",
-            paymentStatus: ""
+            paymentStatus: "pending"
         };
 
         fetch('https://localhost:44321/api/Bookings/bookingtour', {
@@ -249,23 +246,21 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-    // Email validation function
-    function isValidEmail(email) {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return emailRegex.test(email);
-    }
+// validations
+function isValidEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+}
 
-    // Make sure you have this function defined
-    function parseJwt(token) {
-        var base64Url = token.split('.')[1];
-        var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-        var jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
-            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-        }).join(''));
+function parseJwt(token) {
+    var base64Url = token.split('.')[1];
+    var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    var jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
 
-        return JSON.parse(jsonPayload);
-    }
-
+    return JSON.parse(jsonPayload);
+}
 
 
 
@@ -286,26 +281,22 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-// Temporarily hardcode a service ID for testing
-////////////////function to display service Details in service page 
 
+////////////////display service details 
 document.addEventListener('DOMContentLoaded', function () {
-    // Log the current URL for debugging
-    console.log('Current URL:', window.location.href);
 
-    // Get the service ID from the URL query parameters
+
     const urlParams = new URLSearchParams(window.location.search);
     const serviceId = urlParams.get('id');
 
-    console.log('URL Parameters:', urlParams.toString());
-    console.log('Service ID from URL:', serviceId);  // Debugging line
+
 
     if (serviceId) {
-        // Fetch service details by ID
+
         fetch(`https://localhost:44321/api/Services/${serviceId}`)
             .then(response => response.json())
             .then(service => {
-                // Update the details page with the service info
+
                 document.querySelector('.service-image').src = service.image;
                 document.querySelector('.title').textContent = service.serviceName;
                 document.querySelector('.description').textContent = service.description2;
@@ -326,12 +317,12 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 
-//////////////////// function to disaply the proposal services 
+//////////////////// proposal 
 function loadProposalServices() {
-    fetch('https://localhost:44321/api/Services') // Assuming you have this API
+    fetch('https://localhost:44321/api/Services')
         .then(response => response.json())
         .then(data => {
-            // Check if the data contains the expected $values property
+
             const servicesArray = data.$values;
             if (!Array.isArray(servicesArray) || servicesArray.length === 0) {
                 throw new Error('No services data received from the API');
@@ -343,12 +334,11 @@ function loadProposalServices() {
                 return;
             }
 
-            proposalContainer.innerHTML = ''; // Clear existing content
+            proposalContainer.innerHTML = '';
 
-            // Shuffle the array of services
+
             const shuffledServices = servicesArray.sort(() => 0.5 - Math.random());
 
-            // Get the first two services
             const selectedServices = shuffledServices.slice(0, 2);
 
             selectedServices.forEach(service => {
@@ -374,15 +364,9 @@ function loadProposalServices() {
         });
 }
 
-// Call this function when the document is ready or when needed
 document.addEventListener('DOMContentLoaded', loadProposalServices);
 
 ///////////////////////////// for explain button
-
-
-
-
-// Function to extract the serviceId from the URL
 function getServiceIdFromUrl() {
     const urlParams = new URLSearchParams(window.location.search);
     return urlParams.get('id');  // Get the 'id' parameter from the URL
@@ -393,7 +377,6 @@ function fetchServiceData(serviceId) {
     fetch(`https://localhost:44321/api/Services/${serviceId}`)
         .then(response => response.json())
         .then(service => {
-            // Dynamically update the service name and price if data is valid
             if (service) {
                 document.getElementById('bar_service_name').textContent = `Explore ${service.serviceName} today!`;
                 document.getElementById('bar_button').textContent = `Book Now for ${service.price} jd`;
@@ -407,7 +390,6 @@ function fetchServiceData(serviceId) {
         });
 }
 
-// Get the serviceId from the URL and fetch the service data
 const serviceId = getServiceIdFromUrl();
 if (serviceId) {
     fetchServiceData(serviceId);
@@ -437,7 +419,6 @@ document.addEventListener('DOMContentLoaded', function () {
     var overlay = document.getElementById('overlay');
 
     function openPopup() {
-        console.log("Opening popup");
         const jwt = localStorage.getItem('jwt');
         if (!jwt) {
             console.log("No JWT found");
@@ -468,8 +449,8 @@ document.addEventListener('DOMContentLoaded', function () {
         var email = document.getElementById('email-city').value.trim();
         var date = document.getElementById('date-city').value;
         var guests = document.getElementById('guests-city').value;
-        
-        // Validation checks
+
+       
         if (name === "" || email === "" || date === "" || guests === "") {
             console.log("Validation failed: Empty fields");
             return;
@@ -491,14 +472,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
     overlay.addEventListener('click', closePopup);
 
-    // Close popup when clicking outside
+    // clicking outside
     window.addEventListener('click', function (event) {
         if (event.target === popup) {
             closePopup();
         }
     });
 
-    // Close popup with Escape key
+    // Escape key
     document.addEventListener('keydown', function (event) {
         if (event.key === "Escape") {
             closePopup();
