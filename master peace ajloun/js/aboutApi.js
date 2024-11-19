@@ -134,7 +134,7 @@ async function populateMilestones() {
     const stats = await fetchTourismStatistics();
     if (!stats || stats.length === 0) return;
 
-    const currentYear = stats[0]; // Assuming the first item is the most recent year
+    const currentYear = stats[0]; 
 
     const milestonesContainer = document.getElementById('milestonesContainer');
     milestonesContainer.innerHTML = '';
@@ -150,7 +150,7 @@ async function populateMilestones() {
         milestonesContainer.innerHTML += createMilestoneItem(milestone.icon, milestone.value, milestone.text);
     });
 
-    // Initialize counter animation
+    
     initCounterAnimation();
 }
 
@@ -160,7 +160,7 @@ function initCounterAnimation() {
     counterElements.forEach(counter => {
         const endValue = parseInt(counter.getAttribute('data-end-value'), 10);
         let currentValue = 0;
-        const duration = 2000; // 2 seconds
+        const duration = 2000; 
         const stepTime = Math.abs(Math.floor(duration / endValue));
 
         const timer = setInterval(() => {
@@ -174,7 +174,6 @@ function initCounterAnimation() {
     });
 }
 
-// Call the function when the DOM is fully loaded
 document.addEventListener('DOMContentLoaded', populateMilestones);
 
 

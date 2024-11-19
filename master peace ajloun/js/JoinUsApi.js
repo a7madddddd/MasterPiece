@@ -1,7 +1,6 @@
 document.getElementById('joinRequestForm').addEventListener('submit', async function (event) {
-    event.preventDefault(); // Prevent the default form submission
+    event.preventDefault();
 
-    // Gather form data
     const formData = new FormData(this);
 
     try {
@@ -39,7 +38,7 @@ function customAlert(message, type = 'info') {
         timer: 3000,
         timerProgressBar: true,
         willClose: () => {
-            // Additional action after closing, if needed
+            
         }
     };
 

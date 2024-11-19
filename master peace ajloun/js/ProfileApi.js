@@ -26,7 +26,6 @@ document.addEventListener("DOMContentLoaded", function () {
             return response.json();
         })
         .then(data => {
-            console.log('API Response:', data);
 
             const bookings = data.$values;
 
@@ -37,7 +36,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
 
                 bookings.forEach(booking => {
-                    // If the booking is already completed, skip further processing for it.
+                   
                     if (booking.status === "Completed") {
                         return;
                     }
@@ -55,7 +54,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     tableBody.appendChild(row);
                 });
 
-                // Add event listeners for payment buttons
+                
                 document.querySelectorAll(".payment-btn").forEach(button => {
                     button.addEventListener("click", function () {
                         const bookingId = this.getAttribute("data-booking-id");
@@ -70,20 +69,21 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-        // Fetch and display payment status
+        // display payment status
         fetch(paymentApiUrl, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
         })
         .then(response => {
+
+
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
             return response.json();
         })
         .then(data => {
-            console.log('Payment API Response:', data);
 
             const tableBody = document.getElementById("payment-table-body2");
             const payments = data.$values;
@@ -179,7 +179,7 @@ const UserProfileManager = {
     async verifyPassword(userId, currentPassword, token) {
         try {
             const decodedToken = jwt_decode(token);
-            const usernameOrEmail = decodedToken.username || decodedToken.email; // Adjust based on actual token structure
+            const usernameOrEmail = decodedToken.username || decodedToken.email; 
 
             const response = await fetch(`https://localhost:44321/api/Users/VerifyPassword`, {
                 method: 'POST',
@@ -190,7 +190,7 @@ const UserProfileManager = {
                 body: JSON.stringify({
                     userId,
                     password: currentPassword,
-                    UsernameOrEmail: usernameOrEmail // Add the required UsernameOrEmail field
+                    UsernameOrEmail: usernameOrEmail 
                 })
             });
 
@@ -214,13 +214,13 @@ const UserProfileManager = {
             const isPasswordCorrect = await this.verifyPassword(userId, currentPassword, token);
             if (isPasswordCorrect) {
                 this.enableNewPasswordFields();
-                document.getElementById('currentPasswordError').textContent = ''; // Clear error message if correct
+                document.getElementById('currentPasswordError').textContent = ''; 
             } else {
                 this.disableNewPasswordFields();
                 document.getElementById('currentPasswordError').textContent = 'Incorrect current password.';
             }
         } else {
-            this.disableNewPasswordFields(); // Keep new password fields disabled if no current password entered
+            this.disableNewPasswordFields(); 
         }
     },
 
@@ -341,14 +341,13 @@ const UserProfileManager = {
 
             const data = await response.json();
 
-            // Display success message from response
+            
             await Swal.fire({
                 icon: 'success',
                 title: 'Success',
                 text: data.message,
             });
 
-            // Clear password fields
             ['password', 'currentPassword'].forEach(field => {
                 const element = document.getElementById(field);
                 if (element) element.value = '';
@@ -359,7 +358,7 @@ const UserProfileManager = {
         } catch (error) {
             console.error('Error updating user profile:', error);
 
-            // Display error message
+            
             await Swal.fire({
                 icon: 'error',
                 title: 'Update Failed',
@@ -397,9 +396,6 @@ const UserProfileManager = {
     }
 };
 
-
-
-// Initialize the module when the DOM is loaded
 document.addEventListener('DOMContentLoaded', () => UserProfileManager.init());
 
 
@@ -435,34 +431,29 @@ function validatePasswordMatch() {
     return true;
 }
 
-// Add this to your existing UserProfileManager or form submit handler
 async function validatePasswordFields() {
     const currentPassword = document.getElementById('currentPassword').value;
     const newPassword = document.getElementById('newPassword').value;
     const confirmPassword = document.getElementById('confirmPassword').value;
 
-    // If no password change is attempted, return true
+    // If no password change is
     if (!newPassword && !confirmPassword) {
         return true;
     }
 
-    // Check if current password is provided when attempting to change password
     if (!currentPassword) {
         document.getElementById('currentPasswordError').textContent = 'Please enter your current password';
         return false;
     }
 
-    // Validate new password
     if (!validateNewPassword()) {
         return false;
     }
 
-    // Validate password match
     if (!validatePasswordMatch()) {
         return false;
     }
 
-    // Verify current password with server
     const isPasswordValid = await UserProfileManager.verifyPassword(userId, currentPassword, token);
     if (!isPasswordValid) {
         document.getElementById('currentPasswordError').textContent = 'Current password is incorrect';

@@ -10,9 +10,7 @@ function createStarRating(containerId, currentRating, isInteractive = false) {
     </div>`;
 }
 
-// Function to handle rating submission
 async function submitRating(offerId, rating) {
-  // Check if user is logged in by verifying JWT token in localStorage
   const token = localStorage.getItem('jwt');
   if (!token) {
     showMessage('You need to log in first to submit a review.', 'error');
@@ -24,7 +22,7 @@ async function submitRating(offerId, rating) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`  // Send JWT token in Authorization header
+        'Authorization': `Bearer ${token}`  
       },
       body: JSON.stringify({
         offerId: offerId,
@@ -34,7 +32,6 @@ async function submitRating(offerId, rating) {
 
     if (!response.ok) throw new Error('Failed to submit rating');
 
-    // Refresh the offers display to show updated rating
     fetchAndDisplayOffers();
     return true;
   } catch (error) {
@@ -44,7 +41,7 @@ async function submitRating(offerId, rating) {
   }
 }
 
-// Function to fetch offers and update the DOM
+//fetch offers & update dom
 function fetchAndDisplayOffers() {
   fetch('https://localhost:44321/api/Offers/AllOffers')
     .then(response => response.json())
@@ -52,20 +49,20 @@ function fetchAndDisplayOffers() {
       const offers = data.values.$values.filter(offer => offer.isActive);
       const offersGrid = document.querySelector('.offers_grid');
 
-      // Clear existing content
+      
       offersGrid.innerHTML = '';
 
-      // Create and append offer elements
+      // append 
       offers.forEach(offer => {
         const imagePath = offer.serviceImage.replace(/\s+/g, '%20');
         const ratingContainerId = `rating-${offer.offerId}`;
         const userRatingContainerId = `user-rating-${offer.offerId}`;
 
-        // Calculate the discounted price
+        // Calculate discount
         const discountAmount = offer.pricePerNight * (offer.discountPercentage / 100);
         const discountedPrice = offer.pricePerNight - discountAmount;
 
-        // HTML structure with price and discount
+        // price and discount
         const offerHTML = `
           <div class="offers_item rating_${offer.rating}">
             <div class="row">
@@ -128,7 +125,6 @@ function fetchAndDisplayOffers() {
 
 
 
-        // Add event listener for the book button
         const bookButton = offersGrid.querySelector(`[data-offer-id="${offer.offerId}"]`);
         bookButton.addEventListener('click', async (e) => {
           e.preventDefault();
@@ -142,12 +138,12 @@ function fetchAndDisplayOffers() {
 
 
         
-        // Add event listeners for the interactive rating
+        // listeners for rating
         const userRatingContainer = document.getElementById(userRatingContainerId);
         if (userRatingContainer) {
           const stars = userRatingContainer.querySelectorAll('i');
 
-          // Hover effects
+          // effects
           stars.forEach(star => {
             star.addEventListener('mouseover', function () {
               const rating = this.getAttribute('data-rating');
@@ -165,10 +161,10 @@ function fetchAndDisplayOffers() {
               const rating = parseInt(this.getAttribute('data-rating'));
               const success = await submitRating(offer.offerId, rating);
               if (success) {
-                // Show success message
+                
                 showMessage('Rating submitted successfully!', 'success');
               } else {
-                // Show error message
+                
                 showMessage('You need to log in first to submit a review.', 'error');
               }
             });
@@ -192,7 +188,6 @@ function highlightStars(container, rating) {
   });
 }
 
-// Function to show messages to the user
 function showMessage(message, type) {
   const messageDiv = document.createElement('div');
   messageDiv.className = `message ${type}`;
@@ -205,7 +200,6 @@ function showMessage(message, type) {
   }, 3000);
 }
 
-// Call the function when the document is ready
 document.addEventListener('DOMContentLoaded', fetchAndDisplayOffers);
 
 
@@ -217,13 +211,11 @@ document.addEventListener('DOMContentLoaded', fetchAndDisplayOffers);
 
 
 
-// Function to get userId from JWT token
 function getUserIdFromToken() {
   const token = localStorage.getItem('jwt');
   if (!token) return null;
 
   try {
-    // Decode the JWT token to get the payload
     const base64Url = token.split('.')[1];
     const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
     const payload = JSON.parse(window.atob(base64));
@@ -234,21 +226,21 @@ function getUserIdFromToken() {
   }
 }
 
-// Function to validate service before booking
+// validate service before booking
 async function validateService(serviceId, serviceName) {
   try {
-    // First try to verify by ID
+    /////////verify by ID
     const responseById = await fetch(`https://localhost:44321/api/Services/${serviceId}`);
     if (responseById.ok) {
       const service = await responseById.json();
       return service;
     }
 
-    // If ID not found, try to search by name
+    // //// by service name
     const responseByName = await fetch(`https://localhost:44321/api/Services/searchServiceByName?serviceName=${encodeURIComponent(serviceName)}`);
     if (responseByName.ok) {
       const services = await responseByName.json();
-      // Find the matching service
+      // ///// Find service
       const matchingService = services.find(s => s.serviceName.toLowerCase() === serviceName.toLowerCase());
       if (matchingService) {
         return matchingService;
@@ -276,7 +268,6 @@ async function submitBooking(offerId, serviceName, serviceImage, pricePerTour) {
     const validatedService = await validateService(offerId, serviceName);
     console.log('Validated service:', validatedService);
 
-    // Use the validated service ID instead of the original offerId
     offerId = validatedService.id || validatedService.serviceId;
 
     if (!offerId) {
@@ -328,7 +319,7 @@ async function submitBooking(offerId, serviceName, serviceImage, pricePerTour) {
   const totalAmountSpan = document.getElementById('totalAmount');
   const errorDetails = document.getElementById('errorDetails');
 
-  // Set min datetime to current date/time
+  // Set current date/time
   const bookingDateInput = document.getElementById('bookingDate');
   const now = new Date();
   const localDateTime = new Date(now.getTime() - now.getTimezoneOffset() * 60000)
@@ -429,24 +420,3 @@ async function submitBooking(offerId, serviceName, serviceImage, pricePerTour) {
 
 
 document.head.insertAdjacentHTML('beforeend', modalStyles);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

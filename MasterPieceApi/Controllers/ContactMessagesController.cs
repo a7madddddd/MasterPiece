@@ -201,7 +201,7 @@ namespace MasterPieceApi.Controllers
                                          <!-- Header -->
                                          <tr>
                                              <td style=""background-color: #1a4674; padding: 40px 30px; border-radius: 8px 8px 0 0; text-align: center;"">
-                                                 <h1 style=""color: #ffffff; margin: 0; font-size: 28px;"">Reply to Your Inquiry</h1>
+                                                 <h1 style=""color: #ffffff; margin: 0; font-size: 28px;"">Reply to Your Contact Request</h1>
                                              </td>
                                          </tr>
 
@@ -211,7 +211,7 @@ namespace MasterPieceApi.Controllers
                                                  <h2 style=""color: #333333; margin: 0 0 20px 0; font-size: 24px;"">Hello {contactMessageDto.Name},</h2>
 
                                                  <p style=""color: #666666; font-size: 16px; line-height: 1.5; margin: 0 0 20px 0;"">
-                                                     Thank you for reaching out to us. Here’s our response to your inquiry regarding <strong>{contactMessageDto.Subject}</strong>.
+                                                     Thank you for reaching out to us. Here’s our response to your Contact Request regarding <strong>{contactMessageDto.Subject}</strong>.
                                                  </p>
 
                                                  <p style=""background-color: #f8f9fa; padding: 20px; border-radius: 6px; color: #666666; font-size: 16px; line-height: 1.6; margin: 0 0 20px 0;"">
@@ -247,7 +247,7 @@ namespace MasterPieceApi.Controllers
 
             try
             {
-                await _emailService.SendEmailAsync(contactMessageDto.Email, "Reply to Your Inquiry - Ajloun Tour 360", emailBody);
+                await _emailService.SendEmailAsync(contactMessageDto.Email, "Reply to Your Contact Request - Ajloun Tour 360", emailBody);
                 Console.WriteLine("Reply email sent successfully.");
             }
             catch (Exception ex)

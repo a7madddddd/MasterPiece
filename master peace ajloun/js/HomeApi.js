@@ -42,7 +42,6 @@ document.addEventListener('DOMContentLoaded', function () {
 /////////////////////////////////////////////////////
 
 
-// Fetch the data from the API
 function safelyUpdateElement(selector, value) {
     const element = document.querySelector(selector);
     if (element) {
@@ -54,7 +53,6 @@ function safelyUpdateElement(selector, value) {
     return element;
 }
 
-// Function to fetch and update tourism statistics
 function fetchTourismStatistics() {
     fetch('https://localhost:44321/api/TourismStatistics')
         .then(response => {
@@ -95,7 +93,7 @@ document.addEventListener('DOMContentLoaded', fetchTourismStatistics);
 
 
 
-// fetchOpeningHours
+// fetch Opening Hours
 function fetchOpeningHours() {
     fetch('https://localhost:44321/api/TourismStatistics')
         .then(response => {
@@ -200,7 +198,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 document.addEventListener('DOMContentLoaded', function () {
-    // Function to fetch services from the API
+    
     async function fetchServices() {
         try {
             const response = await fetch('https://localhost:44321/api/Services');
@@ -211,20 +209,20 @@ document.addEventListener('DOMContentLoaded', function () {
             const data = await response.json();
             console.log("Services data:", data);
 
-            // Access the $values array inside the response object
+            
             if (data && Array.isArray(data.$values)) {
-                return data.$values; // Return the services array
+                return data.$values; 
             } else {
                 console.error("Expected an array but got:", data);
-                return []; // Return an empty array if it's not formatted as expected
+                return [];  
             }
         } catch (error) {
             console.error("Error fetching services:", error);
-            return []; // Return an empty array in case of an error
+            return []; 
         }
     }
 
-    // Function to display services inside the modal
+    
     function displayServices(services) {
         const resultsContainer = document.getElementById('serviceResults');
         resultsContainer.innerHTML = ''; // Clear previous results
@@ -282,7 +280,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Function to open the modal
     function openModal() {
         const modal = document.getElementById('serviceModal');
-        modal.style.display = 'block'; // Show the modal
+        modal.style.display = 'block'; 
     }
 
     // Function to close the modal
@@ -315,8 +313,3 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     };
 });
-
-
-
-
-

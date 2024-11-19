@@ -976,7 +976,6 @@ logo {
 }
 
 .search_tab img {
-	margin-right: 10px;
 	-webkit-transition: all 200ms ease;
 	-moz-transition: all 200ms ease;
 	-ms-transition: all 200ms ease;
@@ -993,12 +992,13 @@ logo {
 
 .search_tab:first-child {
 	border-top-left-radius: 94px;
-	padding-left: 7px;
+	margin-left: 30px;
+	padding-left: 1%;
 }
 
 .search_tab:last-child {
 	border-top-right-radius: 94px;
-	padding-right: 7px;
+	margin-right: 30px;
 }
 
 .search_tab.active {
@@ -1079,22 +1079,27 @@ logo {
 
 .search_item:first-child {
 	width: 30.453%;
+
 }
 
 .search_item:nth-child(2) {
 	width: 13.961%;
+	margin-left: -30%;
 }
 
 .search_item:nth-child(3) {
 	width: 13.961%;
+
 }
 
 .search_item:nth-child(4) {
 	width: 9.947%;
+
 }
 
 .search_item:nth-child(5) {
 	width: 9.947%;
+
 }
 
 .search_item div {

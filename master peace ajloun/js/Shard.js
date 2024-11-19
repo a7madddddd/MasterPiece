@@ -38,15 +38,23 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
-// Function to handle logout
 function logout() {
-    localStorage.removeItem('jwt'); // Remove JWT from local storage
+    localStorage.removeItem('jwt'); 
 
-    // Show a styled success message for logout using AlertifyJS
     alertify.success("Logged out successfully!");
 
-    // Delay page reload to allow user to see the message
     setTimeout(() => {
         window.location.reload();
-    }, 1000); // 1-second delay before reloading to display the message
+    }, 1000); 
 }
+
+
+
+
+
+
+
+
+
+
+

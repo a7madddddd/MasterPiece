@@ -1382,6 +1382,7 @@ section {
 	width: 100%;
 	padding-top: 115px;
 	padding-bottom: 115px;
+	height: auto;
 }
 
 /*********************************
@@ -2210,6 +2211,7 @@ strong {
 	margin-top: 6%;
 	margin-bottom: auto;
 	padding-bottom: 20%;
+	height: max-content;
 }
 
 .super_container {

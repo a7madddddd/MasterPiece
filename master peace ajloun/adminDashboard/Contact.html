@@ -230,7 +230,10 @@
             </div>
             <div class="modal-body bg-secondary">
                 <form id="replyMessageForm">
-                    
+                    <div class="mb-3" hidden>
+                        <label for="username" class="form-label" hidden>username</label>
+                        <input type="text" class="form-control" id="username" name="email" disabled hidden>
+                    </div>
                     <div class="mb-3">
                         <label for="userEmail" class="form-label">Email Address</label>
                         <input type="email" class="form-control" id="userEmail" name="email" disabled>

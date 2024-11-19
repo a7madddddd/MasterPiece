@@ -13,7 +13,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const decodedToken = parseJwt(jwt);
     const userId = decodedToken.userId || decodedToken.sub;
 
-    // Get bookingId from URL parameters
     const urlParams = new URLSearchParams(window.location.search);
     const bookingId = urlParams.get('bookingId');
     if (!bookingId) {
@@ -22,8 +21,7 @@ document.addEventListener('DOMContentLoaded', function () {
             title: 'No Booking ',
             text: 'No booking Untill Now.',
         }).then(() => {
-            // This code runs after the user closes the alert
-            window.location.href = 'services.html'; // Redirect after closing the alert
+            window.location.href = document.referrer || 'edit_profile.html';
         });
         return;
     }
@@ -61,7 +59,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const orderItemsContainer = document.getElementById('order-items');
             const totalPriceElement = document.getElementById('total-price');
 
-            // Ensure the container is empty before populating it
+            // container is empty before populating it
             orderItemsContainer.innerHTML = '';
 
             // Create booking row
@@ -159,7 +157,6 @@ document.addEventListener('DOMContentLoaded', function () {
                                 showConfirmButton: false,
                                 timer: 2000
                             }).then(() => {
-                                // Redirect to bookings page after successful payment
                                 window.location.href = 'edit_profile.html';
                             });
                         });
