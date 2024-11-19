@@ -104,7 +104,7 @@ async function loadServices() {
 
         services.forEach(service => {
             const option = document.createElement('option');
-            option.value = service.serviceName; // Set the value to the service name
+            option.value = service.serviceName; 
             option.text = service.serviceName;
             option.dataset.service = JSON.stringify(service);
             serviceDropdown.appendChild(option);
@@ -138,7 +138,7 @@ function fillFormFields(service) {
 
     // Update image source path
     if (service.image) {
-        document.getElementById('imagePreview').src = `../${service.image}`; // Adjusted path
+        document.getElementById('imagePreview').src = `../${service.image}`; 
         document.getElementById('imagePreview').style.display = 'block';
     } else {
         document.getElementById('imagePreview').style.display = 'none';
@@ -182,13 +182,19 @@ document.getElementById('updateServiceForm').addEventListener('submit', async fu
     formData.append('Question', document.getElementById('question').value);
     formData.append('IsActive', document.getElementById('isActive').checked);
 
-    const dateInput = document.getElementById('dates').value;
+    const dateInput = document.getElementById('Dates').value;
     if (dateInput) {
         const dateObj = new Date(dateInput);
-        formData.append('Dates[year]', dateObj.getFullYear());
-        formData.append('Dates[month]', dateObj.getMonth() + 1);
-        formData.append('Dates[day]', dateObj.getDate());
-        formData.append('Dates[dayOfWeek]', dateObj.getDay());
+        if (!isNaN(dateObj)) { // Ensure the date is valid
+            formData.append('Dates[year]', dateObj.getFullYear());
+            formData.append('Dates[month]', dateObj.getMonth() + 1);
+            formData.append('Dates[day]', dateObj.getDate());
+            formData.append('Dates[dayOfWeek]', dateObj.getDay());
+        } else {
+            console.error("Invalid date format");
+        }
+    } else {
+        console.warn("Date input is empty");
     }
 
     const imageFile = document.getElementById('imageFile').files[0];
@@ -218,7 +224,7 @@ document.getElementById('updateServiceForm').addEventListener('submit', async fu
 
         document.getElementById('updateServiceForm').reset();
         document.getElementById('imagePreview').style.display = 'none';
-        loadServices(); // Reload services to reflect updates
+        loadServices(); 
 
     } catch (error) {
         console.error('Error:', error.message);
@@ -241,7 +247,6 @@ document.addEventListener('DOMContentLoaded', loadServices);
 
 
 
-// Add event listener for delete button
 document.getElementById('deleteServiceBtn').addEventListener('click', async function () {
     const serviceName = document.getElementById('serviceName').value;
     if (!serviceName) {
@@ -268,9 +273,6 @@ document.getElementById('deleteServiceBtn').addEventListener('click', async func
         }
     }
 });
-
-// Note: Make sure the showToast function is defined once in your main JavaScript file
-// and not duplicated in each form handler.
 
 
 

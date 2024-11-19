@@ -313,8 +313,8 @@ window.addEventListener('load', initializePage);
 
 
 
-let currentUserId = null; // Hold the current user ID
-let currentUserRole = null; // Hold the current user role
+let currentUserId = null;
+let currentUserRole = null; 
 
 function showToast(message, type) {
     console.log(`${type}: ${message}`);
@@ -351,15 +351,22 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const user = await response.json();
-            console.log('Fetched User:', user);
+
+            // EXTENSIVE LOGGING
+            console.log('RAW User Object:', JSON.stringify(user));
+            console.log('User Object Keys:', Object.keys(user));
+            console.log('User Role Property:', user.userRole);
+            console.log('User Role Type:', typeof user.userRole);
 
             if (!user || !user.userId) {
                 throw new Error('User data is incomplete.');
             }
 
+            // NORMALIZE ROLE
             currentUserId = user.userId;
-            currentUserRole = user.userRole || 'User';
-            console.log(`Fetched Current Role: "${currentUserRole}"`);
+            currentUserRole = (user.userRole || 'User').trim();
+
+            console.log(`Normalized Current Role: "${currentUserRole}"`);
 
             document.getElementById('displayUsername').innerText = user.username;
             document.getElementById('displayEmail').innerText = user.email;
@@ -371,11 +378,25 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+
+    // Update user role
     // Update user role
     updateUserButton.addEventListener('click', async function () {
         const selectedRole = document.getElementById('userRole').value;
 
-        console.log(`Current Role: "${currentUserRole}", Selected Role: "${selectedRole}"`);
+        // DEFENSIVE ROLE COMPARISON
+        console.log('ROLE COMPARISON DEBUG:');
+        console.log(`Current User ID: ${currentUserId}`);
+        console.log(`Current Role: "${currentUserRole}"`);
+        console.log(`Selected Role: "${selectedRole}"`);
+
+        // Normalize roles
+        const normalizedCurrentRole = (currentUserRole || '').trim().toUpperCase();
+        const normalizedSelectedRole = selectedRole.trim().toUpperCase();
+
+        console.log(`Normalized Current Role: "${normalizedCurrentRole}"`);
+        console.log(`Normalized Selected Role: "${normalizedSelectedRole}"`);
+        console.log(`Roles Are Equal: ${normalizedCurrentRole === normalizedSelectedRole}`);
 
         if (!currentUserId) {
             showToast('User ID is missing. Please search for a user first.', 'error');
@@ -387,8 +408,9 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // Check if the selected role is the same as the current role
-        if (selectedRole.trim().toLowerCase() === currentUserRole.trim().toLowerCase()) {
+        // More robust comparison
+        if (normalizedCurrentRole === normalizedSelectedRole) {
+            console.warn('PREVENTION: Roles are the same');
             Swal.fire({
                 title: "Same Role Selected",
                 text: "You cannot change the role to the same current role.",
@@ -398,7 +420,9 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // SweetAlert confirmation
+
+
+
         Swal.fire({
             title: "Are you sure?",
             text: "Once changed, The User Role will be Changed to a new role!",
@@ -423,7 +447,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     });
 
                     console.log('Update Response Status:', response.status);
-
                     const responseData = await response.json();
                     console.log('Response Data for Update:', responseData);
 
@@ -433,8 +456,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     if (responseData.success) {
                         showToast(responseData.message, 'success');
-                        currentUserRole = selectedRole; // Update the current role after successful change
-                        await refreshUserDetails(currentUserId); // Refresh user details after update
+                        currentUserRole = selectedRole; // Update current role
+                        await refreshUserDetails(currentUserId); // Refresh user details
                     } else {
                         throw new Error(responseData.message || 'Failed to update role.');
                     }
@@ -455,10 +478,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 throw new Error('Failed to refresh user details.');
             }
             const user = await response.json();
-            currentUserRole = user.userRole || 'User'; // Update current role
+
+            // NORMALIZE ROLE
+            currentUserRole = (user.userRole || 'User').trim();
+
+            console.log('Refresh User Details:');
+            console.log('Refreshed User Object:', JSON.stringify(user));
+            console.log('Refreshed Current Role:', currentUserRole);
+
             document.getElementById('displayUsername').innerText = user.username;
             document.getElementById('displayEmail').innerText = user.email;
-            document.getElementById('userRole').value = currentUserRole; // Update dropdown to new role
+            document.getElementById('userRole').value = currentUserRole;
             console.log('User details refreshed');
         } catch (error) {
             showToast('Error refreshing user details: ' + error.message, 'error');
