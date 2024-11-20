@@ -79,7 +79,7 @@ namespace MasterPieceApi.Controllers
 
 
 
-        // PUT: api/Users/5
+        // PUT: api/Users
         [HttpPut("{id}")]
         public async Task<IActionResult> PutUser(int id, User user)
         {
